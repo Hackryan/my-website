@@ -12,12 +12,10 @@
     "require": {
         "php": "^7.4",
         "phpmailer/phpmailer": "^6.4"
-        // Add other PHP dependencies as needed
     },
     "autoload": {
         "psr-4": {
             "YourNamespace\\": "src/"
-            // Define your PSR-4 autoloading rules for your project's namespace and source directory
         }
     },
     "scripts": {
