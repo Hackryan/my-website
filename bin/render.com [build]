@@ -1,0 +1,10 @@
+site name = https://sitename.render.com
+///////////////////////////////////////////////////////////////////////
+root folder   = ./
+build command = composer install && npm install && npm run build
+pubic folder  = ./public
+///////////////////////////////////////////////////////////////////////
+leave everything else alone and click build / deploy
+  
+
+  
