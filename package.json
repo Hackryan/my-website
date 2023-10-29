@@ -1,10 +1,10 @@
 {
-    "name": "your-project-name",
+    "name": "my-website",
     "version": "1.0.0",
     "description": "Your project description",
-    "main": "index.js",
+    "main": "public/js/index.js",  // Adjust the path to your entry point
     "scripts": {
-        "start": "node index.js",
+        "start": "node public/js/index.js",  // Adjust the path for the "start" script
         "build": "your-build-command",
         "test": "your-test-command"
     },
