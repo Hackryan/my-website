@@ -1,0 +1,12 @@
+services:
+  - name: my-website
+    type: web
+    buildCommand: |
+      # Build command for PHP (Composer)
+      composer install --no-dev --optimize-autoloader
+
+      # Build command for JavaScript (using npm)
+      npm install
+      npm run build
+
+    # Other service configurations like environment variables, ports, and routes
