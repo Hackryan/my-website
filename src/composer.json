@@ -1,0 +1,44 @@
+{
+    "name": "your-vendor-name/your-package-name",
+    "description": "Your project description",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "your.email@example.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "phpmailer/phpmailer": "^6.4"
+        // Add other PHP dependencies as needed
+    },
+    "autoload": {
+        "psr-4": {
+            "YourNamespace\\": "src/"
+            // Define your PSR-4 autoloading rules for your project's namespace and source directory
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "start": "php -S 0.0.0.0:8080 -t public",
+        "post-install-cmd": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.packagist.org"
+        }
+    ]
+}
