@@ -2,11 +2,48 @@ services:
   - name: my-website
     type: web
     buildCommand: |
-      # Build command for PHP (Composer)
+      # Install PHP dependencies with Composer
       composer install --no-dev --optimize-autoloader
 
-      # Build command for JavaScript (using npm)
+      # Install JavaScript dependencies and build assets
       npm install
       npm run build
 
-    # Other service configurations like environment variables, ports, and routes
+    startCommand: "php -S 0.0.0.0:8080 -t public"
+
+    env: production
+
+    # Specify the Node.js version
+    nodeVersion: 14
+
+    # Add environment variables if needed
+    environment:
+      - name: APP_ENV
+        value: production
+
+    # Configure routes if necessary
+    routes:
+      - path: /
+        methods: [GET, POST]
+        command: "php -S 0.0.0.0:8080 -t public"
+        headers:
+          - name: Cache-Control
+            value: no-store
+
+    # Optional database setup
+    databases:
+      - name: my-database
+        type: postgresql
+        version: "13"
+        plan: free
+
+    # Secrets for sensitive data
+    secrets:
+      - name: DB_PASSWORD
+        generateValue: true
+
+    # Network settings
+    network:
+      - type: public
+        httpPort: 80
+        httpsPort: 443
