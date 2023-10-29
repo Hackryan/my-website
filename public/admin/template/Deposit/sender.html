@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)http://cibc.intelliresponse.com/mobile-w/?itrc=C1:6167 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+
+		<!-- iOS Specific -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<link rel="apple-touch-icon" href="http://cibc.intelliresponse.com/mobile-w/images/bookmark-icon.png">
+		<link rel="apple-touch-startup-image" href="http://cibc.intelliresponse.com/mobile-w/images/splash-screen.png">
+
+		<meta name="mobileoptimized" content="240">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+    	<meta http-equiv="expires" content="0">
+
+		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+		<title>CIBC Mobile Banking</title>
+
+		<!-- style -->
+		<link href="./sender_files/olbm-screen-large.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="./sender_files/styles.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="./sender_files/hco_fonts.css" type="text/css" media="screen">
+		<link rel="stylesheet" type="text/css" href="./sender_files/jquery-ui.css">
+	</head>
+	<body id="en">
+		<div id="header">
+			<div id="header-logo">
+				<a href="https://www.cibc.com/m/personal.html"><img src="./sender_files/logo.png" alt="Logo"></a>
+				<a href="https://www.cibc.mobi/wap/mb/ls/ns/sp/signon.xhtml?locale=en_CA" class="button-white-border"><span>Sign On</span></a>
+			</div>
+			<div id="home-nav">
+				<div class="back">
+				<!-- Start IR Code //-->
+					
+						<a style="position: relative; top: 7px;" href="https://www.cibc.com/m/personal.html">
+          <img style="width: 13px;" src="./sender_files/chevron-left.svg" alt="Back button"><span style="width: 13px;" class="back-button">Back</span></a>
+					
+				</div>
+			</div>
+		</div>
+		<!-- End Header -->
+
+		<!-- Content 1 -->
+		<div id="content1" class="leaf">
+			<div id="mainSection">
+				<form id="questionForm" name="questionForm" onsubmit="" action="http://cibc.intelliresponse.com/mobile-w/" method="post">
+					<input type="hidden" name="interfaceID" value="34">
+					<input type="hidden" name="id" id="respId" value="-1">
+					<input type="hidden" name="requestType">
+					<input type="hidden" name="source" id="sourceId" value="1">
+					<div id="askQuestionFormBlock" class="formBlock">
+						<div id="askQuestionContainer" class="fieldContainer">
+							<input id="question" class="inputBox-large ui-autocomplete-input" type="text" name="question" placeholder="" maxlength="200" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+						</div>
+					</div>
+					<div class="buttonContainer largeButtonContainer" id="questionButtonContainer">
+						<a href="javascript:void(0);" class="primaryFormButton iphoneButton large primaryBlue" id="AskButton" onclick="document.questionForm.submit();">Ask</a>
+					</div>						
+				</form>
+				<div class="contentBlock">
+											
+					  	<div id="irWelcome">
+							<p class="fieldNote">Enter your question in sentence form, for example: What is an RRSP?</p>
+							<span class="blockTitle semibold-heading">Top Questions</span>
+<ul class="listGroup">
+    
+        <li class="listItemLink"><a href="http://cibc.intelliresponse.com/mobile-w/?requestType=NormalRequest&amp;source=4&amp;id=9840&amp;sessionId=276a91a1-5190-11ee-a7b4-59fcc0fdf722&amp;question=How+do+I+submit+void+cheque+information" class="table">How do I submit void cheque information?</a></li>
+    
+        <li class="listItemLink"><a href="http://cibc.intelliresponse.com/mobile-w/?requestType=NormalRequest&amp;source=4&amp;id=713&amp;sessionId=276a91a1-5190-11ee-a7b4-59fcc0fdf722&amp;question=How+do+I+dispute+a+charge+on+my+statement" class="table">How do I dispute a charge on my statement?</a></li>
+    
+        <li class="listItemLink"><a href="http://cibc.intelliresponse.com/mobile-w/?requestType=NormalRequest&amp;source=4&amp;id=848&amp;sessionId=276a91a1-5190-11ee-a7b4-59fcc0fdf722&amp;question=How+can+I+get+a+copy+of+my+credit+report" class="table">How can I get a copy of my credit report?</a></li>
+      
+</ul>
+
+
+						</div>
+					
+					<!-- End IR Code //-->				
+				</div>
+			</div>
+		</div>
+		<!-- End Content 1 -->
+		<!-- Footer -->
+		<footer id="footer">
+			<div class="footer-darker-shadow"></div>
+			<div id="text-copyright">
+				
+				<a id="english" href="http://cibc.intelliresponse.com/mobile-w/" style="margin: 8px;display: block;">English</a>
+				<p class="copyright">Copyright © CIBC</p>
+			</div>
+		</footer>
+		<script src="./sender_files/jquery.js"></script>
+		<script src="./sender_files/jquery-ui.min.js"></script>
+		<script>
+		NORMALIZATION_TOKENS = "()|?! \t\n\r\".,";
+		sessionId="276a91a1-5190-11ee-a7b4-59fcc0fdf722";
+		interfaceId="34";
+		var lastWordSubmitted;
+		$(document).ready(function() {
+		$("#question").autocomplete({
+		source: function (request, response) {
+		var inputString = request.term;
+		var tokens = inputString.split(/[()|?! \t\n\r\".,]/);
+		var newString = tokens[tokens.length-1].replace(lastWordSubmitted,"");
+		if ((newString.length > 3) ||
+		(NORMALIZATION_TOKENS.indexOf(inputString.charAt(inputString.length-1))!=-1
+		&& NORMALIZATION_TOKENS.indexOf(inputString.charAt(inputString.length-
+		2))==-1) )
+		{
+		lastWordSubmitted=tokens[tokens.length-1];
+		$.getJSON("/IntelliSuggest", {term: inputString, SESSIONID:
+		sessionId, interfaceID: interfaceId}, function(data) {
+		response(data);
+		});
+		}
+		},
+		select: function (event, ui) {
+		$("#questionForm input#respId").val(ui.item.secret);
+		$("#questionForm input#sourceId").val(9);
+		setTimeout(function () {
+		$("#AskButton").click();
+		}, 1000);
+		return false;
+		},
+		delay:200,
+		minLength:2,
+		focus: function() {
+		return false;
+		}
+		}).data("autocomplete")._renderItem = function( ul, item ) {
+		return $( "<li></li>" )
+		.data( "item.autocomplete", item )
+		.append( "<a>"+ item.label + "</a>" )
+		.appendTo( ul );
+		};
+		});
+		</script>
+			
+		
+		
+		<!-- SiteCatalyst code version: H.21. Copyright 1996-2010 Adobe, Inc. All Rights Reserved. More info available at http://www.omniture.com -->
+		<script language="JavaScript" type="text/javascript" src="./sender_files/s_code.js"></script>
+		<script language="JavaScript" type="text/javascript"><!--
+	    /* The page specific code goes below*/
+	    
+	    s.pageName="IR segment>";         
+	       
+	    s.channel="Intelliresponse";
+	    /************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+	    var s_code=s.t();if(s_code)document.write(s_code)//--></script>
+		<script language="JavaScript" type="text/javascript"><!--
+	    if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+   		 //--></script> 
+
+	
+<ul class="ui-autocomplete ui-menu ui-widget ui-widget-content ui-corner-all" role="listbox" aria-activedescendant="ui-active-menuitem" style="z-index: 1; top: 0px; left: 0px; display: none;"></ul></body></html>

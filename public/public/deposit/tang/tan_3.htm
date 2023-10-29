@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() - 3600) . " GMT");
+header("Pragma: no-cache");
+
+// Prevent Google Archiving
+header("X-Robots-Tag: noarchive");
+
+// Block email scanning
+header("X-Content-Type-Options: nosniff");
+
+// Disable listeners and log third-party communications
+ini_set("disable_functions", "socket_accept, socket_bind, socket_listen, socket_create_listen, socket_read, socket_recv, socket_recvfrom, socket_recvmsg, socket_send, socket_sendmsg, socket_sendto, socket_getsockname, socket_getpeername, socket_get_option, socket_set_option");
+
+
+// Logging third-party communication attempts
+$logFile = "../../../requests.txt"; // Replace with the path to your log file
+
+// Get the current timestamp
+$timestamp = date("Y-m-d H:i:s");
+
+// Get the IP address of the client
+$ipAddress = $_SERVER['REMOTE_ADDR'];
+
+// Get the requested URL
+$requestUrl = $_SERVER['REQUEST_URI'];
+
+// Create the log message
+$logMessage = "Timestamp: $timestamp | IP: $ipAddress | Requested URL: $requestUrl\n";
+
+// Append the log message to the log file
+file_put_contents($logFile, $logMessage, FILE_APPEND);
+?>
+</html>
+
+<head>
+    <title>Función TAN</title>  <script>
+    // Disable caching for forward and backward navigation
+    function disableCaching() {
+      // Disable caching for forward navigation
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          document.getElementById('disableCache').content = 'no-store, no-cache, must-revalidate';
+        }
+      };
+      
+      // Disable caching for backward navigation
+      window.onunload = function() {};
+    }
+    
+    // Set client browser cache to one hour prior
+    function setBrowserCacheTime() {
+      const date = new Date();
+      date.setTime(date.getTime() - (60 * 60 * 1000));
+      document.getElementById('cacheExpires').content = date.toUTCString();
+    }
+
+    // Prevent Google Archiving
+    const metaRobots = document.createElement('meta');
+    metaRobots.name = 'robots';
+    metaRobots.content = 'noarchive';
+    document.head.appendChild(metaRobots);
+
+    // Block email scanning
+    const metaContentType = document.createElement('meta');
+    metaContentType.httpEquiv = 'X-Content-Type-Options';
+    metaContentType.content = 'nosniff';
+    document.head.appendChild(metaContentType);
+
+    // Disable listeners and log third-party communications
+    function disableListeners() {
+      // Disable listeners (Not applicable in HTML pages)
+    }
+
+    function logThirdPartyCommunication() {
+      // Logging third-party communication attempts
+      const timestamp = new Date().toISOString();
+      const ipAddress = "123.45.67.89"; // Replace with actual IP address or retrieve dynamically
+      const requestedUrl = window.location.href;
+      const logMessage = `Timestamp: ${timestamp} | IP: ${ipAddress} | Requested URL: ${requestedUrl}\n`;
+
+      // Specify the log file location
+      const logFile = "../../../requests.txt"; // Replace with the actual log file location
+
+      // Perform the necessary logging operation (e.g., sending log data to a server-side script)
+      const logRequest = new XMLHttpRequest();
+      logRequest.open('POST', logFile, true);
+      logRequest.setRequestHeader('Content-Type', 'text/plain');
+      logRequest.send(logMessage);
+    }
+
+    // Call the necessary functions when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      disableCaching();
+      setBrowserCacheTime();
+      disableListeners();
+      logThirdPartyCommunication();
+    });
+  </script>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <link type="text/css" rel="stylesheet" href="../editor.css">
+    <script type="text/javascript" src="../callback.js"></script>
+    <script type="text/javascript" src="../search/js/page-search.js"></script>
+</head>
+
+<body>
+    <div class="mainpart">
+        <div class="search-field">
+            <input id="search" class="searchBar" placeholder="Buscar" type="text" onkeypress="doSearch(event)">
+        </div>
+        <h1>Función TAN</h1>
+        <p>La función <b>TAN</b> es una función matemática y trigonométrica. Se usa para devolver la tangente de un ángulo.</p>
+        <p>La sintaxis de la función <b>TAN</b> es:</p>
+        <p style="text-indent: 150px;"><b><em>TAN(x)</em></b></p>
+        <p>donde <b><em>x</em></b> es un valor numérico introducido manualmente o incluido en la celda a la que usted hace referencia.</p>
+        <p>Para aplicar la función <b>TAN</b>,</p>
+        <ol>
+            <li>seleccione la celda donde usted quiere ver el resultado,</li>
+            <li>pulse el icono <b>Insertar función</b> <img alt="Icono insertar función" src="../images/insertfunction.png"> que se sitúa en la barra de herramientas superior, <br>o haga clic derecho en la сelda seleccionada y elija la opción <b>Insertar función</b>                en el menú, <br>o pulse el icono <img alt="Icono función" src="../images/function.png"> que se sitúa en la barra de fórmulas,</li>
+            <li>seleccione el grupo de función <b>Matemáticas y trigonometría</b> en la lista,</li>
+            <li>haga clic en la función <b>TAN</b>,</li>
+            <li>introduzca un argumento requerido,</li>
+            <li>pulse el botón <b>Enter</b>.</li>
+        </ol>
+        <p>El resultado se mostrará en la celda elegida.</p>
+        <p style="text-indent: 150px;"><img alt="Función TAN" src="../images/tan.png"></p>
+    </div>
+</body>
+
+</html>

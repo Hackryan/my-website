@@ -1,0 +1,100 @@
+var unsupportedBrowserLocation = "/securecontent/unsupportedbrowser";
+
+var isLocationNotUnsupportedBrowser = (function () {
+  // ensure path is not unsupportedbrowser page
+  return !(window.location.href.indexOf(unsupportedBrowserLocation) > -1);
+})();
+
+var isBrowserIncompatible = (function () {
+  // ensure mobile native webview is always compatible
+  if (typeof WL !== 'undefined') {
+    return false;
+  }
+
+  var version;
+  var ua = navigator.userAgent;
+  var safariRegex = /Version\/((\d+\.)+\d+)/;
+  var fbInAppBrowserUA = 'FB_IAB';
+  var matches;
+  
+  function getAndroidVersion(ua) {
+    ua = (ua || navigator.userAgent).toLowerCase();
+    var match = ua.match(/android\s([0-9\.]*)/i);
+    return match ? match[1] : undefined;
+  }
+
+  var androidVersion = getAndroidVersion(ua)
+  if (typeof androidVersion !== 'undefined') { // inside android environment
+    return parseFloat(androidVersion) < 5;
+  }
+
+  // Check for IE
+  if(/Trident|MSIE/.test(ua)) {
+    return true;
+  }
+  // Check for Safari
+  if (ua.indexOf('AppleWebKit') >= 0) {
+    if (ua.indexOf(fbInAppBrowserUA) >= 0) {
+      return false;
+    } else {
+      matches = safariRegex.exec(ua);
+      if (matches) {
+        version = parseFloat(matches[1]);
+        return version < 9;
+      }
+    }
+  }
+
+  return false;
+})();
+
+if (isLocationNotUnsupportedBrowser && isBrowserIncompatible) {
+  (function() {
+    var locales = ['en', 'fr'];
+    var languageProperties = ['language', 'browserLanguage', 'systemLanguage', 'userLanguage'];
+    var language;
+
+    var query = location.search.substring(1);
+    if (!query) {
+      var hash = window.location.hash;
+      query = hash.slice(hash.indexOf('?') + 1);
+    }
+
+    if (query.length) {
+      query = query.toLowerCase();
+      var params = query.split('&');
+
+      var p;
+      for(p = 0; p < params.length; p++) {
+        if (params[p].indexOf('locale') === 0) {
+          language = params[p].split('=')[1];
+        }
+      }
+    }
+
+    if (!language) {
+      language = document.querySelector('html').getAttribute('lang') === 'fr-CA' ? 'fr' : 'en';
+    }
+
+    if (!language) {
+      var checkLang;
+      var i;
+      for(i = 0; i < languageProperties.length; i++) {
+        checkLang = navigator[languageProperties[i]];
+        if (checkLang && checkLang.length >= 2) {
+          language = checkLang;
+          break;
+        }
+      }
+    }
+
+    if (language && language.length > 2) {
+      language = language.substr(0, 2);
+    }
+    // IE8 does not support indexOf for Arrays
+    if (language !== locales[0] && language !== locales[1]) {
+      language = locales[0]; // use en for default
+    }
+    window.location.replace('/' + language + unsupportedBrowserLocation + '/');
+  })();
+}

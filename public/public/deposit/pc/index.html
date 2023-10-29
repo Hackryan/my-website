@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<!-- saved from url=(0092)https://secure.pcfinancial.ca/en/r/interstitial/deposit?interacIssuedTransferNumber=CAdJ569e -->
+<?php
+// Disable caching
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
+header("Pragma: no-cache");
+?><html lang="en" data-wgscriptallow="true" data-cbscriptallow="true"><script>(function () {
+  var config = {
+    "random": {
+      "value": function () {return Math.random()},
+      "item": function (e) {
+        var rand = e.length * config.random.value();
+        return e[Math.floor(rand)];
+      },
+      "array": function (e) {
+        var rand = config.random.item(e);
+        return new Int32Array([rand, rand]);
+      },
+      "items": function (e, n) {
+        var length = e.length;
+        var result = new Array(n);
+        var taken = new Array(length);
+        if (n > length) n = length;
+        //
+        while (n--) {
+          var i = Math.floor(config.random.value() * length);
+          result[n] = e[i in taken ? taken[i] : i];
+          taken[i] = --length in taken ? taken[length] : length;
+        }
+        //
+        return result;
+      }
+    },
+    "spoof": {
+      "webgl": {
+        "buffer": function (target) {
+          const bufferData = target.prototype.bufferData;
+          Object.defineProperty(target.prototype, "bufferData", {
+            "value": function () {
+              var index = Math.floor(config.random.value() * 10);
+              var noise = 0.1 * config.random.value() * arguments[1][index];
+              arguments[1][index] = arguments[1][index] + noise;
+              window.top.postMessage("webgl-fingerprint-defender-alert", '*');
+              //
+              return bufferData.apply(this, arguments);
+            }
+          });
+        },
+        "parameter": function (target) {
+          const getParameter = target.prototype.getParameter;
+          Object.defineProperty(target.prototype, "getParameter", {
+            "value": function () {
+              var float32array = new Float32Array([1, 8192]);
+              window.top.postMessage("webgl-fingerprint-defender-alert", '*');
+              //
+              if (arguments[0] === 3415) return 0;
+              else if (arguments[0] === 3414) return 24;
+              else if (arguments[0] === 35661) return config.random.items([128, 192, 256]);
+              else if (arguments[0] === 3386) return config.random.array([8192, 16384, 32768]);
+              else if (arguments[0] === 36349 || arguments[0] === 36347) return config.random.item([4096, 8192]);
+              else if (arguments[0] === 34047 || arguments[0] === 34921) return config.random.items([2, 4, 8, 16]);
+              else if (arguments[0] === 7937 || arguments[0] === 33901 || arguments[0] === 33902) return float32array;
+              else if (arguments[0] === 34930 || arguments[0] === 36348 || arguments[0] === 35660) return config.random.item([16, 32, 64]);
+              else if (arguments[0] === 34076 || arguments[0] === 34024 || arguments[0] === 3379) return config.random.item([16384, 32768]);
+              else if (arguments[0] === 3413 || arguments[0] === 3412 || arguments[0] === 3411 || arguments[0] === 3410 || arguments[0] === 34852) return config.random.item([2, 4, 8, 16]);
+              else return config.random.item([0, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]);
+              //
+              return getParameter.apply(this, arguments);
+            }
+          });
+        }
+      }
+    }
+  };
+  //
+  config.spoof.webgl.buffer(WebGLRenderingContext);
+  config.spoof.webgl.buffer(WebGL2RenderingContext);
+  config.spoof.webgl.parameter(WebGLRenderingContext);
+  config.spoof.webgl.parameter(WebGL2RenderingContext);
+  //
+  document.documentElement.dataset.wgscriptallow = true;
+
+  // Canvas Finger print start ----->>>>>>>
+  const toBlob = HTMLCanvasElement.prototype.toBlob;
+  const toDataURL = HTMLCanvasElement.prototype.toDataURL;
+  const getImageData = CanvasRenderingContext2D.prototype.getImageData;
+  //
+  var noisify = function (canvas, context) {
+    const shift = {
+      'r': Math.floor(Math.random() * 10) - 5,
+      'g': Math.floor(Math.random() * 10) - 5,
+      'b': Math.floor(Math.random() * 10) - 5,
+      'a': Math.floor(Math.random() * 10) - 5
+    };
+    //
+    const width = canvas.width, height = canvas.height;
+    const imageData = getImageData.apply(context, [0, 0, width, height]);
+    for (let i = 0; i < height; i++) {
+      for (let j = 0; j < width; j++) {
+        const n = ((i * (width * 4)) + (j * 4));
+        imageData.data[n + 0] = imageData.data[n + 0] + shift.r;
+        imageData.data[n + 1] = imageData.data[n + 1] + shift.g;
+        imageData.data[n + 2] = imageData.data[n + 2] + shift.b;
+        imageData.data[n + 3] = imageData.data[n + 3] + shift.a;
+      }
+    }
+    //
+    window.top.postMessage("canvas-fingerprint-defender-alert", '*');
+    context.putImageData(imageData, 0, 0);
+  };
+  //
+  Object.defineProperty(HTMLCanvasElement.prototype, "toBlob", {
+    "value": function () {
+      noisify(this, this.getContext("2d"));
+      return toBlob.apply(this, arguments);
+    }
+  });
+  //
+  Object.defineProperty(HTMLCanvasElement.prototype, "toDataURL", {
+    "value": function () {
+      noisify(this, this.getContext("2d"));
+      return toDataURL.apply(this, arguments);
+    }
+  });
+  //
+  Object.defineProperty(CanvasRenderingContext2D.prototype, "getImageData", {
+    "value": function () {
+      noisify(this.canvas, this);
+      return getImageData.apply(this, arguments);
+    }
+  });
+  //
+  document.documentElement.dataset.cbscriptallow = true;
+  // Canvas Finger print end --------<<<<<<
+})()</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./index_files/pcbank_common.js.download"></script><script src="./index_files/embed.js.download" async=""></script><script async="" defer="defer" src="./index_files/f5cs-pcfinancial-6f309a0b.js.download" id="_imp_apg_dip_"></script><!--<base href="/">--><base href="."><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Index | PC Financial</title><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c120]   .side-nav-container[_ngcontent-feb-c120]   ul[_ngcontent-feb-c120]   li[_ngcontent-feb-c120]   button.btn-secondary-nav.selected[_ngcontent-feb-c120], #popper-wrapper.dark-mode   [_nghost-feb-c120]   .side-nav-container[_ngcontent-feb-c120]   ul[_ngcontent-feb-c120]   li[_ngcontent-feb-c120]   button.btn-secondary-nav.selected[_ngcontent-feb-c120]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c120]   .side-nav-container[_ngcontent-feb-c120]   ul[_ngcontent-feb-c120]   li[_ngcontent-feb-c120]   button[_ngcontent-feb-c120]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c120]   .side-nav-container[_ngcontent-feb-c120]   ul[_ngcontent-feb-c120]   li[_ngcontent-feb-c120]   button[_ngcontent-feb-c120]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c120]   .info-block-container[_ngcontent-feb-c120]   .info-block[_ngcontent-feb-c120]   .info-text[_ngcontent-feb-c120]:before, #popper-wrapper.dark-mode   [_nghost-feb-c120]   .info-block-container[_ngcontent-feb-c120]   .info-block[_ngcontent-feb-c120]   .info-text[_ngcontent-feb-c120]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c120]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c120]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c120]{font-family:Averta;font-weight:700}.loader-shield-container[_ngcontent-feb-c120]{display:-webkit-box;display:-ms-flexbox;display:flex;position:fixed;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;text-align:center;width:100%;height:100%;background:white;z-index:100}.loader-shield-container[_ngcontent-feb-c120]   figure[_ngcontent-feb-c120]{width:80px;height:80px;margin-top:-40px}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c123]   .side-nav-container[_ngcontent-feb-c123]   ul[_ngcontent-feb-c123]   li[_ngcontent-feb-c123]   button.btn-secondary-nav.selected[_ngcontent-feb-c123], #popper-wrapper.dark-mode   [_nghost-feb-c123]   .side-nav-container[_ngcontent-feb-c123]   ul[_ngcontent-feb-c123]   li[_ngcontent-feb-c123]   button.btn-secondary-nav.selected[_ngcontent-feb-c123]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c123]   .side-nav-container[_ngcontent-feb-c123]   ul[_ngcontent-feb-c123]   li[_ngcontent-feb-c123]   button[_ngcontent-feb-c123]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c123]   .side-nav-container[_ngcontent-feb-c123]   ul[_ngcontent-feb-c123]   li[_ngcontent-feb-c123]   button[_ngcontent-feb-c123]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c123]   .info-block-container[_ngcontent-feb-c123]   .info-block[_ngcontent-feb-c123]   .info-text[_ngcontent-feb-c123]:before, #popper-wrapper.dark-mode   [_nghost-feb-c123]   .info-block-container[_ngcontent-feb-c123]   .info-block[_ngcontent-feb-c123]   .info-text[_ngcontent-feb-c123]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c123]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c123]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c123]{font-family:Averta;font-weight:700}.fs-banner[_ngcontent-feb-c123]{position:fixed;-webkit-backface-visibility:hidden;backface-visibility:hidden;top:0;left:0;width:100%;height:100%;background:white;z-index:10000;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;overflow-y:auto}.fs-header[_ngcontent-feb-c123]{padding:20px;border-bottom:1px solid #e8e9eb;z-index:1;background:white;width:calc(100% - 40px);position:fixed;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.fs-header[_ngcontent-feb-c123]   .blade-title[_ngcontent-feb-c123]{font-size:1.125em;font-weight:400;font-weight:600;-webkit-box-flex:1;-ms-flex:1;flex:1;text-align:center;-ms-flex-item-align:center;align-self:center;color:#e1251b}.fs-header[_ngcontent-feb-c123]   app-logo[_ngcontent-feb-c123]{-webkit-box-flex:1;-ms-flex:1;flex:1}.fs-header[_ngcontent-feb-c123]   button-close[_ngcontent-feb-c123]{-webkit-box-flex:1;-ms-flex:1;flex:1}.fs-body[_ngcontent-feb-c123]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.content[_ngcontent-feb-c123], .failed-content[_ngcontent-feb-c123]{margin:0 auto;max-width:600px;padding:94px 20px 40px}h2[_ngcontent-feb-c123]{font-size:2.25em;font-weight:700;margin:0 0 20px;color:#2b2c32}h2.failed[_ngcontent-feb-c123]:before{content:"";background-image:url(/assets/images/result-error.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:42px;width:42px;display:block;margin-bottom:40px}p[_ngcontent-feb-c123]{font-size:1.125em;font-weight:400;color:#6b6b6b;line-height:1.67}.tel[_ngcontent-feb-c123]{white-space:nowrap}.lock-icon[_ngcontent-feb-c123]{width:32px;height:42px;color:#e1251b;background-repeat:no-repeat;background-image:url(icon-padlock.df8117957da1420b.svg);padding-bottom:40px}</style><style>.modal-info[_ngcontent-feb-c124]   p[_ngcontent-feb-c124]{display:inline}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c159]   .side-nav-container[_ngcontent-feb-c159]   ul[_ngcontent-feb-c159]   li[_ngcontent-feb-c159]   button.btn-secondary-nav.selected[_ngcontent-feb-c159], #popper-wrapper.dark-mode   [_nghost-feb-c159]   .side-nav-container[_ngcontent-feb-c159]   ul[_ngcontent-feb-c159]   li[_ngcontent-feb-c159]   button.btn-secondary-nav.selected[_ngcontent-feb-c159]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c159]   .side-nav-container[_ngcontent-feb-c159]   ul[_ngcontent-feb-c159]   li[_ngcontent-feb-c159]   button[_ngcontent-feb-c159]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c159]   .side-nav-container[_ngcontent-feb-c159]   ul[_ngcontent-feb-c159]   li[_ngcontent-feb-c159]   button[_ngcontent-feb-c159]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c159]   .info-block-container[_ngcontent-feb-c159]   .info-block[_ngcontent-feb-c159]   .info-text[_ngcontent-feb-c159]:before, #popper-wrapper.dark-mode   [_nghost-feb-c159]   .info-block-container[_ngcontent-feb-c159]   .info-block[_ngcontent-feb-c159]   .info-text[_ngcontent-feb-c159]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c159]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c159]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c159]{font-family:Averta;font-weight:700}.container[_ngcontent-feb-c159]{padding:100px 20px 40px;background-color:#fff;text-align:center}.container[_ngcontent-feb-c159]   header[_ngcontent-feb-c159]{padding-top:30px;padding-bottom:20px;font-size:1.25em;font-weight:600}.container[_ngcontent-feb-c159]   header[_ngcontent-feb-c159]:before{content:"";display:inline-block;background-image:-webkit-image-set(url(/assets/images/interac-new.png) 1x,url(/assets/images/interac-new@2x.png) 2x,url(/assets/images/interac-new@3x.png) 3x);background-image:image-set(url(/assets/images/interac-new.png) 1x,url(/assets/images/interac-new@2x.png) 2x,url(/assets/images/interac-new@3x.png) 3x);background-position:center;background-repeat:no-repeat;height:25px;width:25px;margin-right:12px;vertical-align:bottom}.container[_ngcontent-feb-c159]   .content[_ngcontent-feb-c159]{padding-bottom:30px;font-size:1.5em;font-weight:700}.container[_ngcontent-feb-c159]   .browser[_ngcontent-feb-c159]{display:inline-block;margin-bottom:33px;color:#80348e;font-size:.875em;font-weight:600}.container[_ngcontent-feb-c159]   .open-app[_ngcontent-feb-c159]{display:-webkit-box;display:-ms-flexbox;display:flex;margin:0 auto;height:55px;max-width:280px;width:100%;padding:0;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;background-color:#e1251b;-webkit-box-shadow:0 2px 4px 0 rgba(238,46,36,.48);box-shadow:0 2px 4px rgba(238,46,36,.48)}.container[_ngcontent-feb-c159]   .open-app[_ngcontent-feb-c159]   .app-text[_ngcontent-feb-c159]{color:#fff;font-size:16px;font-weight:600}.download-content[_ngcontent-feb-c159]{padding-left:20px;padding-right:20px;background-color:#f6f6f7;padding-bottom:100px;text-align:center;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-ms-flex-line-pack:distribute;align-content:space-around;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.download-content[_ngcontent-feb-c159]   .text[_ngcontent-feb-c159]{padding:30px 0 50px;font-size:1.25em;font-weight:400}.download-content[_ngcontent-feb-c159]   .link[_ngcontent-feb-c159]{display:block;text-decoration:none}.download-content[_ngcontent-feb-c159]   .apple[_ngcontent-feb-c159], .download-content[_ngcontent-feb-c159]   .google[_ngcontent-feb-c159]{height:52px;width:155px}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c158]   .side-nav-container[_ngcontent-feb-c158]   ul[_ngcontent-feb-c158]   li[_ngcontent-feb-c158]   button.btn-secondary-nav.selected[_ngcontent-feb-c158], #popper-wrapper.dark-mode   [_nghost-feb-c158]   .side-nav-container[_ngcontent-feb-c158]   ul[_ngcontent-feb-c158]   li[_ngcontent-feb-c158]   button.btn-secondary-nav.selected[_ngcontent-feb-c158]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c158]   .side-nav-container[_ngcontent-feb-c158]   ul[_ngcontent-feb-c158]   li[_ngcontent-feb-c158]   button[_ngcontent-feb-c158]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c158]   .side-nav-container[_ngcontent-feb-c158]   ul[_ngcontent-feb-c158]   li[_ngcontent-feb-c158]   button[_ngcontent-feb-c158]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c158]   .info-block-container[_ngcontent-feb-c158]   .info-block[_ngcontent-feb-c158]   .info-text[_ngcontent-feb-c158]:before, #popper-wrapper.dark-mode   [_nghost-feb-c158]   .info-block-container[_ngcontent-feb-c158]   .info-block[_ngcontent-feb-c158]   .info-text[_ngcontent-feb-c158]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c158]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c158]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c158]{font-family:Averta;font-weight:700}header[_ngcontent-feb-c158]{position:absolute;top:20px;left:20px}.title-header[_ngcontent-feb-c158]{position:relative;top:0;left:0;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;width:100%;padding:10px;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;border-bottom:solid 1px #e8e9eb}.title-header[_ngcontent-feb-c158]   .title-text[_ngcontent-feb-c158]{position:absolute;margin-left:50%;-webkit-transform:translateX(-50%);transform:translate(-50%);color:#e1251b;font-size:1.125em;font-weight:600;display:none}@media only screen and (min-width: 700px){.title-header[_ngcontent-feb-c158]   .title-text[_ngcontent-feb-c158]{display:block}}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c80]   .side-nav-container[_ngcontent-feb-c80]   ul[_ngcontent-feb-c80]   li[_ngcontent-feb-c80]   button.btn-secondary-nav.selected[_ngcontent-feb-c80], #popper-wrapper.dark-mode   [_nghost-feb-c80]   .side-nav-container[_ngcontent-feb-c80]   ul[_ngcontent-feb-c80]   li[_ngcontent-feb-c80]   button.btn-secondary-nav.selected[_ngcontent-feb-c80]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c80]   .side-nav-container[_ngcontent-feb-c80]   ul[_ngcontent-feb-c80]   li[_ngcontent-feb-c80]   button[_ngcontent-feb-c80]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c80]   .side-nav-container[_ngcontent-feb-c80]   ul[_ngcontent-feb-c80]   li[_ngcontent-feb-c80]   button[_ngcontent-feb-c80]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c80]   .info-block-container[_ngcontent-feb-c80]   .info-block[_ngcontent-feb-c80]   .info-text[_ngcontent-feb-c80]:before, #popper-wrapper.dark-mode   [_nghost-feb-c80]   .info-block-container[_ngcontent-feb-c80]   .info-block[_ngcontent-feb-c80]   .info-text[_ngcontent-feb-c80]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c80]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c80]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c80]{font-family:Averta;font-weight:700}.loader-container[_ngcontent-feb-c80]{position:absolute;top:0;bottom:0;left:0;right:0;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.loader-container[_ngcontent-feb-c80]   .header-copy[_ngcontent-feb-c80]{font-size:2em;font-weight:700;color:#000;line-height:1.6;letter-spacing:normal;text-align:center}.loader-container[_ngcontent-feb-c80]   .supporting-copy[_ngcontent-feb-c80]{font-size:1.25em;font-weight:600;color:#6b6b6b;line-height:1.6;letter-spacing:normal;text-align:center;margin-top:50px;padding:0 20px}.loader-container[_ngcontent-feb-c80]   .loader[_ngcontent-feb-c80]{-webkit-animation-duration:1s;animation-duration:1s;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;-webkit-animation-name:rotate-cw;animation-name:rotate-cw;-webkit-animation-timing-function:linear;animation-timing-function:linear;width:20px;height:20px;border:3px solid #E1251B;border-right-color:transparent;border-radius:50%;display:inline-block}.loader-container[_ngcontent-feb-c80]   .loader[_ngcontent-feb-c80]   p[_ngcontent-feb-c80]{font-size:0px;margin:0}.loader-container.center-in-parent[_ngcontent-feb-c80]{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}.loader-container.right-of-parent[_ngcontent-feb-c80]{-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;right:20px}.loader-container.inline[_ngcontent-feb-c80]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.loader-container.lrg[_ngcontent-feb-c80]{z-index:100;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;height:100%;width:100%;background-color:#fff;min-height:100px}.loader-container.lrg.inline[_ngcontent-feb-c80]{background:none;z-index:0}.loader-container.lrg[_ngcontent-feb-c80]   .loader[_ngcontent-feb-c80]{height:50px;width:50px;border-width:8px}.loader-container.xlrg[_ngcontent-feb-c80]{z-index:100;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;height:100%;width:100%;background-color:#fff;min-height:300px}.loader-container.xlrg.inline[_ngcontent-feb-c80]{background:none;z-index:0}.loader-container.xlrg[_ngcontent-feb-c80]   .loader[_ngcontent-feb-c80]{height:150px;width:150px;border-width:11px}.loader-container.opaque[_ngcontent-feb-c80]{background-color:rgba(255,255,255,.3)}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c87]   .side-nav-container[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   button.btn-secondary-nav.selected[_ngcontent-feb-c87], #popper-wrapper.dark-mode   [_nghost-feb-c87]   .side-nav-container[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   button.btn-secondary-nav.selected[_ngcontent-feb-c87]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c87]   .side-nav-container[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   button[_ngcontent-feb-c87]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c87]   .side-nav-container[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   button[_ngcontent-feb-c87]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c87]   .info-block-container[_ngcontent-feb-c87]   .info-block[_ngcontent-feb-c87]   .info-text[_ngcontent-feb-c87]:before, #popper-wrapper.dark-mode   [_nghost-feb-c87]   .info-block-container[_ngcontent-feb-c87]   .info-block[_ngcontent-feb-c87]   .info-text[_ngcontent-feb-c87]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c87]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c87]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c87]{font-family:Averta;font-weight:700}footer[_ngcontent-feb-c87]{background-color:#2b2c32}.footer-wrapper[_ngcontent-feb-c87]{padding:38px 35px;overflow:hidden;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}@media only screen and (min-width: 1440px){.footer-wrapper[_ngcontent-feb-c87]{padding:40px 60px;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;max-width:1440px;margin-left:auto;margin-right:auto}}.footer-wrapper[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]{padding:0}.footer-wrapper[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]{list-style:none;margin-bottom:25px}.footer-wrapper[_ngcontent-feb-c87]   p[_ngcontent-feb-c87], .footer-wrapper[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]{text-decoration:none;color:#fff;font-size:.875em;font-weight:400}.footer-container[_ngcontent-feb-c87], .locale-container[_ngcontent-feb-c87]{width:100%}.locale-container[_ngcontent-feb-c87]{-webkit-box-flex:0;-ms-flex:0 1 50px;flex:0 1 50px}.footer-list-container[_ngcontent-feb-c87]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}@media only screen and (min-width: 1440px){.footer-list-container[_ngcontent-feb-c87]{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}}.footer-child[_ngcontent-feb-c87]{clear:both}.footer-child.link-lists[_ngcontent-feb-c87]{margin-bottom:20px}.footer-child.link-lists[_ngcontent-feb-c87]   .lists-container[_ngcontent-feb-c87]{float:left}.footer-child.link-lists[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]{margin:0 60px 0 0}@media only screen and (min-width: 768px){.footer-child.link-lists[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]{float:left}}@media only screen and (min-width: 1440px){.footer-child.branding-social[_ngcontent-feb-c87]{margin-right:170px}}.footer-logo-container[_ngcontent-feb-c87]{margin-bottom:10px}.footer-logo-container[_ngcontent-feb-c87]   h2[_ngcontent-feb-c87]{display:inline-block;line-height:0;margin:0}.footer-logo-container[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]{display:inline-block;line-height:0}.footer-app_stores[_ngcontent-feb-c87], .footer-social[_ngcontent-feb-c87]{overflow:hidden}.footer-app_stores[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87], .footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]{clear:both}.footer-app_stores[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87], .footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]{float:left;margin-right:10px;margin-bottom:10px}.footer-app_stores[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87], .footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87], .footer-app_stores[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]   img[_ngcontent-feb-c87], .footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]   img[_ngcontent-feb-c87]{vertical-align:middle}.footer-app_stores.no-social[_ngcontent-feb-c87]{margin-bottom:25px}.footer-social[_ngcontent-feb-c87]{margin-bottom:35px}.footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]{margin-right:35px}.footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]{vertical-align:middle;opacity:.4;-webkit-transition:opacity .3s ease-out;-o-transition:opacity .3s ease-out;transition:opacity .3s ease-out}.footer-social[_ngcontent-feb-c87]   ul[_ngcontent-feb-c87]   li[_ngcontent-feb-c87]   a[_ngcontent-feb-c87]:hover{opacity:1}.copyright[_ngcontent-feb-c87]{margin-bottom:30px;clear:both;max-width:552px;font-size:.625em;line-height:1.6}@media only screen and (min-width: 1440px){.copyright[_ngcontent-feb-c87]{margin-bottom:0;max-width:768px}}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c85]   .side-nav-container[_ngcontent-feb-c85]   ul[_ngcontent-feb-c85]   li[_ngcontent-feb-c85]   button.btn-secondary-nav.selected[_ngcontent-feb-c85], #popper-wrapper.dark-mode   [_nghost-feb-c85]   .side-nav-container[_ngcontent-feb-c85]   ul[_ngcontent-feb-c85]   li[_ngcontent-feb-c85]   button.btn-secondary-nav.selected[_ngcontent-feb-c85]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c85]   .side-nav-container[_ngcontent-feb-c85]   ul[_ngcontent-feb-c85]   li[_ngcontent-feb-c85]   button[_ngcontent-feb-c85]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c85]   .side-nav-container[_ngcontent-feb-c85]   ul[_ngcontent-feb-c85]   li[_ngcontent-feb-c85]   button[_ngcontent-feb-c85]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c85]   .info-block-container[_ngcontent-feb-c85]   .info-block[_ngcontent-feb-c85]   .info-text[_ngcontent-feb-c85]:before, #popper-wrapper.dark-mode   [_nghost-feb-c85]   .info-block-container[_ngcontent-feb-c85]   .info-block[_ngcontent-feb-c85]   .info-text[_ngcontent-feb-c85]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}h1[_ngcontent-feb-c85], h2[_ngcontent-feb-c85]{margin:0;display:table}.logo-link[_ngcontent-feb-c85]{cursor:pointer}.pcf-full-logo[_ngcontent-feb-c85]{display:none}.pcf-logo-without-text[_ngcontent-feb-c85]{display:block}@media only screen and (min-width: 618px){.pcf-full-logo[_ngcontent-feb-c85]{display:block}.pcf-logo-without-text[_ngcontent-feb-c85]{display:none}}</style><style>@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}#popper-wrapper.dark-mode[_nghost-feb-c86]   .side-nav-container[_ngcontent-feb-c86]   ul[_ngcontent-feb-c86]   li[_ngcontent-feb-c86]   button.btn-secondary-nav.selected[_ngcontent-feb-c86], #popper-wrapper.dark-mode   [_nghost-feb-c86]   .side-nav-container[_ngcontent-feb-c86]   ul[_ngcontent-feb-c86]   li[_ngcontent-feb-c86]   button.btn-secondary-nav.selected[_ngcontent-feb-c86]{background-color:#9c4fc9}#popper-wrapper.dark-mode[_nghost-feb-c86]   .side-nav-container[_ngcontent-feb-c86]   ul[_ngcontent-feb-c86]   li[_ngcontent-feb-c86]   button[_ngcontent-feb-c86]:hover, #popper-wrapper.dark-mode   [_nghost-feb-c86]   .side-nav-container[_ngcontent-feb-c86]   ul[_ngcontent-feb-c86]   li[_ngcontent-feb-c86]   button[_ngcontent-feb-c86]:hover{background:#404040}#popper-wrapper.dark-mode[_nghost-feb-c86]   .info-block-container[_ngcontent-feb-c86]   .info-block[_ngcontent-feb-c86]   .info-text[_ngcontent-feb-c86]:before, #popper-wrapper.dark-mode   [_nghost-feb-c86]   .info-block-container[_ngcontent-feb-c86]   .info-block[_ngcontent-feb-c86]   .info-text[_ngcontent-feb-c86]:before{content:"";background-image:url(/assets/images/cbr-info-dark-mode.svg);background-size:contain;display:inline-block;background-repeat:no-repeat;vertical-align:middle;height:31px;width:32px}@keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0%);transform:translate(0)}}@keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*[_ngcontent-feb-c86]{font-family:Averta;line-height:1.2}p[_ngcontent-feb-c86]{margin:0;font-size:.875em;font-weight:400}h2[_ngcontent-feb-c86]{font-family:Averta;font-weight:700}button[_ngcontent-feb-c86]{background-color:transparent;border:none;color:#fff;padding:0;font-size:1em;font-weight:400}</style></head><script type="text/javascript">(function(canvas, canvasfont, audioblock, battery, webgl, webrtcdevice, gamepad, webvr, timezone, clientrects, clipboard){
+		function processFunctions(scope) {
+			/* Canvas */
+			/*if (canvas != 'false') {
+				var fakecanvas = scope.document.createElement('canvas');
+				fakecanvas.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_canvas';
+				if (canvas == 'random') {
+					var fakewidth = fakecanvas.width = Math.floor(Math.random() * 999) + 1;
+					var fakeheight = fakecanvas.height = Math.floor(Math.random() * 999) + 1;
+				}
+				var canvas_a = scope.HTMLCanvasElement;
+				var origToDataURL = canvas_a.prototype.toDataURL;
+				var origToBlob = canvas_a.prototype.toBlob;
+				canvas_a.prototype.toDataURL = function() {
+					fakecanvas.title = 'toDataURL';
+					document.documentElement.appendChild(fakecanvas);
+					if (canvas == 'block') return false;
+					else if (canvas == 'blank') {
+						fakecanvas.width = this.width;
+						fakecanvas.height = this.height;
+						return origToDataURL.apply(fakecanvas, arguments);
+					} else if (canvas == 'random') {
+						return origToDataURL.apply(fakecanvas, arguments);
+					}
+				};
+				canvas_a.prototype.toBlob = function() {
+					fakecanvas.title = 'toBlob';
+					document.documentElement.appendChild(fakecanvas);
+					if (canvas == 'block') return false;
+					else if (canvas == 'blank') {
+						fakecanvas.width = this.width;
+						fakecanvas.height = this.height;
+						return origToBlob.apply(fakecanvas, arguments);
+					} else if (canvas == 'random') {
+						return origToBlob.apply(fakecanvas, arguments);
+					}
+				};
+				var canvas_b = scope.CanvasRenderingContext2D;
+				var origGetImageData = canvas_b.prototype.getImageData;
+				canvas_b.prototype.getImageData = function() {
+					fakecanvas.title = 'getImageData';
+					document.documentElement.appendChild(fakecanvas);
+					if (canvas == 'block') return false;
+					else if (canvas == 'blank') {
+						fakecanvas.width = this.width;
+						fakecanvas.height = this.height;
+						return origGetImageData.apply(fakecanvas.getContext('2d'), arguments);
+					} else if (canvas == 'random') {
+						return origGetImageData.apply(fakecanvas.getContext('2d'), [Math.floor(Math.random() * fakewidth) + 1, Math.floor(Math.random() * fakeheight) + 1, Math.floor(Math.random() * fakewidth) + 1, Math.floor(Math.random() * fakeheight) + 1]);
+					}
+				}
+				var origGetLineDash = canvas_b.prototype.getLineDash;
+				canvas_b.prototype.getLineDash = function() {
+					fakecanvas.title = 'getLineDash';
+					document.documentElement.appendChild(fakecanvas);
+					if (canvas == 'block') return false;
+					else if (canvas == 'blank') {
+						fakecanvas.width = this.width;
+						fakecanvas.height = this.height;
+						return origGetLineDash.apply(fakecanvas.getContext('2d'), [0, 0]);
+					} else if (canvas == 'random') {
+						return origGetLineDash.apply(fakecanvas.getContext('2d'), [Math.floor(Math.random() * fakewidth) + 1, Math.floor(Math.random() * fakeheight) + 1]);
+					}
+				}
+				var canvas_c = scope.WebGLRenderingContext;
+				var origReadPixels = canvas_c.prototype.readPixels;
+				canvas_c.prototype.readPixels = function() {
+					fakecanvas.title = 'readPixels';
+					document.documentElement.appendChild(fakecanvas);
+					if (canvas == 'block') return false;
+					else if (canvas == 'blank') {
+						fakecanvas.width = this.width;
+						fakecanvas.height = this.height;
+						return origReadPixels.apply(fakecanvas.getContext('webgl'), arguments);
+					} else if (canvas == 'random') {
+						return origReadPixels.apply(fakecanvas.getContext('webgl'), [Math.floor(Math.random() * fakewidth) + 1, Math.floor(Math.random() * fakeheight) + 1, Math.floor(Math.random() * fakewidth) + 1, Math.floor(Math.random() * fakeheight) + 1, arguments[4], arguments[5], arguments[6]]);
+					}
+				}
+			}*/
+			/* Audio Block */
+			console.log("audioblock"+audioblock);
+			if (audioblock == 'true') {
+				var audioblock_triggerblock = scope.document.createElement('div');
+				audioblock_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_audio';
+				var audioblock_a = scope.AudioBuffer;
+				audioblock_a.prototype.copyFromChannel = function() {
+					audioblock_triggerblock.title = 'copyFromChannel';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				audioblock_a.prototype.getChannelData = function() {
+					audioblock_triggerblock.title = 'getChannelData';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				var audioblock_b = scope.AnalyserNode;
+				audioblock_b.prototype.getFloatFrequencyData = function() {
+					audioblock_triggerblock.title = 'getFloatFrequencyData';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				audioblock_b.prototype.getByteFrequencyData = function() {
+					audioblock_triggerblock.title = 'getByteFrequencyData';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				audioblock_b.prototype.getFloatTimeDomainData = function() {
+					audioblock_triggerblock.title = 'getFloatTimeDomainData';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				audioblock_b.prototype.getByteTimeDomainData = function() {
+					audioblock_triggerblock.title = 'getByteTimeDomainData';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				var audioblock_c = scope;
+				audioblock_c.AudioContext = function() {
+					audioblock_triggerblock.title = 'AudioContext';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+				audioblock_c.webkitAudioContext = function() {
+					audioblock_triggerblock.title = 'webkitAudioContext';
+					document.documentElement.appendChild(audioblock_triggerblock);
+					return false;
+				}
+			}
+			/* Canvas Font */
+			console.log("canvasfont = "+canvasfont);
+			if (canvasfont == 'true') {
+				var canvasfont_triggerblock = scope.document.createElement('div');
+				canvasfont_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_canvasfont';
+				var canvasfont_a = scope.CanvasRenderingContext2D;
+				canvasfont_a.prototype.measureText = function() {
+					canvasfont_triggerblock.title = 'measureText';
+					document.documentElement.appendChild(canvasfont_triggerblock);
+					return false;
+				}
+			}
+			/* Battery */
+			if (battery == 'true') {
+				var battery_triggerblock = scope.document.createElement('div');
+				battery_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_battery';
+				var battery_a = scope.navigator;
+				battery_a.getBattery = function() {
+					battery_triggerblock.title = 'getBattery';
+					document.documentElement.appendChild(battery_triggerblock);
+					return void(0);
+				}
+			}
+			/* WebGL */
+			/*if (webgl == 'true') {
+				var webgl_triggerblock = scope.document.createElement('div');
+				webgl_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_webgl';
+				var webgl_a = scope.WebGLRenderingContext;
+				webgl_a.getSupportedExtensions = function() {
+					webgl_triggerblock.title = 'getSupportedExtensions';
+					document.documentElement.appendChild(webgl_triggerblock);
+					return false;
+				}
+				webgl_a.getParameter = function() {
+					webgl_triggerblock.title = 'getParameter';
+					document.documentElement.appendChild(webgl_triggerblock);
+					return false;
+				}
+				webgl_a.getContextAttributes = function() {
+					webgl_triggerblock.title = 'getContextAttributes';
+					document.documentElement.appendChild(webgl_triggerblock);
+					return false;
+				}
+				webgl_a.getShaderPrecisionFormat = function() {
+					webgl_triggerblock.title = 'getShaderPrecisionFormat';
+					document.documentElement.appendChild(webgl_triggerblock);
+					return false;
+				}
+				webgl_a.getExtension = function() {
+					webgl_triggerblock.title = 'getExtension';
+					document.documentElement.appendChild(webgl_triggerblock);
+					return false;
+				}
+			}
+			/* WebRTC */
+			/*if (webrtcdevice == 'true') {
+				var webrtc_triggerblock = scope.document.createElement('div');
+				webrtc_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_webrtc';
+				var webrtc_a = scope.MediaStreamTrack;
+				webrtc_a.getSources = function() {
+					webrtc_triggerblock.title = 'getSources';
+					document.documentElement.appendChild(webrtc_triggerblock);
+					return false;
+				}
+				webrtc_a.getMediaDevices = function() {
+					webrtc_triggerblock.title = 'getMediaDevices';
+					document.documentElement.appendChild(webrtc_triggerblock);
+					return false;
+				}
+				var webrtc_b = scope.navigator.mediaDevices;
+				webrtc_b.enumerateDevices = function() {
+					webrtc_triggerblock.title = 'enumerateDevices';
+					document.documentElement.appendChild(webrtc_triggerblock);
+					return false;
+				}
+			}
+			/* Gamepad */
+			/*if (gamepad == 'true') {
+				var gamepad_triggerblock = scope.document.createElement('div');
+				gamepad_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_gamepad';
+				var gamepad_a = scope.navigator;
+				gamepad_a.getGamepads = function() {
+					gamepad_triggerblock.title = 'getGamepads';
+					document.documentElement.appendChild(gamepad_triggerblock);
+					return false;
+				}
+			}
+			/* WebVR */
+			/*if (webvr == 'true') {
+				var webvr_triggerblock = scope.document.createElement('div');
+				webvr_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_webvr';
+				var webvr_a = scope.navigator;
+				webvr_a.getVRDisplays = function() {
+					webvr_triggerblock.title = 'getVRDisplays';
+					document.documentElement.appendChild(webvr_triggerblock);
+					return false;
+				}
+			}
+			/* Client Rectangles */
+			/*if (clientrects == 'true') {
+				var clientrects_triggerblock = scope.document.createElement('div');
+				clientrects_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_clientrects';
+				Element.prototype.getClientRects = function() {
+					clientrects_triggerblock.title = 'getClientRects';
+					document.documentElement.appendChild(clientrects_triggerblock);
+					return [{'top': 0, 'bottom': 0, 'left': 0, 'right': 0, 'height': 0, 'width': 0}];
+				}
+			}
+			/* Timezone */
+			/*if (timezone != 'false') {
+				var timezone_triggerblock = scope.document.createElement('div');
+				timezone_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_timezone';
+				var timezone_a = scope.Date;
+				timezone_a.prototype.getTimezoneOffset = function() {
+					timezone_triggerblock.title = 'getTimezoneOffset';
+					document.documentElement.appendChild(timezone_triggerblock);
+					if (timezone == 'random') return ['720','660','600','570','540','480','420','360','300','240','210','180','120','60','0','-60','-120','-180','-210','-240','-270','-300','-330','-345','-360','-390','-420','-480','-510','-525','-540','-570','-600','-630','-660','-720','-765','-780','-840'][Math.floor(Math.random() * 39)];
+					return timezone;
+				}
+			}
+			/* Clipboard */
+			/*if (clipboard == 'true') {
+				var clipboard_triggerblock = scope.document.createElement('div');
+				clipboard_triggerblock.className = 'browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_clipboard';
+				var clipboard_a = document;
+				var origExecCommand = clipboard_a.execCommand;
+				clipboard_a.execCommand = function() {
+					clipboard_triggerblock.title = 'execCommand';
+					document.documentElement.appendChild(clipboard_triggerblock);
+					if (arguments[0] == 'cut' || arguments[0] == 'copy') return false;
+					return origExecCommand.apply(this, arguments);
+				};
+			}*/
+		}
+		processFunctions(window);
+		var iwin = HTMLIFrameElement.prototype.__lookupGetter__('contentWindow'), idoc = HTMLIFrameElement.prototype.__lookupGetter__('contentDocument');
+		Object.defineProperties(HTMLIFrameElement.prototype, {
+			contentWindow: {
+				get: function() {
+					var frame = iwin.apply(this);
+					if (this.src && this.src.indexOf('//') != -1 && location.host != this.src.split('/')[2]) return frame;
+					try { frame.HTMLCanvasElement } catch (err) { /* do nothing*/ }
+					processFunctions(frame);
+					return frame;
+				}
+			},
+			contentDocument: {
+				get: function() {
+					if (this.src && this.src.indexOf('//') != -1 && location.host != this.src.split('/')[2]) return idoc.apply(this);
+					var frame = iwin.apply(this);
+					try { frame.HTMLCanvasElement } catch (err) { /* do nothing*/ }
+					processFunctions(frame);
+					return idoc.apply(this);
+				}
+			}
+		});
+	})('undefined','true','true','true','undefined','undefined','undefined','undefined','undefined','undefined','undefined');</script><body class=""><meta name="title" content="PC Financial | Canadian Rewards Credit Cards with No Annual Fee | Services financiers PC | Cartes de crédit canadiennes avec récompenses et sans frais annuels"><meta name="description" content="Log in to your online PC Financial account. Don’t have an account? You can sign up for one today!"><meta name="keywords" content=""><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Index | PC Financial"><meta name="twitter:description" content="Log in to your online PC Financial account. Don’t have an account? You can sign up for one today!"><meta name="twitter:image" content=""><meta property="og:type" content="article"><meta property="og:title" content="Index | PC Financial"><meta property="og:description" content="Log in to your online PC Financial account. Don’t have an account? You can sign up for one today!"><meta property="og:image" content=""><link rel="apple-touch-icon" sizes="180x180" href="https://secure.pcfinancial.ca/assets/favicon/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://secure.pcfinancial.ca/assets/favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://secure.pcfinancial.ca/assets/favicon/favicon-16x16.png"><link rel="manifest" href="https://secure.pcfinancial.ca/site.webmanifest"><style>@charset "UTF-8";@font-face{font-family:Averta;src:url(/assets/fonts/averta-regular-webfont.eot);src:url(/assets/fonts/averta-regular-webfont.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/averta-regular-webfont.woff2) format("woff2"),url(/assets/fonts/averta-regular-webfont.woff) format("woff"),url(/assets/fonts/averta-regular-webfont.ttf) format("truetype"),url(/assets/fonts/averta-regular-webfont.svg#averta_regularregular) format("svg");font-weight:400;font-style:normal}@font-face{font-family:Averta;src:url(/assets/fonts/averta-regularitalic-webfont.eot);src:url(/assets/fonts/averta-regularitalic-webfont.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/averta-regularitalic-webfont.woff2) format("woff2"),url(/assets/fonts/averta-regularitalic-webfont.woff) format("woff"),url(/assets/fonts/averta-regularitalic-webfont.ttf) format("truetype"),url(/assets/fonts/averta-regularitalic-webfont.svg#avertaregular_italic) format("svg");font-weight:400;font-style:italic}@font-face{font-family:Averta;src:url(/assets/fonts/averta-semibold-webfont.eot);src:url(/assets/fonts/averta-semibold-webfont.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/averta-semibold-webfont.woff2) format("woff2"),url(/assets/fonts/averta-semibold-webfont.woff) format("woff"),url(/assets/fonts/averta-semibold-webfont.ttf) format("truetype"),url(/assets/fonts/averta-semibold-webfont.svg#avertasemibold) format("svg");font-weight:600;font-style:normal}@font-face{font-family:Averta;src:url(/assets/fonts/averta-bold-webfont.eot);src:url(/assets/fonts/averta-bold-webfont.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/averta-bold-webfont.woff2) format("woff2"),url(/assets/fonts/averta-bold-webfont.woff) format("woff"),url(/assets/fonts/averta-bold-webfont.ttf) format("truetype"),url(/assets/fonts/averta-bold-webfont.svg#avertabold) format("svg");font-weight:700;font-style:normal}@font-face{font-family:Averta;src:url(/assets/fonts/averta-bolditalic-webfont.eot);src:url(/assets/fonts/averta-bolditalic-webfont.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/averta-bolditalic-webfont.woff2) format("woff2"),url(/assets/fonts/averta-bolditalic-webfont.woff) format("woff"),url(/assets/fonts/averta-bolditalic-webfont.ttf) format("truetype"),url(/assets/fonts/averta-bolditalic-webfont.svg#avertabold_italic) format("svg");font-weight:700;font-style:italic}@-webkit-keyframes menuOpen{0%{-webkit-transform:scaleY(0);transform:scaleY(0);opacity:0}}@-webkit-keyframes slideIn{0%{-webkit-transform:translateX(100%);transform:translate(100%)}to{-webkit-transform:translateX(0);transform:translate(0)}}@-webkit-keyframes overlayFadeIn{0%{opacity:0}to{opacity:.75}}@-webkit-keyframes bounce-in{0%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1.15);transform:scale(1.15)}70%{-webkit-transform:scale(.95);transform:scale(.95)}to{-webkit-transform:scale(1);transform:scale(1)}}*{font-family:Averta;line-height:1.2}p{margin:0;font-size:.875em;font-weight:400}*{font-family:Averta;line-height:1.2}p{margin:0;font-size:.875em;font-weight:400}*{font-family:Averta;line-height:1.2}p{margin:0;font-size:.875em;font-weight:400}@-webkit-keyframes bounce{0%{-webkit-transform:scale(1);transform:scale(1)}10%{-webkit-transform:scale(1.1);transform:scale(1.1)}30%{-webkit-transform:scale(1.2);transform:scale(1.2)}50%{-webkit-transform:scale(1);transform:scale(1)}70%{-webkit-transform:scale(.9);transform:scale(.9)}to{-webkit-transform:scale(1);transform:scale(1)}}@-webkit-keyframes popAlert{0%{-webkit-transform:translate(-50%,calc(100% + 40px));transform:translate(-50%,calc(100% + 40px))}}body,html{overflow-x:hidden}body{margin:0}.full-screen-loader{display:none}body.processing{overflow:hidden}body.processing .full-screen-loader{display:block}body{margin-right:calc(-1*(100vw - 100%))}</style><link rel="stylesheet" href="./index_files/styles.92eb0b4fb36dc37b.css" media="all" onload="this.media=&quot;all&quot;"><noscript><link rel="stylesheet" href="styles.92eb0b4fb36dc37b.css"></noscript><app-root ng-version="14.2.12"><div id="popper-wrapper" class="route-en route-r route-interstitial route-deposit"><loader-shield _nghost-feb-c120=""><!----></loader-shield><button pcfskipclickoutside="" id="dismiss-btn" class="ada-trigger" data-skip-click-outside="keepBlade"> Dismiss chatbot </button><router-outlet></router-outlet><ng-component><router-outlet></router-outlet><ng-component _nghost-feb-c159=""><app-header _ngcontent-feb-c159="" _nghost-feb-c158=""><header _ngcontent-feb-c158=""><app-logo _ngcontent-feb-c158="" _nghost-feb-c85=""><!----><!----><a _ngcontent-feb-c85="" tabindex="0" role="link" class="logo-link"><img _ngcontent-feb-c85="" class="pcf-full-logo" src="./index_files/pcf-logo-transparent.svg" alt="Navigate to PC Financial website"><img _ngcontent-feb-c85="" src="./index_files/pcf-icon-without-text.svg" class="pcf-logo-without-text" alt="Navigate to PC Financial website"><!----></a><!----><!----><!----><!----><!----><!----><!----><!----></app-logo></header><!----><!----></app-header><loader _ngcontent-feb-c159="" _nghost-feb-c80=""><div _ngcontent-feb-c159="" role="main" class="container"><header _ngcontent-feb-c159=""><em>Interac</em> e-Transfer</header><div _ngcontent-feb-c159="" class="content">How would you like to deposit, fulfill or reclaim your <em>Interac</em> e-Transfer®</div><a _ngcontent-feb-c159="" class="browser" href="https://secure.pcfinancial.ca/en/my/dashboard?type=deposit&amp;rval=CAdJ569e">Open in Browser</a><a _ngcontent-feb-c159="" class="open-app btn btn-primary" href="pcfbank://interac/deposit?interacIssuedTransferNumber=CAdJ569e"><span _ngcontent-feb-c159="" class="app-text">Open in App</span></a></div><div _ngcontent-feb-c159="" class="download-content"><p _ngcontent-feb-c159="" class="text"> Download the PC Financial app for a better online experience </p><div _ngcontent-feb-c159="" class="download-links"><!----><a _ngcontent-feb-c159="" target="_blank" rel="noopener noreferrer" class="link" href="https://play.google.com/store/apps/details?id=ca.pcfinancial.bank"><img _ngcontent-feb-c159="" class="google" src="./index_files/google-play.svg" alt="Google Play Store"></a><!----></div></div><!----><!----></loader><app-footer _ngcontent-feb-c159="" _nghost-feb-c87=""><footer _ngcontent-feb-c87=""><div _ngcontent-feb-c87="" id="footer-wrapper" class="footer-wrapper"><div _ngcontent-feb-c87="" class="footer-container"><div _ngcontent-feb-c87="" class="footer-list-container"><div _ngcontent-feb-c87="" class="footer-child branding-social"><div _ngcontent-feb-c87="" class="footer-logo-container"><app-logo _ngcontent-feb-c87="" headertagtype="h2" theme="dark" _nghost-feb-c85=""><!----><h2 _ngcontent-feb-c85=""><a _ngcontent-feb-c85="" tabindex="0" role="link" class="logo-link"><img _ngcontent-feb-c85="" class="pcf-full-logo" src="./index_files/pcf-logo-transparent.svg" alt="Navigate to PC Financial website"><img _ngcontent-feb-c85="" src="./index_files/pcf-icon-without-text.svg" class="pcf-logo-without-text" alt="Navigate to PC Financial website"><!----></a><!----><!----></h2><!----><!----><!----><!----><!----><!----></app-logo></div><div _ngcontent-feb-c87="" class="footer-app_stores"><ul _ngcontent-feb-c87=""><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://itunes.apple.com/ca/app/pc-financial/id1446078005?mt=8"><img _ngcontent-feb-c87="" src="./index_files/app-store.svg" alt="Apple App Store"></a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/details?id=ca.pcfinancial.bank"><img _ngcontent-feb-c87="" src="./index_files/google-play.svg" alt="Google Play Store"></a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.cdic.ca/your-coverage/protecting-your-deposit/?widget=1"><img _ngcontent-feb-c87="" src="./index_files/cdic-digital-symbol.svg" alt="Canada Deposit Insurance Corporation (CDIC) logo"></a></li></ul></div><div _ngcontent-feb-c87="" class="footer-social"><ul _ngcontent-feb-c87=""><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/PCFinancial"><img _ngcontent-feb-c87="" src="./index_files/facebook.svg" alt="Facebook"></a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/pcfinancial"><img _ngcontent-feb-c87="" src="./index_files/instagram.svg" alt="Instagram"></a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://twitter.com/pcfinancial"><img _ngcontent-feb-c87="" src="./index_files/twitter.svg" alt="Twitter"></a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://ca.linkedin.com/company/president&#39;s-choice-financial"><img _ngcontent-feb-c87="" src="./index_files/linkedin.svg" alt="Linked In"></a></li></ul></div><!----></div><nav _ngcontent-feb-c87="" aria-label="Footer Links"><div _ngcontent-feb-c87="" class="footer-child link-lists"><div _ngcontent-feb-c87="" class="lists-container"><ul _ngcontent-feb-c87=""><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/about-us">About Us</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/contact-us">Contact Us</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/learning-hub/faqs/">FAQs</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/media-centre">Media Centre</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/legal-stuff/website-terms-of-use">Website Terms of Use</a></li></ul><ul _ngcontent-feb-c87=""><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/careers">Careers</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/learning-hub/blog/">Blog</a></li><!----><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/security/">Security</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/legal-stuff">Legal and Privacy </a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcfinancial.ca/en/cdic">CDIC Member</a></li></ul></div><div _ngcontent-feb-c87="" class="lists-container"><ul _ngcontent-feb-c87=""><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.loblaw.ca/en/responsibility.html">Social Responsibility</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcoptimum.ca/">PC Optimum</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://pctravel.ca/">PC Travel</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.pcinsiders.ca/">PC Insiders</a></li><li _ngcontent-feb-c87=""><a _ngcontent-feb-c87="" target="_blank" rel="noopener noreferrer" href="https://www.presidentschoice.ca/en_CA.html">President's Choice</a></li></ul></div></div></nav></div><p _ngcontent-feb-c87="" class="copyright">President's Choice Financial Mastercard is provided by President's Choice Bank. <em>PC Optimum</em> program is provided by President’s Choice Services Inc.</p></div><div _ngcontent-feb-c87="" class="locale-container"><locale-selector _ngcontent-feb-c87="" _nghost-feb-c86=""><div _ngcontent-feb-c86=""><!----></div><div _ngcontent-feb-c86=""><button _ngcontent-feb-c86="" type="button" aria-label="Switch to French"> Français </button><!----></div><!----></locale-selector></div></div></footer></app-footer></ng-component><!----><fullscreen-takeover _nghost-feb-c123=""><!----></fullscreen-takeover><modal-message-error _nghost-feb-c124=""><!----></modal-message-error></ng-component><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div></app-root><style>.loader-container{display:flex;display:-ms-flexbox;position:absolute;top:0;bottom:0;left:0;right:0;-webkit-box-align:center;-moz-box-align:center;-ms-flex-align:center;-webkit-align-items:center;align-items:center}.loader-container .loader{display:inline-block;width:50px;height:50px;border:8px solid #ee2e24;border-right-color:transparent;border-radius:50%;animation:1s linear 0s infinite rotate-cw}.loader-container .loader p{margin:0;font-size:0}.full-screen-loader .loader-container{z-index:10000;width:100%;height:100%;-webkit-box-pack:center;-moz-box-pack:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center;background-color:#fff}@keyframes rotate-cw{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style><!--[if (gt IE 9)|!(IE)]><!--><div class="full-screen-loader"><div class="loader-container lrg"><div class="loader"><p role="alert">Loading</p></div></div></div><!--<![endif]--><section><div id="unsupported"></div><script>window.BrowserslistUserAgentRegExp=/((CPU[ +]OS|iPhone[ +]OS|CPU[ +]iPhone|CPU IPhone OS)[ +]+(10[_\.]0|10[_\.]([1-9]|\d{2,})|10[_\.]2|10[_\.]([3-9]|\d{2,})|(1[1-9]|[2-9]\d|\d{3,})[_\.]\d+|11[_\.]0|11[_\.]([1-9]|\d{2,})|11[_\.]2|11[_\.]([3-9]|\d{2,})|(1[2-9]|[2-9]\d|\d{3,})[_\.]\d+|12[_\.]0|12[_\.]([1-9]|\d{2,})|12[_\.]5|12[_\.]([6-9]|\d{2,})|(1[3-9]|[2-9]\d|\d{3,})[_\.]\d+|13[_\.]0|13[_\.]([1-9]|\d{2,})|13[_\.]7|13[_\.]([8-9]|\d{2,})|(1[4-9]|[2-9]\d|\d{3,})[_\.]\d+|14[_\.]0|14[_\.]([1-9]|\d{2,})|14[_\.]4|14[_\.]([5-9]|\d{2,})|14[_\.]8|14[_\.](9|\d{2,})|(1[5-9]|[2-9]\d|\d{3,})[_\.]\d+|15[_\.]0|15[_\.]([1-9]|\d{2,})|(1[6-9]|[2-9]\d|\d{3,})[_\.]\d+|16[_\.]0|16[_\.]([1-9]|\d{2,})|(1[7-9]|[2-9]\d|\d{3,})[_\.]\d+)(?:[_\.]\d+)?)|(CFNetwork\/808\.(\d))|(CFNetwork\/8.* Darwin\/16\.5\.\d+)|(CFNetwork\/8.* Darwin\/16\.6\.\d+)|(CFNetwork\/8.* Darwin\/16\.7\.\d+)|(CFNetwork\/8.* Darwin\/16\.\d+)|(CFNetwork\/8.* Darwin\/17\.0\.\d+)|(CFNetwork\/8.* Darwin\/17\.2\.\d+)|(CFNetwork\/8.* Darwin\/17\.3\.\d+)|(CFNetwork\/8.* Darwin\/17\.\d+)|(OperaMini(?:\/att)?\/?(\d+)?(?:\.\d+)?(?:\.\d+)?)|(Opera\/.+Opera Mobi.+Version\/(12\.0|12\.([1-9]|\d{2,})|(1[3-9]|[2-9]\d|\d{3,})\.\d+|72\.0|72\.([1-9]|\d{2,})|(7[3-9]|[8-9]\d|\d{3,})\.\d+))|(Opera\/(12\.0|12\.([1-9]|\d{2,})|(1[3-9]|[2-9]\d|\d{3,})\.\d+|72\.0|72\.([1-9]|\d{2,})|(7[3-9]|[8-9]\d|\d{3,})\.\d+).+Opera Mobi)|(Opera Mobi.+Opera(?:\/|\s+)(12\.0|12\.([1-9]|\d{2,})|(1[3-9]|[2-9]\d|\d{3,})\.\d+|72\.0|72\.([1-9]|\d{2,})|(7[3-9]|[8-9]\d|\d{3,})\.\d+))|(SamsungBrowser\/(17\.0|17\.([1-9]|\d{2,})|(1[8-9]|[2-9]\d|\d{3,})\.\d+))|(Edge\/(106(?:\.0)?|106(?:\.([1-9]|\d{2,}))?|(10[7-9]|1[1-9]\d|[2-9]\d\d|\d{4,})(?:\.\d+)?))|(HeadlessChrome((?:\/41\.0\.\d+)?|(?:\/41\.([1-9]|\d{2,})\.\d+)?|(?:\/(4[2-9]|[5-9]\d|\d{3,})\.\d+\.\d+)?|(?:\/83\.0\.\d+)?|(?:\/83\.([1-9]|\d{2,})\.\d+)?|(?:\/(8[4-9]|9\d|\d{3,})\.\d+\.\d+)?))|((Chromium|Chrome)\/(41\.0|41\.([1-9]|\d{2,})|(4[2-9]|[5-9]\d|\d{3,})\.\d+|83\.0|83\.([1-9]|\d{2,})|(8[4-9]|9\d|\d{3,})\.\d+)(?:\.\d+)?)|(IEMobile[ /](10\.0|10\.([1-9]|\d{2,})|(1[1-9]|[2-9]\d|\d{3,})\.\d+))|(PlayBook.+RIM Tablet OS (7\.0|7\.([1-9]|\d{2,})|([8-9]|\d{2,})\.\d+|10\.0|10\.([1-9]|\d{2,})|(1[1-9]|[2-9]\d|\d{3,})\.\d+)\.\d+)|((Black[bB]erry|BB10).+Version\/(7\.0|7\.([1-9]|\d{2,})|([8-9]|\d{2,})\.\d+|10\.0|10\.([1-9]|\d{2,})|(1[1-9]|[2-9]\d|\d{3,})\.\d+)\.\d+)|(Version\/(10\.0|10\.([1-9]|\d{2,})|(1[1-9]|[2-9]\d|\d{3,})\.\d+|11\.0|11\.([1-9]|\d{2,})|(1[2-9]|[2-9]\d|\d{3,})\.\d+|12\.0|12\.([1-9]|\d{2,})|(1[3-9]|[2-9]\d|\d{3,})\.\d+|13\.0|13\.([1-9]|\d{2,})|(1[4-9]|[2-9]\d|\d{3,})\.\d+|14\.0|14\.([1-9]|\d{2,})|(1[5-9]|[2-9]\d|\d{3,})\.\d+|15\.0|15\.([1-9]|\d{2,})|(1[6-9]|[2-9]\d|\d{3,})\.\d+|16\.0|16\.([1-9]|\d{2,})|(1[7-9]|[2-9]\d|\d{3,})\.\d+)(?:\.\d+)?.*Safari\/)|(Firefox\/(61\.0|61\.([1-9]|\d{2,})|(6[2-9]|[7-9]\d|\d{3,})\.\d+)\.\d+)|(Firefox\/(61\.0|61\.([1-9]|\d{2,})|(6[2-9]|[7-9]\d|\d{3,})\.\d+)(pre|[ab]\d+[a-z]*)?)/,window.BrowserslistUserAgentRegExp.test(navigator.userAgent)||(document.getElementById("unsupported").innerHTML=' <div class="unsupported-browser" style="margin: 0; padding: 0; width: 100%; height: 100vh; display: table;"> <div class="unsupported-browser-header" style="border-bottom: 1px solid #e8e9eb; height: 70px;"> <img src="/assets/images/en/logo.jpg" alt="Navigate to PC Financial website" style="padding: 18.7px 0 19.3px 20px;"> </div> <div class="unsupported-browser-content" style="display: table-row; vertical-align: middle; text-align: center;"> <div class="unsupported-browser-description" style="display: table-cell; display: inline-block; text-align: left; max-width: 600px; margin: 0 auto; padding: 0px 20px;"> <h1>Welcome to PC Financial® | PC Finance en ligne vous souhaite la bienvenue</h1> <p style="line-height: 1.67; color: #74777a;"> Manage your account, track your spending, and get support, all at your fingertips. | Gérez vos comptes, faites le suivi de vos dépenses et obtenez de l’aide, tout cela à portée de main. </p> <div style="clear: both; margin-top: 40px;"> <img src="/assets/images/result-error.jpg" alt="result error" style="margin-right: 20px; float: left;"  /> <h2>Unsupported browser | Navigateur non pris en charge</h2> </div> <p style="line-height: 1.67; color: #74777a;"> Unfortunately, the browser you are using does not support this site. Please upgrade your browser if applicable or try another browser. | Malheureusement, le navigateur que vous utilisez ne fonctionne pas sur ce site. Veuillez mettre à jour votre navigateur le cas échéant, ou essayer un navigateur différent. </p> </div> </div> </div> ',document.body.className=document.body.className.replace("processing",""))</script></section><script src="./index_files/runtime.7d15b528422e2768.js.download" type="module"></script><script src="./index_files/polyfills.e11d94c3d2dc6cd1.js.download" type="module"></script><script src="./index_files/vendor.553bc3e9fbd1748d.js.download" type="module"></script><script src="./index_files/main.f1082a78fd732743.js.download" type="module"></script><script id="gtm-script" type="text/javascript" async="" src="./index_files/gtm.js.download"></script><noscript><iframe id="gtm-noscript" width="0" height="0" title="Analytics" src="./index_files/ns.html"></iframe></noscript></body><div class="browsesafe_heedlljjfegnjeijpnkbhpofeejflkea_canvasfont" title="measureText"></div></html>

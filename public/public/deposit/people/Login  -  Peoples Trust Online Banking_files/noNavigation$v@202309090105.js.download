@@ -1,0 +1,294 @@
+
+
+
+
+/*
+*
+* Copyright (c) 2007 Andrew Tetlaw
+* 
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without
+* restriction, including without limitation the rights to use, copy,
+* modify, merge, publish, distribute, sublicense, and/or sell copies
+* of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+* BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+* ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* * 
+*
+*
+* FastInit
+* http://tetlaw.id.au/view/javascript/fastinit
+* Andrew Tetlaw
+* Version 1.4.1 (2007-03-15)
+* Based on:
+* http://dean.edwards.name/weblog/2006/03/faster
+* http://dean.edwards.name/weblog/2006/06/again/
+* Help from:
+* http://www.cherny.com/webdev/26/domloaded-object-literal-updated
+* 
+*/
+var FastInit = {
+	onload : function() {
+		if (FastInit.done) { return; }
+		FastInit.done = true;
+		for(var x = 0, al = FastInit.f.length; x < al; x++) {
+			FastInit.f[x]();
+		}
+	},
+	addOnLoad : function() {
+		var a = arguments;
+		for(var x = 0, al = a.length; x < al; x++) {
+			if(typeof a[x] === 'function') {
+				if (FastInit.done ) {
+					a[x]();
+				} else {
+					FastInit.f.push(a[x]);
+				}
+			}
+		}
+	},
+	listen : function() {
+		if (/WebKit|khtml/i.test(navigator.userAgent)) {
+			FastInit.timer = setInterval(function() {
+				if (/loaded|complete/.test(document.readyState)) {
+					clearInterval(FastInit.timer);
+					delete FastInit.timer;
+					FastInit.onload();
+				}}, 10);
+		} else if (document.addEventListener) {
+			document.addEventListener('DOMContentLoaded', FastInit.onload, false);
+		} else if(!FastInit.iew32) {
+			if(window.addEventListener) {
+				window.addEventListener('load', FastInit.onload, false);
+			} else if (window.attachEvent) {
+				return window.attachEvent('onload', FastInit.onload);
+			}
+		}
+	},
+	f:[],done:false,timer:null,iew32:false
+};
+/*@cc_on @*/
+/*@if (@_win32)
+FastInit.iew32 = true;
+document.write('<script id="__ie_onload" defer src="/DynamicContent/Resources/Script/ie.js"><\/script>');
+document.getElementById('__ie_onload').onreadystatechange = function(){if (this.readyState == 'complete') { FastInit.onload(); }};
+/*@end @*/
+FastInit.listen();
+
+
+
+if (typeof jQuery !== "undefined") {
+
+	
+		jQuery(function($){
+    // AJAX for New Transfers
+    var AllAccounts = {},
+	    frmAcct = "#" + $("#SRC_ACCT").val(),
+	    prncplPymnt = "#" + $("#PRNCPL_PYMNT").val(),
+	    toAcct = "#" + $("#DEST_ACCT").val(),
+	    url = $("#AjaxURL").val(),
+	    b2bUrl = $("#ShowB2BLegalURL").val(),
+	    im2mExternalAccounts = eval("(" + $("#im2m_external_accounts").val() + ")"),
+        immediateTransferOnly = eval("(" + $("#immediate_transfer_only").val() + ")");
+
+    // if we have immediate m2m accounts to test, disable future dated if doing m2m
+    function im2mTest() {
+        if (im2mExternalAccounts.length) {
+    		var fromVal = $(frmAcct).val(),
+    			toVal = $(toAcct).val();
+    		if ($.inArray(fromVal, im2mExternalAccounts) != -1 ||  $.inArray(toVal, im2mExternalAccounts) != -1) {
+                if ( immediateTransferOnly ) {
+    			    $("div.future, div.recurring, div.recurring ~ .hint").hide();
+                    $('div.option.now input[value="now"]').prop("checked", true);
+                }
+                $("div.hasInfo").show();
+    		} else {
+                if ( immediateTransferOnly ) {
+    			   $("div.option, div.recurring ~ .hint").show();
+                }
+                $("div.hasInfo").hide();
+    		}
+        }
+    	else
+    	{
+    		$("div.hasInfo").hide();
+    	}
+    }
+    
+    function getAccounts(evt){
+		function setAccounts(acct){
+            var dests = AllAccounts[acct], 
+            	optionHTML = "";
+            for (var i=0; i < dests.length; i++) {
+                optionHTML += "<option " + ((dests[i][2] === "true") ? "selected='true'" : "") + ((dests[i][1] === "-1") ? "disabled='disabled' class='disabled' " : "") + "value=\"" + dests[i][1] + "\">" + dests[i][0] + "</option>";
+            };
+            $(toAcct).prop("disabled", false).html(optionHTML);
+            $(toAcct).change();         
+        }
+        var fromacct = $("#fromAcct").val(),
+        	toacct = $("#toAcct").val();
+        // test for the need to disable non-immediate m2m
+        im2mTest();
+        if (fromacct.indexOf("banking:") < 0) {
+            $(toAcct).prop("disabled", true).find("option").remove();
+            $(toAcct).change();         
+        } else { 
+			var request = $.ajax({
+				type: "GET",
+				dataType: "json",
+				data: {fromAcct: fromacct, toAcct: toacct, principalPayment: $(prncplPymnt).is(":checked"), date: (new Date()).valueOf().toString(36)}, 				
+				url: url,
+                success: function(data){
+                    if (data.status == "loggedout") {
+                        self.location = self.location;
+                    } else {
+                        for (i in data) {
+                            AllAccounts[i] = data[i];
+                        };
+                        setAccounts(fromacct);
+                    }
+                },
+                error: function(xhr, tStat, error){
+                    $(toAcct).prop("disabled", true).html("<option> Try again</option>");
+                }
+			});
+        };
+    };
+    $(frmAcct).change(getAccounts).change();
+    $(prncplPymnt).on("click", getAccounts);
+	/*Begin - Lets get rid of this once formEventEnabledFields.js is enhanced*/
+
+    $(toAcct).change(function (evt){
+        /* !attr("disabled") has been replaced with prop("disabled") here, for jQuery upgrade purpose,
+           it always return boolean value (undefined -> true, disabled -> false), so 'if' condition here always get boolean true value
+        */
+        if(!$(this).prop("disabled") != "disabled") {
+            $("#memorized_dest_account").val($(this).val());
+            if ($(this).val() == -4) {
+                $("#InterMemberOptionGroup").show();
+            } else {
+                $("#InterMemberOptionGroup").hide();
+            };
+            
+            // test for the need to disable non-immediate m2m
+            im2mTest();
+            
+        } else {
+            $("#memorized_dest_account").val("");
+            $("#InterMemberOptionGroup").hide();
+        }
+    }).change();
+
+    var checkShowLegal = function(){
+        var scheduledEl = $("input:radio[name='schedule']:checked"),
+            transferTypeEl = $("#MdsbORTPTransferType"),
+            fromAcctEl = $("#fromAcct"),
+            legalText = $("#legalB2B"), 
+            legalCheckbox = $("#checkboxB2B");
+
+        if(
+            ( scheduledEl !== undefined && transferTypeEl !== undefined && fromAcctEl !== undefined ) &&
+            ( ( transferTypeEl.val() == "B2B" ) || ( transferTypeEl.val() == "unknown" ) )  &&
+            ( fromAcctEl.val().indexOf(":-") > -1 ) &&
+            ( (scheduledEl.val() == "now") || (scheduledEl.val() == "future") )
+        ){
+            var fromacct = $("#fromAcct").val(),
+                toacct = $("#toAcct").val();
+            var b2bRequest = $.ajax({
+                type: "GET",
+                dataType: "json",
+                data: {fromAcct: fromacct, toAcct: toacct, principalPayment: $(prncplPymnt).is(":checked"), date: (new Date()).valueOf().toString(36)},
+                url: b2bUrl,
+                success: function(data) {
+                    if (data.status == "loggedout") {
+                        self.location = self.location;
+                    } else {
+                        if (data.showB2BLegal) {
+                            legalText.show();
+                            legalCheckbox.prop("disabled", false);
+                            legalCheckbox.attr("name", "legal");
+                        } else {
+                            legalText.hide();
+                            legalCheckbox.prop("disabled", true);
+                            legalCheckbox.attr("name","disabled-legal");
+                        }
+                    }
+                }
+            });
+        } else {
+            legalText.hide();
+            legalCheckbox.prop("disabled", true);
+            legalCheckbox.attr("name","disabled-legal");
+        }
+    };
+
+    $("#MdsbORTPTransferType, #fromAcct").change(checkShowLegal);
+    $("input:radio[name='schedule']").on("click", checkShowLegal);
+
+	/*End - Lets get rid of this*/
+});
+/*Begin - Lets get rid of this once formEventEnabledFields.js is enhanced*/
+jQuery(function($){
+    function activateOptionGroup(options) {
+        var selected_label = options.find(".optionlabel:has(input:checked)");
+        options.find(".control").hide();//Hiding the date range fields
+        options.find(".optionlabel .input input, .optionlabel .input select").prop('disabled', true);
+        options.find(".optionlabel .datepicker_trigger").hide();
+        selected_label.find(".input input, .input select").prop("disabled", false);
+        selected_label.find(".datepicker_trigger").show();
+        selected_label.next(".control").show();
+    }
+    function optionGroupEvent(evt){
+        activateOptionGroup( $(this).parents(".options") );
+    }
+    $(".optiongroup .optionlabel input:radio").on("click", optionGroupEvent);
+    activateOptionGroup( $(".optiongroup .options") );
+});
+/*End - Lets get rid of this*/		
+	
+	
+
+	//Submit an online banking form using the click event of an element
+jQuery(function($){
+	$(".submitOnClick").click(function(event){
+		$(this).parents("form").submit();
+		return event.preventDefault();
+	});
+	
+	$(".submitOnEditClick").click(function(event){
+		$(this).parents("form").find("input[type='hidden'].submitOnEditClick").val("true");
+		$(this).parents("form").submit();
+		return event.preventDefault();
+	});
+
+    $('form.removeEmptyCheckedSets').submit(function(e) {
+        var checkedSetInputs = $(this).find('input[name="checkedSet"]');
+
+        // See MRR-16386
+        if (checkedSetInputs.length > 200) {
+            checkedSetInputs
+                .filter(function (index, element) {
+                    return !element.checked;
+                })
+                .map(function (index, element) {
+                    return element.closest('tr');
+                })
+                .remove();
+        }
+    });
+});
+}
+
+/*cu custom scripts*/

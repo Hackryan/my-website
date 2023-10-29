@@ -1,0 +1,342 @@
+/* ========================= General ========================= */
+
+body {
+	font-family: "Whitney-Book-Pro", Arial, Helvetica, sans-serif;
+	/*font-size: 14px;*/
+	margin: 0;
+	width: 100%;
+	padding: 0;
+	-webkit-text-size-adjust: none;
+	background: #fff;
+	color: #383B3E;
+	font-size: 12px;
+}
+
+/* ========================= Header Size, Font Size ========================= */
+/*h1 { font-size: 18px;} For What Matters*/
+h1 {
+	font-size: 13px;
+}
+
+h2 {
+	font-size: 13px;
+}
+
+h3 {
+	font-size: 13px;
+}
+
+h4 {
+	font-size: 10px;
+}
+
+p {
+	font-size: 13px;
+	color: #333333;
+}
+
+a {
+	color: #383B3E;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #C41F3E;
+}
+
+img {
+	border: none;
+}
+
+.button-white-border {
+	display: table;
+	float: right;
+	font-size: 14px;
+}
+
+.primary-button {
+	display: block;
+	border: solid 1px #FFF;
+	background: #387594;
+	font-size: 13px;
+	font-weight: bold;
+	padding: 4px 20px 4px 20px;
+	color: #FFF;
+
+	/* CSS3 ready */
+	background-image: -webkit-gradient(linear,
+			left bottom,
+			left top,
+			color-stop(1, #387594),
+			color-stop(0, #003268));
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+
+.semibold-heading {
+	font-family: "Whitney-Semibld-Pro", Arial, Helvetica, sans-serif;
+}
+
+
+/* ========================= Header ========================= */
+#header-logo {
+	background: #EAEAEA;
+	height: 65px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 11px;
+}
+
+#header-logo img {
+	float: left;
+	height: 35px;
+}
+
+#header h1 {
+	color: white;
+	font-weight: normal;
+	float: left;
+	margin: 10px 0 0 5px;
+	font-size: 13px;
+}
+
+/* Grey background banner */
+#home-nav,
+div.grey-bg {
+	display: table;
+	width: 100%;
+	padding: 5px 0px 5px 0px;
+	margin: 0px;
+}
+
+div.grey-bg {
+	border-top: 1px solid #CCC;
+}
+
+.request-call {
+	padding-top: 5px;
+}
+
+#home-nav div,
+div.grey-bg div {
+	width: 50%;
+	float: left;
+	height: 33px;
+}
+
+#home-nav div img,
+div.grey-bg div img {
+	vertical-align: middle;
+	margin-left: 10px;
+	margin-right: 5px;
+	float: left;
+}
+
+#home-nav div a {
+	font-weight: normal;
+	font-size: 12px;
+	color: #8B1D41;
+	position: relative;
+	height: 60px;
+	padding-bottom: 5px;
+	margin: 0px;
+	text-decoration: none;
+}
+
+#home-nav div a:hover {
+	text-decoration: underline;
+}
+
+#home-nav div a span,
+div.grey-bg div a span {
+	position: relative;
+	top: 8px;
+	right: 3px;
+}
+
+.locator-link-french span,
+#locator-link-french span {
+	top: 0px;
+}
+
+/* ========================= footer ========================= */
+#footer {
+	clear: both;
+	font-family: "Whitney-Book-Pro", Arial, Helvetica, sans-serif;
+	height: 71px;
+	background-color: #383B3E;
+	margin-top: 20px;
+}
+
+#footer div.footer-shadow {
+	height: 4px;
+	background: #F5F5F5;
+}
+
+
+
+#social-media {
+	border-top: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	width: 100%;
+	display: table;
+}
+
+#social-media p {
+	font-weight: bold;
+	margin-left: 10px;
+	float: left;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+#social-media a {
+	margin: 12px 10px 0 10px;
+	float: left;
+}
+
+#footer-link,
+#text-copyright {
+	height: 100%;
+}
+
+#text-copyright div.font-size {
+	float: right;
+	width: 160px;
+}
+
+#text-copyright div.font-size a {
+	padding: 0px;
+	margin: 0px;
+}
+
+#footer-link a {
+	text-decoration: underline;
+	font-size: 13px;
+	
+}
+
+#footer-link span {
+	font-size: 13px;
+	margin-left: 5px
+}
+
+#text-copyright {
+	background: #383B3E;
+	
+	text-align: center;
+}
+
+#text-copyright a {
+	text-decoration: underline;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+#text-copyright span {
+	font-size: 13px;
+	margin-left: 5px
+}
+
+#text-copyright p {
+	font-size: 10px;
+	color: #FFFFFF;
+	margin-bottom: 19px;
+}
+
+#text-copyright p.copyright {
+	font-family: "Whitney-Book-Pro", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+#text-copyright img {
+	cursor: pointer;
+	display: inline;
+	float: right;
+	position: relative;
+	top: 1px;
+	margin: 0 10px;
+}
+
+
+/* ========================= Content (Leaf Page) ========================= */
+#content {
+	clear: both;
+}
+
+#content h2,
+#content1 h2 {
+	color: #AF0B1C;
+	margin: 7px 0 7px 10px;
+	font-size: 18px;
+}
+
+div.leaf>p {
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 3px 8px 3px 10px;
+	font-size: 13px;
+}
+
+div.leaf a {
+	font-size: 12px
+}
+
+div.leaf h3 {
+	margin: 5px 10px;
+	font-size: 13px;
+}
+
+div.back-to-top {
+	width: 100%;
+	text-align: right;
+	margin-bottom: 10px;
+}
+
+div.back-to-top a {
+	font-size: 13px;
+	margin: 5px 10px;
+	border-bottom: 1px dotted #AF0B1C;
+	text-decoration: none
+}
+
+
+/* HD image */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+	#header h1 img {
+		width: 35px;
+		height: 14px;
+	}
+
+	img[src="../m/images/logo.png"] {
+		content: url('../m/images/logo-hd.png');
+		background: url('../m/images/logo-hd.png');
+		background-repeat: no-repeat;
+		background-position: 10px 10px;
+	}
+
+	img[src="../m/images/tagline.png"] {
+		content: url('../m/images/tagline-hd.png');
+		background: url('../m/images/tagline-hd.png');
+		background-repeat: no-repeat;
+		background-position: 9px 10px;
+		background-size: 35px 14px;
+	}
+
+	#home-nav img,
+	#call-action img {
+		width: 32px;
+		height: 32px;
+	}
+
+	img[src="../m/images/back.png"] {
+		content: url('../m/images/back-hd.png');
+		background: url('../m/images/back-hd.png');
+		background-repeat: no-repeat;
+		background-size: 32px 32px;
+	}
+}
+back-button{
+
+}

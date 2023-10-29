@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
+    <g fill="none" fill-rule="evenodd">
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+            <path fill="#C1E7FF" stroke="#005587" d="M31 117h82a5 5 0 0 1 5 5v7H26v-7a5 5 0 0 1 5-5z"/>
+            <path stroke="#001928" d="M12 130h120"/>
+            <path stroke="#0079C1" d="M12 130h63.502M26.321 121.888v7.283h91.176"/>
+        </g>
+        <g transform="translate(40.058 37.713)">
+            <path fill="#C1E7FF" stroke="#005587" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M36.643 3.804l27.241 75.123H0L27.242 3.804a5 5 0 0 1 9.4 0z"/>
+            <path fill="#FFF" d="M45.523 31.8l4.19 12.086H14.318L18.622 31.8zM42.21 21.886l-19.597-.02L26.758 9.8h11.008zM54.712 57.506l4.354 12.086H4.678l4.607-12.086z"/>
+            <path stroke="#0079C1" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M38.368 8.141l24.684 68.348"/>
+            <path stroke="#001928" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M38.368 8.141l8.658 23.971"/>
+            <path stroke="#73C3EB" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M3.884 69.938H60.08"/>
+            <circle cx="60.431" cy="69.791" r="1.295" fill="#001928"/>
+            <path stroke="#005587" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9.065 56.125H54.82"/>
+            <path stroke="#73C3EB" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13.517 43.176H50.64M11.34 47.715l13.162-36.377"/>
+        </g>
+        <g transform="translate(58.54 7.614)">
+            <path fill="#FFF" stroke="#73C3EB" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10.836 23.132l.41-.003 2.247 4.595 2.523-4.713 13.508-3.095s-4.739-.826-7.782-3.198-7.953-6.032-7.953-6.032l-.242-6.302c.132-1.7-2.425-3.46-4.185-3.46-1.76 0-3.308 1.41-3.573 3.03l-.7.842L.02 6.751l4.66 1.505-.752 7.853c-.53 3.783 3.189 7.023 6.908 7.023z"/>
+            <circle cx="9.118" cy="4.91" r="1.5" fill="#0079C1"/>
+        </g>
+    </g>
+</svg>

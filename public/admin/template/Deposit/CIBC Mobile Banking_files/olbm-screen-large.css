@@ -1,0 +1,815 @@
+/* CIBC Mobile Banking - CSS Large IPHONE */
+
+/****COMMON ITEMS **********/
+body,
+div,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+input,
+textarea,
+th,
+td {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+}
+
+body {
+	background-color: #f8f8f8;
+	color: #383B3E;
+	font-family: "Whitney-Book-Pro", Arial, Helvetica, sans-serif;
+	font-size: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	-webkit-user-select: none;
+	-webkit-text-size-adjust: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+a {
+	color: #AF0B1C;
+	text-decoration: underline;
+}
+
+select,
+input,
+textarea {
+	line-height: 1.3em;
+}
+
+select {
+	font-size: 0.9em;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	list-style: none;
+}
+
+img {
+	border: 0;
+}
+
+/****** common page content treatment ******/
+#pageContainer {
+	width: 100%;
+	min-height: 100%;
+	height: auto !important;
+}
+
+#pageContent {
+	width: 100%;
+	overflow: hidden;
+}
+
+#mainSection {
+	width: 100%;
+	font-size: 1.0em;
+}
+
+#mainSection.alignCenter {
+	margin: 0 auto;
+}
+
+#mainSection.edgeContent {
+	padding: 0;
+}
+
+#pageContent .rotatingAd {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+#pageContent .rotatingAd img {
+	display: block;
+	margin: 0 auto;
+}
+
+#pageContent .rotatingAdText {
+	background-color: #EFEFEF;
+	border: 1px solid #ccc;
+	display: none;
+	padding: 10px;
+	margin: 10px;
+	margin-left: 0 auto;
+	margin-right: 0 auto;
+}
+
+#pageContent .rotatingAdText a {
+	text-decoration: none;
+	width: 100%;
+}
+
+#pageContent .rotatingAdText .title {
+	font-weight: bold;
+	color: #AF0B1C;
+}
+
+#pageContent .rotatingAdText .text {
+	font-weight: bold;
+}
+
+#pageContent .blockHeader {
+	margin-bottom: 10px;
+}
+
+#pageContent .pageTitle {
+	color: #333333;
+	display: block;
+	font-size: 1.1em;
+	font-weight: bold;
+	padding: 5px 0;
+	width: 100%;
+}
+
+#pageContent .pageTitleDetails {
+	color: #333333;
+	display: block;
+	font-size: 1.0em;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
+.pageTitle.underline,
+.pageTitleDetails.underline {
+	border-bottom: 1px solid #E3E3E3;
+	margin-bottom: 10px;
+}
+
+#pageContent p.result {
+	line-height: 1.8em;
+}
+
+#pageContent .boldText {
+	font-weight: bold;
+}
+
+#pageContent .greyText {
+	color: #666666;
+}
+
+#pageContent .spacer {
+	float: left;
+	clear: both;
+	height: 50px;
+}
+
+/****** table list page treatment ******/
+.listPage {
+	margin: 0 0 10px;
+	width: 100%;
+}
+
+.listPage td {
+	border-bottom: 1px #cccccc solid;
+	font-weight: bold;
+}
+
+.listPage .linkItem.last,
+.last {
+	border-bottom: 0px;
+}
+
+/*always use on last row*/
+.listPage .linkItem {
+	padding: 10px;
+}
+
+.listPage .linkItem .icon {
+	display: block;
+	float: left;
+	padding-right: 10px;
+	vertical-align: middle;
+}
+
+.listPage .linkItem .text {
+	display: block;
+	float: left;
+	font-size: 1.1em;
+	overflow: hidden;
+	padding: 10px 0;
+	vertical-align: middle;
+}
+
+/**** list group treatment ****/
+.contentBlock {
+	margin: 10px 10px 0px 10px;
+	overflow: hidden;
+}
+
+.floatBlock {
+	float: left;
+	padding: 10px;
+}
+
+.listGroup {
+	margin: 10px 0 20px 0;
+	
+}
+
+/*-webkit-border-radius: 10px; removed 11/18/2011*/
+.listItem {
+	border-bottom: 1px #cccccc solid;
+	padding: 10px;
+	color: #000;
+	overflow: hidden;
+	display: block;
+}
+
+.listItem.last {
+	border-bottom: 0px;
+}
+
+/*always use on last row*/
+.listText {
+	display: block;
+	float: left;
+	font-weight: bold;
+}
+
+.listAmount {
+	display: block;
+	float: right;
+	color: #000000;
+	text-align: right;
+	text-decoration: none;
+	padding-right: 0px;
+	font-weight: bold;
+}
+
+.fieldNote {
+	font-size: 0.9em;
+	padding-bottom: 10px;
+}
+
+/**** horizontal fieldlabel pair *****/
+.fieldLabelHorizontal {
+	float: left;
+	font-size: 0.93em;
+	font-weight: bold;
+	overflow: hidden;
+	width: 38%;
+	padding-right: 10px;
+}
+
+.labelledFieldHorizontal {
+	float: right;
+	width: 58%;
+}
+
+.labelledFieldHorizontal.secondary {
+	padding-top: 5px;
+	width: 58%;
+}
+
+.valueLabelHorizontal {
+	float: left;
+	font-size: 1.0em;
+	font-weight: bold;
+	padding-bottom: 5px;
+	width: 33%;
+}
+
+.labelledValueHorizontal {
+	float: left;
+	padding-bottom: 5px;
+	width: 58%;
+}
+
+.labelledValueHorizontal.secondary {
+	padding-top: 5px;
+	width: 67%;
+}
+
+.subgroup .labelledFieldVertical {
+	float: left;
+	width: 33%;
+}
+
+.subgroup .labelledFieldHorizontal {
+	float: left;
+	width: auto;
+}
+
+.subgroup #searchForBranchesPair.labelledFieldHorizontal {
+	padding-right: 20px;
+}
+
+.fieldLabelContainer,
+.valueLabelContainer {
+	clear: both;
+	overflow: hidden;
+	padding: 10px 10px;
+	border-bottom: 1px solid #efefef;
+}
+
+.fieldLabelContainer.last,
+.valueLabelContainer.last {
+	border-bottom: 0px;
+	padding-bottom: 10px;
+}
+
+/*always use on last row*/
+#searchForContainer.fieldLabelContainer {
+	padding: 10px 0 10px 0;
+}
+
+.fieldLabelContainerGroup,
+.valueLabelContainerGroup {
+	float: left;
+	width: 100%;
+}
+
+/******* form flow treatment *****************/
+.formBlock {
+	border-bottom: 1px solid #E3E3E3;
+}
+
+/***** pagination treatment ***********/
+.paginationContainer {
+	background-color: #f8f8f8;
+	margin-bottom: 10px;
+	padding: 10px;
+	color: #000000;
+	overflow: hidden;
+}
+
+.paginationContainer.noborder {
+	border-bottom: 0px;
+}
+
+.prevLink {
+	display: block;
+	float: left;
+}
+
+.nextLink {
+	display: block;
+	float: right;
+}
+
+/******* button treatment ********************/
+.buttonContainer {
+	margin: 10px;
+	overflow: hidden;
+	clear: both;
+}
+
+.primaryFormButton {
+	padding: 7.7px 20px;
+	background-color: #C41F3E;
+	color: #FFFFFF;
+	border: none;
+	border-radius: 2px;
+}
+
+.primaryFormButton a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.secondaryFormButton {
+	background-color: #cccccc;
+	border: 1px solid #AAAAAA;
+	float: left;
+	font-weight: bold;
+	margin-top: 1px;
+	padding: 6px 15px;
+	white-space: nowrap;
+	width: auto;
+	text-align: center;
+}
+
+.secondaryFormButton a {
+	text-decoration: none;
+	color: #333333;
+}
+
+.secondaryFormButton.middle {
+	float: right;
+	margin-right: 10px;
+}
+
+.secondaryFormButton.middle a {
+	text-decoration: none;
+	color: #333333;
+}
+
+/* buttons  Iphone-specific*/
+.primaryFormButton,
+.secondaryFormButton {
+	padding: 0;
+	margin: 0;
+}
+
+.iphoneButton {
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+	text-decoration: none;
+}
+
+/*border-width:0 10px 0 10px;background-color:transparent;line-height:49px;removed 11/18/2011*/
+
+
+#questionButtonContainer a {
+	font-size: 0.95em
+}
+
+.iphoneButton.primary {
+	color: #fff;
+}
+
+.iphoneButton.primaryBlue {
+	color: #fff;
+}
+
+.iphoneButton.secondary {
+	color: #000;
+}
+
+.iphoneButton.large {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 95%;
+	height: 32px;
+	margin: 0 auto;
+	float: none;
+	margin: 0 auto;
+	text-decoration: none;
+}
+
+/*width:280px;height:49px;margin-bottom:10px;float:left;removed 11/18-2011*/
+
+/* max width of iphone screen */
+.iphoneButton.medium {
+	width: 206px;
+	height: 49px;
+}
+
+/* 2/3rds width of iphone screen */
+.iphoneButton.small {
+	width: 126px;
+	height: 49px;
+}
+
+/* 1/2 width of iphone screen */
+.iphoneButton.xsmall {
+	width: 100px;
+	height: 49px;
+}
+
+/* 1/3 width of iphone screen */
+
+.iphoneButton.primary {
+	-webkit-border-image: url(../img/iphone/red.png) 0 10 0 10;
+}
+
+.iphoneButton.primary:active {
+	-webkit-border-image: url(../img/iphone/red-press.png) 0 10 0 10;
+}
+
+/*.iphoneButton.primaryBlue {-webkit-border-image:url(http://cibc.intelliresponse.com/mobilestaging/img/iphone/blue.png) 0 10 0 10;}*/
+.iphoneButton.primaryBlue {
+	background: #AF0B1C;
+}
+
+.iphoneButton.primaryBlue:active {
+	-webkit-border-image: url(../img/iphone/blue-press.png) 0 10 0 10;
+}
+
+.iphoneButton.secondary {
+	-webkit-border-image: url(../img/iphone/grey.png) 0 10 0 10;
+}
+
+.iphoneButton.secondary:active {
+	-webkit-border-image: url(../img/iphone/grey-press.png) 0 10 0 10;
+}
+
+.buttonContainer {
+	margin: 0;
+}
+
+.largeButtonContainer {
+	margin-bottom: 18px;
+}
+
+#mapDirectionsButtonsContainer.buttonContainer {
+	padding: 0px;
+	float: left;
+	width: 100%;
+}
+
+/****** footer treatment ******/
+#footer {
+	color: #999;
+	font-size: 0.8em;
+	overflow: hidden;
+	width: 100%;
+	height: 71px
+}
+
+
+
+/*** IPHONE PAGE-SPECIFIC ITEMS *****************************/
+/* locator pages */
+#markMapContainer.primaryFormButton,
+#getDirectionsContainer.primaryFormButton {
+	float: left;
+	text-align: center;
+	margin: 10px 20px 10px 0;
+}
+
+#directionsContainer ol {
+	margin: 15px 25px;
+	padding-left: 10px;
+}
+
+#directionsContainer ol li {
+	padding-left: 10%;
+}
+
+#googleMap {
+	width: 300px;
+	height: 300px;
+}
+
+.locationListHeader {
+	background-image: url(../img/bg-listheaders.jpg);
+	background-repeat: repeat-x;
+	background-color: #9a9ea1;
+	background-position: top;
+	line-height: 25px;
+	color: #fff;
+	float: left;
+	display: block;
+	width: 100%;
+	font-weight: bold;
+}
+
+.locationListHeader .locationInfo {
+	padding-left: 10px;
+	width: auto;
+}
+
+.locationListHeader .locationType {
+	text-align: right;
+	padding-right: 10px;
+	width: auto;
+}
+
+.locationsListBlock,
+.locationDetailBlock {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+.locationsListBlock li,
+.locationDetailBlock li {
+	clear: both;
+}
+
+.locationsListBlock .listItem,
+.locationDetailBlock .listItem {
+	padding: 10px;
+}
+
+.locationDetailBlock .listItem,
+.locationServicesBlock .listItem {
+	border: none;
+	font-size: 0.95em;
+}
+
+.locationInfo,
+.locationLabel {
+	float: left;
+	display: block;
+	overflow: hidden;
+}
+
+.locationInfo {
+	width: 50%;
+}
+
+.locationType {
+	width: 50%;
+	float: right;
+	display: block;
+	overflow: hidden;
+	text-align: right;
+}
+
+.locationLabel {
+	width: 30%;
+	padding-right: 10px;
+}
+
+.locationData {
+	width: 66%;
+	float: left;
+	display: block;
+	overflow: hidden;
+}
+
+.locationName,
+.locationAddress,
+.locationPhone,
+.locationDirections {
+	display: block;
+}
+
+.locationType,
+.locationLabel {
+	font-weight: bold;
+}
+
+.locationsListBlock .locationAddress {
+	font-weight: bold;
+}
+
+.locationDirectionsBlock {
+	margin: 10px 0;
+}
+
+.locationDirectionsBlock .locationLabel {
+	width: 10%;
+	margin-right: 5%;
+}
+
+.locationDirectionsBlock .locationData {
+	width: 80%;
+}
+
+.hide {
+	display: none;
+}
+
+.clear {
+	clear: both;
+}
+
+.day {
+	float: left;
+	width: 2.25em;
+}
+
+.hours {
+	float: left;
+	background-color: aqua;
+}
+
+#getDirectionsContainer {
+	margin-top: 5px;
+}
+
+#searchResultsBlock .blockTitle,
+#searchSummaryHeader,
+#searchSummary {
+	padding-bottom: 5px;
+}
+
+.listText {
+	display: block;
+	float: left;
+	font-weight: bold;
+}
+
+.listAmount {
+	display: block;
+	float: right;
+	color: #000000;
+	text-align: right;
+	text-decoration: none;
+	padding-right: 0px;
+	font-weight: bold;
+}
+
+/*** Help & FAQ pages ***/
+#askQuestionContainer {
+	margin: 10px 0 10px 0;
+	display: flex;
+	justify-content: center;
+
+}
+
+/*** COMMON IPHONE ***/
+.inputBox-large {
+	box-sizing: border-box;
+	width: 95%;
+	height: 32px;
+	padding-left: 12px;
+	font-size: 12px;
+	color: #383B3E;
+}
+
+.detailsGroup {
+	background-color: #fff;
+}
+
+/*full page width UL list */
+.nobreak {
+	white-space: nowrap;
+}
+
+.title {
+	font-weight: bold;
+}
+
+.blockTitle {
+	color: #383B3E;
+	display: block;
+	padding: 5px 0;
+	width: 100%;
+}
+
+.fieldLabelContainerGroup,
+.valueLabelContainerGroup,
+.listGroup {
+	background-color: #fff;
+	margin: 10px 0 20px 0;
+	/* border: 1px #cccccc solid; */
+}
+
+/*-webkit-border-radius: 10px; removed 11/18/2011*/
+
+/**** smartphone-only - hide from iphone ****/
+/*#header {display:none;}*/
+.globalError {
+	display: none;
+}
+
+.formBlock {
+	border-bottom: 0;
+}
+
+#locationDetails .listItem {
+	border-bottom: 0;
+}
+
+/***/
+
+/* listItemLink (rounded-corner box with linked list items w/ arrow on right ) */
+.listItemLink {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	/*background: url(../img/iphone/list-arrow.png) no-repeat scroll right center;*/
+	/* border-bottom: 1px #cccccc solid; */
+	color: #383B3E;
+	display: block;
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.listItemLink.last {
+	border-bottom: 0px;
+}
+
+/*always use on last row*/
+.listItemLink a {
+	color: inherit;
+	display: block;
+	margin-bottom: 10px;
+	text-decoration: underline;
+}
+
+/* contentBlockItem (single rounded corner border block) */
+.contentBlockItem {
+	background-color: #fff;
+	/*-webkit-border-radius: 10px; removed 11/21/2011*/
+}
+
+.contentBlockItem p {
+	font-size: 12px;
+	color: #383B3E;
+	margin-bottom: 10px;
+	
+}
+
+#irResponse ol,
+#irResponse ul {
+	margin-left: 11.5px;
+}
