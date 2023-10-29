@@ -2,13 +2,10 @@ services:
   - name: my-website
     type: web
     buildCommand: |
-      # Install PHP dependencies with Composer
-      composer install --no-dev --optimize-autoloader
-
-      # Install JavaScript dependencies and build assets
+      composer install
       npm install
       npm run build
-
+      
     startCommand: "php -S 0.0.0.0:8080 -t public"
 
     env: production
@@ -21,7 +18,6 @@ services:
       - name: APP_ENV
         value: production
 
-    # Configure routes if necessary
     routes:
       - path: /
         methods: [GET, POST]
